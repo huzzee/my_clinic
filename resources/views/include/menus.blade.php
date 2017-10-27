@@ -19,12 +19,12 @@
                                     <li class="has_sub">
                                     @if($menus->menu_slug == '')
                                         <a href="javascript:void(0);" class="waves-effect">
-                                            <i class="{{ $menus->icon }}"></i>
+                                            <i class="{{ $menus->menu_icon }}"></i>
                                             <span> {{ $menus->menu_name }} </span>
                                         </a>
                                     @else
-                                        <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
-                                            <i class="{{ $menus->icon }}"></i>
+                                        <a href="{{ url(Auth::user()->entities->entity_code.'/'.$menus->menu_slug) }}" class="waves-effect">
+                                            <i class="{{ $menus->menu_icon }}"></i>
                                             <span> {{ $menus->menu_name }} </span>
                                         </a>
                                     @endif
@@ -37,7 +37,7 @@
                                                     @foreach(callMenus() as $submenus)
                                                         @if($submenus->parent_menu_id == $menus->id)
                                                             <li>
-                                                                <a href="{{ url($submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
+                                                                <a href="{{ url(Auth::user()->entities->entity_code.'/'.$submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
                                                             </li>
                                                         @endif
                                                     @endforeach

@@ -4,10 +4,10 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Application extends Model
+class Entity extends Model
 {
     protected $fillable=[
-        'application_name'
+        'entity_name','entity_code'
     ];
 
     public function users()

@@ -61,11 +61,11 @@
                                         {{ csrf_field() }}
                                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                             <div class="col-xs-12">
-                                                <input id="username" type="username" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
+                                                <input id="email" type="email" autocomplete="off" class="form-control" name="email" value="{{ old('email') }}" required>
 
-                                                @if ($errors->has('username'))
+                                                @if ($errors->has('email'))
                                                     <span style="color:red;">
-                                                        <strong>{{ $errors->first('username') }}</strong>
+                                                        <strong>{{ $errors->first('email') }}</strong>
                                                     </span>
                                                 @endif
                                             </div>
@@ -73,7 +73,7 @@
 
                                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                             <div class="col-xs-12">
-                                                <input id="password" type="password" class="form-control" name="password" required>
+                                                <input id="password" type="password" autocomplete="off" class="form-control" name="password" required>
 
                                                 @if ($errors->has('password'))
                                                     <span style="color:red;">

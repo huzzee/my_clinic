@@ -26,8 +26,6 @@ class CreateMenusTable extends Migration
             $table->boolean('hidden');
             $table->timestamps();
         });
-
-
     }
 
     /**

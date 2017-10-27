@@ -18,15 +18,16 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('application_id')->unsigned()->nullable();
+            $table->integer('entity_id')->unsigned()->nullable();
             $table->integer('role_id')->unsigned()->nullable();
             $table->boolean('status')->default(1);
+            $table->string('profile_image')->default('avatar.png')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
 
         Schema::table('users',function(Blueprint $table){
-            $table->foreign('application_id')->references('id')->on('applications');
+            $table->foreign('entity_id')->references('id')->on('entities');
             $table->foreign('role_id')->references('id')->on('roles');
         });
     }

@@ -37,7 +37,7 @@
 
                             <li class="dropdown user-box">
                                 <a href="" class="dropdown-toggle waves-effect user-link" data-toggle="dropdown" aria-expanded="true">
-                                    <img src="" alt="user-img" class="img-circle user-img">
+                                    <img src="{{ asset('uploads/'.Auth::user()->profile_image) }}" alt="user-img" class="img-circle user-img">
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
@@ -45,7 +45,7 @@
                                         <h5>Hi,  </h5>
                                     </li>
                                     <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> Profile</a></li>
-                                    {{--<li><li><a href="{{ route('logout') }}"
+                                    <li><li><a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             <i class="ti-power-off m-r-5"></i>
@@ -55,7 +55,7 @@
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
-                                    </li></li>--}}
+                                    </li></li>
                                 </ul>
                             </li>
 

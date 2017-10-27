@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicationsTable extends Migration
+class CreateEntitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateApplicationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('applications', function (Blueprint $table) {
+        Schema::create('entities', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('application_name');
+            $table->string('entity_name');
+            $table->string('entity_code');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateApplicationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applications');
+        Schema::dropIfExists('entities');
     }
 }
