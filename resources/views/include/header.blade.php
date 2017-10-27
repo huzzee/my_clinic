@@ -2,7 +2,7 @@
 
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <a href="index.html" class="logo"><span>Al <span>Invento </span></span><i class="mdi mdi-layers"></i></a>
+                    <a href="index.html" class="logo"><span>Al <span>Clinic </span></span><i class="mdi mdi-layers"></i></a>
                     <!-- Image logo -->
                     <!--<a href="index.html" class="logo">-->
                         <!--<span>-->

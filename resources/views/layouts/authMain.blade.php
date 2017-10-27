@@ -32,7 +32,11 @@
 
     </head>
 
-
+    <style>
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px white inset !important;
+        }
+    </style>
     <body class="bg-transparent">
 
         <!-- HOME -->
@@ -47,7 +51,7 @@
                                 <div class="text-center account-logo-box">
                                     <h2 class="text-uppercase">
                                         <a href="index.html" class="text-success">
-                                            <span><img src="assets/images/logo.png" alt="" height="36"></span>
+                                            <span><img src="{{ asset('assets/images/logo.png') }}" alt="" height="36"></span>
                                         </a>
                                     </h2>
                                     <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
@@ -94,7 +98,7 @@
                                         
                                         <div class="form-group account-btn text-center m-t-10">
                                             <div class="col-xs-12">
-                                                <button class="btn w-md btn-bordered btn-danger waves-effect waves-light" type="submit">Log In</button>
+                                                <button class="btn w-md btn-bordered btn-purple waves-effect waves-light" type="submit">Log In</button>
                                             </div>
                                         </div>
 
