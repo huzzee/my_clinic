@@ -14,7 +14,37 @@
                             </li>
 
 
+                            @foreach(callMenus() as $menus)
+                                @if($menus->parent_menu_id == '')
+                                    <li class="has_sub">
+                                    @if($menus->menu_slug == '')
+                                        <a href="javascript:void(0);" class="waves-effect">
+                                            <i class="{{ $menus->icon }}"></i>
+                                            <span> {{ $menus->menu_name }} </span>
+                                        </a>
+                                    @else
+                                        <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
+                                            <i class="{{ $menus->icon }}"></i>
+                                            <span> {{ $menus->menu_name }} </span>
+                                        </a>
+                                    @endif
 
+
+
+
+
+                                                <ul class="list-unstyled">
+                                                    @foreach(callMenus() as $submenus)
+                                                        @if($submenus->parent_menu_id == $menus->id)
+                                                            <li>
+                                                                <a href="{{ url($submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                        </li>
+                                    @endif
+                                @endforeach
                             <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">
