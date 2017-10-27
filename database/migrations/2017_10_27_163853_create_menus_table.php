@@ -21,16 +21,13 @@ class CreateMenusTable extends Migration
             $table->string('menu_icon')->nullable();
             $table->string('menu_route')->nullable();
             $table->integer('sort_order');
-            $table->integer('role_id')->unsigned()->nullable();
+            $table->integer('super_admin_role')->nullable();
             $table->boolean('status');
             $table->boolean('hidden');
             $table->timestamps();
         });
 
-        Schema::table('menus',function (Blueprint $table){
 
-            $table->foreign('role_id')->references('id')->on('roles');
-        });
     }
 
     /**
