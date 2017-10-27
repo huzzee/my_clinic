@@ -1,23 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.mainHome')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+    <div class="content">
+        <div class="container">
 
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    You are logged in!
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Starter Page </h4>
+
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+            <!-- end row -->
+
+
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
 @endsection
