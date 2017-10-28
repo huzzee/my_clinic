@@ -15,6 +15,7 @@
 Auth::routes();
 
 Route::middleware(['auth'])->group(function() {
+    //Route::get('/', 'Auth\LoginController@showLoginForm');
     Route::get('/{code}', 'HomeController@index')->name('home');
 
     Route::Resource('/{code}/admins','AdminController');

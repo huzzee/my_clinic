@@ -10,6 +10,8 @@ class Entity extends Model
         'entity_name','entity_code'
     ];
 
+    protected $table = 'entities';
+
     public function users()
     {
         return $this->hasMany('App\User','id');
