@@ -24,4 +24,5 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::Resource('doctors','DoctorController');
     Route::post('doctoractive/{id}','DoctorController@activated');
     Route::Resource('employee','EmployeeController');
+    Route::post('employeeactivate/{id}','EmployeeController@activated');
 });

@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="page-title-box">
-                        <h4 class="page-title">Profile </h4>
+                        <h4 class="page-title">Employee Profile </h4>
 
                         <div class="clearfix"></div>
                     </div>
@@ -32,19 +32,19 @@
                                 <div class="text-center card-box">
                                     <div class="member-card">
                                         <div class="thumb-xl member-thumb m-b-10 center-block">
-                                            <img src="{{ asset('uploads/'.$admin->users->profile_image) }}" class="img-circle img-thumbnail" alt="profile-image">
+                                            <img src="{{ asset('uploads/'.$employee->users->profile_image) }}" class="img-circle img-thumbnail" alt="profile-image">
                                             <i class="mdi mdi-star-circle member-star text-success" title="verified user"></i>
                                         </div>
 
                                         <div class="">
-                                            <h4 class="m-b-5">{{ $admin->admin_info['full_name'] }}</h4>
-                                            <p class="text-muted">ADMIN</p>
+                                            <h4 class="m-b-5">{{ $employee->admin_info['full_name'] }}</h4>
+                                            <p class="text-muted">{{ $employee->users->roles->role_name }}</p>
                                         </div>
                                         <div class="box-header">
-                                        <a href="{{ url('admins/'.$admin->id.'/edit') }}" class="btn btn-info btn-sm w-sm waves-effect m-t-10 waves-light">Edit Profile</a>
-                                            @if($admin->users->entities->status == 0)
+                                            <a href="{{ url('employee/'.$employee->id.'/edit') }}" class="btn btn-info btn-sm w-sm waves-effect m-t-10 waves-light">Edit Profile</a>
+                                            @if($employee->users->status == 0)
                                                 <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
-                                            @elseif($admin->users->entities->status == 1)
+                                            @elseif($employee->users->status == 1)
                                                 <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
                                             @endif
                                         </div>
@@ -63,7 +63,7 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                        <form action="{{ url('adminsactivate/'.$admin->id) }}" method="post">
+                                                        <form action="{{ url('employeeactivate/'.$employee->id) }}" method="post">
                                                             {{ csrf_field() }}
 
                                                             <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Yes Activate it</button>
@@ -89,7 +89,7 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                        <form action="{{ url('admins/'.$admin->id) }}" method="post">
+                                                        <form action="{{ url('employee/'.$employee->id) }}" method="post">
                                                             {{ csrf_field() }}
                                                             <input type="hidden" name="_method" value="DELETE">
                                                             <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
@@ -102,12 +102,12 @@
                                         </div>                                     <hr/>
                                         {{--end model--}}
                                         <div class="text-left">
-                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">{{ $admin->full_name }}</span></p>
+                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">{{ $employee->users['name'] }}</span></p>
 
                                             <p class="text-muted font-13"><strong>Gender :</strong><span class="m-l-15">
-                                                    @if($admin->admin_info['gender'] == 0)
+                                                    @if($employee->employee_info['gender'] == 0)
                                                         Male
-                                                    @elseif($admin->admin_info['gender'] == 1)
+                                                    @elseif($employee->employee_info['gender'] == 1)
                                                         Female
                                                     @else
                                                         Others
@@ -115,13 +115,13 @@
                                                 </span></p>
 
                                             <p class="text-muted font-13"><strong>Email :</strong> <span class="m-l-15">
-                                                    {{ $admin->users->email }}</span></p>
+                                                    {{ $employee->users->email }}</span></p>
 
                                             <p class="text-muted font-13"><strong>Status :</strong>
                                                 <span class="m-l-15">
-                                                    @if($admin->users->entities->status == 1)
+                                                    @if($employee->users->status == 1)
                                                         Activate
-                                                    @elseif($admin->users->entities->status == 0)
+                                                    @elseif($employee->users->status == 0)
                                                         Deactivate
 
                                                     @endif
@@ -156,27 +156,21 @@
 
                                 <div class="row">
                                     <div class="col-md-8 col-sm-6">
-                                        <h4>Clinic Info</h4>
+                                        <h4>Employee Detail</h4>
 
                                         <div class=" p-t-10">
 
-                                            <p><b>Clinic Name</b></p>
+                                            <p><b>Designation Name</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->users->entities->entity_name }}
+                                            <p class="text-muted font-13 m-b-0">{{ $employee->users->roles->role_name }}
                                             </p>
                                         </div>
-                                        <div class=" p-t-10">
 
-                                            <p><b>Location</b></p>
-
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->admin_info['country'] }}
-                                            </p>
-                                        </div>
                                         <div class=" p-t-10">
 
                                             <p><b>Contact No</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->admin_info['contact_no'] }}
+                                            <p class="text-muted font-13 m-b-0">{{ $employee->employee_info['contact_no'] }}
                                             </p>
                                         </div>
 
@@ -184,19 +178,11 @@
 
                                             <p><b>Address</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->admin_info['address'] }}
+                                            <p class="text-muted font-13 m-b-0">{{ $employee->employee_info['address'] }}
                                             </p>
                                         </div>
 
-                                        <hr/>
-                                        <h4>Account Detail</h4>
-                                        <div class="">
 
-                                            <p><b>Account No</b></p>
-
-                                            <p class="text-muted font-13">
-                                            </p>
-                                        </div>
                                     </div> <!-- end col -->
 
 

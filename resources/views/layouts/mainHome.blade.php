@@ -68,6 +68,9 @@
           body .box-header{
             display: none;
           }
+            @page {
+                margin:0px;
+            }
         }
 
         .head_show span{

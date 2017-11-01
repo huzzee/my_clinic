@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\models\UserInformation;
+use App\models\Entity;
+use App\User;
+use Illuminate\Support\Facades\DB;
+use Auth;
+
 
 class EmployeeController extends Controller
 {
@@ -13,7 +19,15 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        $employees = UserInformation::with('users')
+            ->wherehas('users',function ($query){
+                $query->where('users.entity_id','=',Auth::user()->entity_id);
+            })
+            ->whereNotNull('employee_info')->get();
+            //dd($employees);
+            return view('pages.employees.manageEmployee',array(
+               'employees' => $employees
+            ));
     }
 
     /**
@@ -23,7 +37,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.employees.createEmployee');
     }
 
     /**
@@ -34,7 +48,72 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $upload_dir = base_path() . '/public/uploads';
+
+        if ($request->profile_image !== null)
+        {
+            $request->validate([
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'role_id' => 'required',
+                'email' => 'required|unique:users',
+                'password' => 'required',
+                'address' => 'required',
+                'gender' => 'required',
+                'contact_no' => 'required',
+                'profile_image' => 'image|mimes:jpeg,png|max:2048'
+            ]);
+
+            $file = $request->file('profile_image');
+            $ext = $file->getClientOriginalExtension();
+            $filename = $request->get('email').'.'.$ext;
+            $file->move($upload_dir, $filename);
+        }
+        else{
+            $request->validate([
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'role_id' => 'required',
+                'email' => 'required|unique:users',
+                'password' => 'required',
+                'address' => 'required',
+                'gender' => 'required',
+                'contact_no' => 'required',
+
+            ]);
+
+            $filename = 'avatar.png';
+        }
+        $status = 1;
+
+
+        $users = new User([
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
+            'name' => $request['first_name'].' '.$request['last_name'],
+            'role_id' => $request['role_id'],
+            'entity_id' => Auth::user()->entity_id,
+            'status' => $status,
+            'profile_image' => $filename
+
+        ]);
+
+        $users->save();
+
+        $employee = new UserInformation;
+        $employee->user_id = $users->id;
+        $employee->employee_info = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'country' => $request->country,
+            'address' => $request->address,
+            'gender' => $request->gender,
+            'contact_no' => $request->contact_no,
+        ];
+
+        $employee->save();
+
+        return redirect('employee')->with('message','Employee Created Successfully');
     }
 
     /**
@@ -45,7 +124,11 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employee = UserInformation::with('users')->where('id','=',$id)->first();
+
+        return view('pages.employees.showEmployee',array(
+            'employee' => $employee
+        ));
     }
 
     /**
@@ -56,7 +139,11 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee = UserInformation::with('users')->where('id','=',$id)->first();
+
+        return view('pages.employees.editEmployee',array(
+            'employee' => $employee
+        ));
     }
 
     /**
@@ -79,6 +166,25 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = UserInformation::findOrFail($id);
+
+        $user = User::findOrFail($employee->user_id);
+
+        $user->status = 0;
+        $user->save();
+
+        return redirect('employee/'.$employee->id)->with('message','Clinic Employee Deactivated');
+    }
+
+    public function activated($id)
+    {
+        $employee = UserInformation::findOrFail($id);
+
+        $user = User::findOrFail($employee->user_id);
+
+        $user->status = 1;
+        $user->save();
+
+        return redirect('employee/'.$employee->id)->with('message','Clinic Employee Activated');
     }
 }

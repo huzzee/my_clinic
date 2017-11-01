@@ -245,7 +245,9 @@ class AdminController extends Controller
         $admin = UserInformation::findOrFail($id);
 
         $user = User::findOrFail($admin->user_id);
+        $user->status = 0;
 
+        $user->save();
 
         $entity = Entity::findOrFail($user->entity_id);
 
@@ -260,6 +262,9 @@ class AdminController extends Controller
         $admin = UserInformation::findOrFail($id);
 
         $user = User::findOrFail($admin->user_id);
+        $user->status = 1;
+
+        $user->save();
 
 
         $entity = Entity::findOrFail($user->entity_id);
