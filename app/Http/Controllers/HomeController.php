@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -20,10 +21,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($code)
+    public function index()
     {
        //dd($code);
-        check_code($code);
+
         return view('home');
     }
 }

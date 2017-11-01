@@ -12,7 +12,7 @@
                 <div class="col-xs-12">
                     <div class="page-title-box">
 
-                        <h4 class="page-title">Manage Admins</h4>
+                        <h4 class="page-title">Manage Doctor</h4>
 
                         <div class="clearfix"></div>
 
@@ -33,7 +33,7 @@
 
                     <div class="card-box table-responsive">
 
-                        <a class="btn btn-danger" href="{{ url('admins/create') }}">Create Admins</a>
+                        <a class="btn btn-danger" href="{{ url('doctors/create') }}">Create Doctor</a>
 
                         <hr>
 
@@ -45,7 +45,7 @@
                                 <th width="2%">Image</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th width="15%">Clinic Name</th>
+                                <th width="15%">Department Name</th>
 
                                 <th width="8%">Gender</th>
 
@@ -59,17 +59,17 @@
 
                             <tbody>
                             @php $i=1;@endphp
-                            @foreach($admins as $admin)
+                            @foreach($doctors as $doctor)
                                 <tr>
                                     <td>{{ $i }}</td>
-                                    <td><img src="{{ asset('uploads/'.$admin->users->profile_image) }}" alt="{{ $admin->users->profile_image }}" style="height: 50px; width: 50px;"></td>
-                                    <td>{{ $admin->admin_info['full_name'] }}</td>
-                                    <td>{{ $admin->users->email }}</td>
-                                    <td>{{ $admin->users->entities->entity_name }}</td>
+                                    <td><img src="{{ asset('uploads/'.$doctor->users->profile_image) }}" alt="{{ $doctor->users->profile_image }}" style="height: 50px; width: 50px;"></td>
+                                    <td>Dr.{{ $doctor->users['name'] }}</td>
+                                    <td>{{ $doctor->users->email }}</td>
+                                    <td>{{ $doctor->doctor_info['department'] }}</td>
 
-                                    @if($admin->admin_info['gender'] == 0)
+                                    @if($doctor->doctor_info['gender'] == 0)
                                         <td>Male</td>
-                                    @elseif($admin->admin_info['gender'] == 1)
+                                    @elseif($doctor->doctor_info['gender'] == 1)
                                         <td>Female</td>
                                     @else
                                         <td>Other</td>
@@ -77,7 +77,7 @@
 
 
 
-                                    @if($admin->users->entities->status == 1)
+                                    @if($doctor->users->status == 1)
                                         <td>Activate</td>
                                     @else
                                         <td>Deactivate</td>
@@ -85,17 +85,43 @@
 
                                     <td>
 
-                                        <a href="{{ url('admins/'.$admin->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
+                                        <a href="{{ url('doctors/'.$doctor->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
                                             <i class="fa fa-eye"></i>
                                         </a>
 
 
-                                        <a href="{{ url('admins/'.$admin->id.'/edit') }}" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
+                                        <a href="{{ url('doctors/'.$doctor->id.'/edit') }}" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
 
-
+                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$doctor->id}}"><i class="fa fa-remove"></i></button>
 
                                     </td>
                                 </tr>
+
+                                <div id="con-close-modal{{$doctor->id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title">Warning!</h4>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                Are You Sure.You want to Deactivate This User.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
+
+                                                <form action="{{ url('doctors/'.$doctor->id) }}" method="post">
+                                                    {{ csrf_field() }}
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
+
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
                                 @php $i++; @endphp

@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','entity_id','role_id','status','profile_image'
+        'name', 'email', 'password','entity_id','role_id','status','profile_image','approved'
     ];
 
     /**
@@ -37,9 +37,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\models\Role','role_id');
     }
 
-    public function admins()
+    public function users_informations()
     {
-        return $this->hasMany('App\models\Admin','id');
+        return $this->hasMany('App\models\UserInformation','id');
     }
 
 
@@ -60,4 +60,6 @@ class User extends Authenticatable
 
         return $users->id;
     }
+
+
 }

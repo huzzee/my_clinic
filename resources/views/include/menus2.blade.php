@@ -1,51 +1,51 @@
 <div class="sidebar-inner slimscrollleft">
 
-                    <!--- Sidemenu -->
-                    <div id="sidebar-menu">
-                        <ul>
-                        	<li class="menu-title">Navigation</li>
+    <!--- Sidemenu -->
+    <div id="sidebar-menu">
+        <ul>
+            <li class="menu-title">Navigation</li>
 
-                            <li class="has_sub">
-                                <a href="{{ url('/') }}" class="waves-effect">
-                                    <i class="mdi mdi-view-dashboard"></i>
-                                    <span> Dashboard </span>
-                                </a>
-                                
-                            </li>
+            <li class="has_sub">
+                <a href="{{ url('/') }}" class="waves-effect">
+                    <i class="mdi mdi-view-dashboard"></i>
+                    <span> Dashboard </span>
+                </a>
 
-
-                            @foreach(callMenus() as $menus)
-                                @if($menus->parent_menu_id == '')
-                                    <li class="has_sub">
-                                    @if($menus->menu_slug == '')
-                                        <a href="javascript:void(0);" class="waves-effect">
-                                            <i class="{{ $menus->menu_icon }}"></i>
-                                            <span> {{ $menus->menu_name }} </span>
-                                        </a>
-                                    @else
-                                        <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
-                                            <i class="{{ $menus->menu_icon }}"></i>
-                                            <span> {{ $menus->menu_name }} </span>
-                                        </a>
-                                    @endif
+            </li>
 
 
+            @foreach(callMenus2() as $menus)
+                @if($menus->parent_menu_id == '')
+                    <li class="has_sub">
+                        @if($menus->menu_slug == '')
+                            <a href="javascript:void(0);" class="waves-effect">
+                                <i class="{{ $menus->menu_icon }}"></i>
+                                <span> {{ $menus->menu_name }} </span>
+                            </a>
+                        @else
+                            <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
+                                <i class="{{ $menus->menu_icon }}"></i>
+                                <span> {{ $menus->menu_name }} </span>
+                            </a>
+                        @endif
 
 
 
-                                                <ul class="list-unstyled">
-                                                    @foreach(callMenus() as $submenus)
-                                                        @if($submenus->parent_menu_id == $menus->id)
-                                                            <li>
-                                                                <a href="{{ url($submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
-                                                            </li>
-                                                        @endif
-                                                    @endforeach
-                                                </ul>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            <!-- <li class="has_sub">
+
+
+                        <ul class="list-unstyled">
+                            @foreach(callMenus2() as $submenus)
+                                @if($submenus->parent_menu_id == $menus->id)
+                                    <li>
+                                        <a href="{{ url($submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    </li>
+            @endif
+        @endforeach
+        <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">
                                     <li><a href="ui-buttons.html">Buttons</a></li>
@@ -219,8 +219,8 @@
                                 </ul>
                             </li> -->
 
-                        </ul>
-                    </div>
-                    
+        </ul>
+    </div>
 
-                </div>
+
+</div>

@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\models\Admin;
 use Illuminate\Http\Request;
+use App\models\UserInformation;
 use App\models\Entity;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $admins = UserInformation::with('users')
+            ->whereNotNull('admin_info')->get();
+        //dd($admins[0]->admin_info);
+
+        return view('pages.admins.adminManage',array(
+            'admins' => $admins
+        ));
     }
 
     /**
@@ -25,11 +26,15 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($code)
+    public function create()
     {
         //dd(Entity::all());
-        check_code($code);
-        return view('pages.admins.createAdmin');
+        //check_code($code);
+        $country = DB::table('apps_countries_detailed')->orderBy('CountryName','asc')->get();
+
+        return view('pages.admins.createAdmin',array(
+            'countries' => $country
+        ));
     }
 
     /**
@@ -38,12 +43,14 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$code)
+    public function store(Request $request)
     {
-        check_code($code);
+
+
+
         $upload_dir = base_path() . '/public/uploads';
 
-        if ($request->profile_image === null)
+        if ($request->profile_image !== null)
         {
             $request->validate([
                 'full_name' => 'required',
@@ -51,7 +58,7 @@ class AdminController extends Controller
                 'password' => 'required',
                 'address' => 'required',
                 'gender' => 'required',
-                'entity_name' => 'required|unique:entity',
+                'entity_name' => 'required|unique:entities',
                 'country' => 'required',
                 'contact_no' => 'required',
                 'profile_image' => 'image|mimes:jpeg,png|max:2048'
@@ -69,7 +76,7 @@ class AdminController extends Controller
                 'password' => 'required',
                 'address' => 'required',
                 'gender' => 'required',
-                'entity_name' => 'required|unique:entity',
+                'entity_name' => 'required|unique:entities',
                 'country' => 'required',
                 'contact_no' => 'required',
 
@@ -96,18 +103,21 @@ class AdminController extends Controller
 
         $user_id = User::createUsers($request,$filename,$entity_id,$status);
 
-        $admin = new Admin;
-        $admin->full_name = $request->full_name;
+        $admin = new UserInformationController;
+
         $admin->user_id = $user_id;
-        $admin->country = $request->country;
-        $admin->gender = $request->gender;
-        $admin->contact_no = $request->contact_no;
-        $admin->address = $request->address;
-        $admin->status = $status;
+        $admin->admin_info = [
+            'full_name' => $request->full_name,
+            'country' => $request->country,
+            'address' => $request->address,
+            'gender' => $request->gender,
+            'contact_no' => $request->contact_no,
+        ];
+
 
         $admin->save();
 
-        return redirect(Auth::user()->entities->entity_code.'admins')
+        return redirect('admins')
             ->with('message', 'Admin Created Successfully!');
 
 
@@ -119,9 +129,13 @@ class AdminController extends Controller
      * @param  \App\models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show(Admin $admin)
+    public function show($id)
     {
-        //
+        $admin = UserInformation::with('users')->where('id',$id)->first();
+
+        return view('pages.admins.showAdmin',array(
+            'admin' => $admin
+        ));
     }
 
     /**
@@ -130,9 +144,16 @@ class AdminController extends Controller
      * @param  \App\models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Admin $admin)
+    public function edit($id)
     {
-        //
+        $country = DB::table('apps_countries_detailed')->orderBy('CountryName','asc')->pluck('countryName','countryName');
+        //dd($country);
+        $admin = UserInformation::with('users')->where('id',$id)->first();
+
+        return view('pages.admins.editAdmin',array(
+            'admin' => $admin,
+            'country' => $country
+        ));
     }
 
     /**
@@ -142,9 +163,75 @@ class AdminController extends Controller
      * @param  \App\models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
+    public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $upload_dir = base_path() . '/public/uploads';
+
+        if ($request->profile_image !== null)
+        {
+            $request->validate([
+
+                'admin_info' => 'required',
+                'email' => 'required',
+                'users' => 'required',
+                'profile_image' => 'image|mimes:jpeg,png|max:2048'
+            ]);
+
+            $file = $request->file('profile_image');
+            $ext = $file->getClientOriginalExtension();
+            $filename = $request->get('email').'.'.$ext;
+            $file->move($upload_dir, $filename);
+        }
+        else{
+            $request->validate([
+                'admin_info' => 'required',
+                'email' => 'required',
+                'users' => 'required',
+
+
+            ]);
+
+
+        }
+        $admin = UserInformation::with('users')->where('id',$id)->first();
+
+        //dd($admin->users->entities);
+
+        $admin->admin_info = [
+            'full_name' => $request->admin_info['full_name'],
+            'country' => $request->admin_info['country'],
+            'address' => $request->admin_info['address'],
+            'gender' => $request->admin_info['gender'],
+            'contact_no' => $request->admin_info['contact_no'],
+        ];
+
+        $users = User::findOrFail($admin->users->id);
+
+        $users->name =  $request->admin_info['full_name'];
+        $users->email = $request->email;
+        if ($request->profile_image !== null){
+            $users->profile_image = $filename;
+        }
+        if ($request->password !== null){
+            $users->password = bcrypt($request->password);
+        }
+        $users->save();
+
+        $entity = Entity::findOrFail($users->entity_id);
+
+        $entity->entity_name = $request->users['entities']['entity_name'];
+        $entity->save();
+
+        //dd($users);
+
+        //$admin->users->entities->entity_name = $request->users['entities']['entity_name'];
+
+
+        $admin->save();
+
+        return redirect('admins')
+            ->with('message', 'Admin Edited Successfully!');
     }
 
     /**
@@ -153,8 +240,33 @@ class AdminController extends Controller
      * @param  \App\models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Admin $admin)
+    public function destroy($id)
     {
-        //
+        $admin = UserInformation::findOrFail($id);
+
+        $user = User::findOrFail($admin->user_id);
+
+
+        $entity = Entity::findOrFail($user->entity_id);
+
+        $entity->status = 0;
+        $entity->save();
+
+        return redirect('admins/'.$admin->id)->with('message','Clinic Admin Deactivated');
+    }
+
+    public function activated($id)
+    {
+        $admin = UserInformation::findOrFail($id);
+
+        $user = User::findOrFail($admin->user_id);
+
+
+        $entity = Entity::findOrFail($user->entity_id);
+
+        $entity->status = 1;
+        $entity->save();
+
+        return redirect('admins/'.$admin->id)->with('message','Clinic Admin Activated');
     }
 }

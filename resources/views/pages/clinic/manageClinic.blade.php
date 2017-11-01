@@ -12,7 +12,7 @@
                 <div class="col-xs-12">
                     <div class="page-title-box">
 
-                        <h4 class="page-title">Manage Admins</h4>
+                        <h4 class="page-title">Manage Clinics</h4>
 
                         <div class="clearfix"></div>
 
@@ -42,16 +42,14 @@
                             <thead>
                             <tr>
                                 <th width="2%">Sr.No</th>
-                                <th width="2%">Image</th>
-                                <th>Name</th>
-                                <th>Email</th>
+
                                 <th width="15%">Clinic Name</th>
 
-                                <th width="8%">Gender</th>
+                                <th width="15%">Admin Name</th>
 
-                                <th width="10%">Status</th>
+                                <th width="8%">Status</th>
 
-                                <th width="15%">Action</th>
+                                <th width="8%">Action</th>
 
                             </tr>
                             </thead>
@@ -59,44 +57,22 @@
 
                             <tbody>
                             @php $i=1;@endphp
-                            @foreach($admins as $admin)
-                                <tr>
-                                    <td>{{ $i }}</td>
-                                    <td><img src="{{ asset('uploads/'.$admin->users->profile_image) }}" alt="{{ $admin->users->profile_image }}" style="height: 50px; width: 50px;"></td>
-                                    <td>{{ $admin->admin_info['full_name'] }}</td>
-                                    <td>{{ $admin->users->email }}</td>
-                                    <td>{{ $admin->users->entities->entity_name }}</td>
+                            @foreach($clinics as $clinic)
 
-                                    @if($admin->admin_info['gender'] == 0)
-                                        <td>Male</td>
-                                    @elseif($admin->admin_info['gender'] == 1)
-                                        <td>Female</td>
-                                    @else
-                                        <td>Other</td>
-                                    @endif
+                                <td>{{ $i }}</td>
+                                <td>{{ $clinic->entity_name }}</td>
+                                <td>{{ $clinic->users[0]->name }}</td>
 
-
-
-                                    @if($admin->users->entities->status == 1)
-                                        <td>Activate</td>
-                                    @else
-                                        <td>Deactivate</td>
-                                    @endif
-
-                                    <td>
-
-                                        <a href="{{ url('admins/'.$admin->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-
-
-                                        <a href="{{ url('admins/'.$admin->id.'/edit') }}" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
-
-
-
-                                    </td>
-                                </tr>
-
+                                @if($clinic->status == 1)
+                                    <td>Activate</td>
+                                @else
+                                    <td>Deactivate</td>
+                                @endif
+                                <td>
+                                    <a href="{{ url('clinics/'.$clinic->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </td>
 
                                 @php $i++; @endphp
                             @endforeach

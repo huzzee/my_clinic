@@ -3,26 +3,23 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
-class RedirectIfAuthenticated
+class UserStatusCheck
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-
-        if (Auth::guard($guard)->check()) {
-
-            return redirect('/');
+        if(Auth::user()->status == 0)
+        {
+            return abort(409);
         }
-
         return $next($request);
     }
 }

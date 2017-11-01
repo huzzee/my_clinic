@@ -17,6 +17,7 @@ class CreateEntitiesTable extends Migration
             $table->increments('id');
             $table->string('entity_name');
             $table->string('entity_code');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

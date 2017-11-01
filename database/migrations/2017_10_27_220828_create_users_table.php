@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->integer('role_id')->unsigned()->nullable();
             $table->boolean('status')->default(1);
             $table->string('profile_image')->default('avatar.png')->nullable();
+            $table->boolean('approved')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

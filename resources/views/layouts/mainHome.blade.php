@@ -25,7 +25,7 @@
         <link href="{{ asset('assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/clockpicker/css/bootstrap-clockpicker.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/jquery.steps/css/jquery.steps.css') }}" />
         <!-- Datatables -->
 
         <link rel="stylesheet" href="{{ asset('assets/plugins/magnific-popup/css/magnific-popup.css') }}" />
@@ -94,8 +94,14 @@
 
             <!-- ========== Left Sidebar Start ========== -->
             <div class="left side-menu">
-                @include('include.menus')
-                <!-- Sidebar -left -->
+                @if(Auth::user()->role_id == 1 )
+
+                    @include('include.menus')
+                @else
+                    @include('include.menus2')
+                @endif
+
+                    <!-- Sidebar -left -->
 
             </div>
             <!-- Left Sidebar End -->
