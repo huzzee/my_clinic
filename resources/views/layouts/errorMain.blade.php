@@ -9,7 +9,7 @@
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
         <!-- App title -->
-        <title>Al Invento</title>
+        <title>Klenic</title>
 
         <!-- Custom box -->
 

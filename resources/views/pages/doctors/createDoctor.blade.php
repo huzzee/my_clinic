@@ -33,7 +33,7 @@
                             {{ csrf_field() }}
 
 
-                            <a class="btn btn-purple" href="{{ url('doctors') }}">Manage Doctors</a>
+                            <a class="btn btn-info" href="{{ url('doctors') }}">Manage Doctors</a>
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">
                                     <ul>
@@ -131,6 +131,8 @@
                                     <div class="form-group clearfix">
                                         <label for="last_name" class="col-lg-2">Password<span class="text-danger">*</span></label>
                                         <div class="col-lg-10">
+                                            <input type="email" name="email-fake" style="display: none">
+                                            <input type="password" name="password-fake" style="display: none">
                                             <input type="password" name="password" parsley-trigger="change"
                                                    placeholder="Enter Password" autocomplete="off" class="form-control"/>
 
@@ -221,35 +223,35 @@
 
 
 
-    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
-    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+        <script src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
+        <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
 
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.mockjax.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.autocomplete.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/countries.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.autocomplete.init.js') }}"></script>
+        <script src="{{ asset('assets/plugins/autocomplete/jquery.mockjax.js') }}"></script>
+        <script src="{{ asset('assets/plugins/autocomplete/jquery.autocomplete.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/autocomplete/countries.js') }}"></script>
+        <script src="{{ asset('assets/pages/jquery.autocomplete.init.js') }}"></script>
 
 
 
-    <script src="{{ asset('assets/plugins/moment/moment.js') }}"></script>
-    <script src="{{ asset('assets/plugins/timepicker/bootstrap-timepicker.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/clockpicker/js/bootstrap-clockpicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+        <script src="{{ asset('assets/plugins/moment/moment.js') }}"></script>
+        <script src="{{ asset('assets/plugins/timepicker/bootstrap-timepicker.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/clockpicker/js/bootstrap-clockpicker.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
-    <script src="{{ asset('assets/pages/jquery.form-pickers.init.js') }}"></script>
+        <script src="{{ asset('assets/pages/jquery.form-pickers.init.js') }}"></script>
 
-    <script src="{{ asset('assets/plugins/jquery.steps/js/jquery.steps.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-validation/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.wizard-init.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
+        <script src="{{ asset('assets/plugins/jquery.steps/js/jquery.steps.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/jquery-validation/js/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('assets/pages/jquery.wizard-init.js') }}"></script>
+        <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
 
 
 @endsection

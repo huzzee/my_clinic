@@ -49,23 +49,14 @@
                                 <div class="col-sm-12 col-xs-12 col-md-12">
 
 
-                                    <a class="btn btn-purple" href="{{ url('employee') }}">Manage Employee</a>
+                                    <a class="btn btn-info" href="{{ url('employee') }}">Manage Employee</a>
                                     <hr>
 
 
                                     <div class="p-20" style="clear: both;">
 
-                                        <div class="form-group row">
-                                            <label for="role_id" class="col-sm-3">Role<span class="text-danger">*</span></label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="role_id">
-                                                    <option selected disabled>Select Designation</option>
-                                                    <option value="4">Receptionist</option>
-                                                    <option value="5">Pharmacist</option>
-                                                </select>
 
-                                            </div>
-                                        </div>
+                                        <input type="hidden" name="role_id" value="4" />
 
                                         <div class="form-group row">
                                             <label for="first_name" class="col-sm-3">First Name<span class="text-danger">*</span></label>
@@ -90,8 +81,9 @@
                                         <div class="form-group row">
                                             <label for="last_name" class="col-sm-3">Email Address<span class="text-danger">*</span></label>
                                             <div class="col-sm-9">
+
                                                 <input type="email" name="email" parsley-trigger="change"
-                                                       placeholder="Enter Email" value="{{ old('email') }}" autocomplete="off" class="form-control"/>
+                                                       placeholder="Enter Email" autocomplete="off" class="form-control"/>
 
                                             </div>
                                         </div>
@@ -99,7 +91,11 @@
                                         <div class="form-group row">
                                             <label for="last_name" class="col-sm-3">Password<span class="text-danger">*</span></label>
                                             <div class="col-sm-9">
-                                                <input type="password" name="password" parsley-trigger="change"
+
+                                                <input type="email" name="email-fake" style="display: none">
+                                                <input type="password" name="password-fake" style="display: none">
+
+                                                <input type="text" name="password" parsley-trigger="change"
                                                        placeholder="Enter Password" autocomplete="off" class="form-control"/>
 
                                             </div>

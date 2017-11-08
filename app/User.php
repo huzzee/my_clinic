@@ -42,6 +42,16 @@ class User extends Authenticatable
         return $this->hasMany('App\models\UserInformation','id');
     }
 
+    public function patients()
+    {
+        return $this->hasOne('App\models\Patient','id');
+    }
+
+    public function adjustments()
+    {
+        return $this->hasMany('App\models\Adjustment','id');
+    }
+
 
     public static function createUsers($data,$filename,$entity_id,$status)
     {

@@ -126,10 +126,7 @@
                                     <div class="form-group clearfix">
                                         <label for="last_name" class="col-lg-2">Password</label>
                                         <div class="col-lg-10">
-                                            <input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
-                                            <input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
-                                            {!! Form::password('password',['class' => 'form-control','autocomplete' => 'false','placeholder' => 'Change Password if needed']) !!}
-
+                                            {!! Form::text('password',null,['class' => 'form-control','autocomplete' => 'false','placeholder' => 'Change Password if needed']) !!}
                                         </div>
                                     </div>
 

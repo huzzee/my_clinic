@@ -7,9 +7,10 @@
         <meta name="author" content="Coderthemes">
 
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+        <link rel="shortcut icon" href="{{asset('logo/fav.png')}}" type="image/x-icon">
+        <link rel="icon" href="{{asset('logo/fav.png')}}" type="image/x-icon">
         <!-- App title -->
-        <title>Al Invento</title>
+        <title>Klenic</title>
 
         <!-- App css -->
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -33,26 +34,26 @@
     </head>
 
 
-    <body class="bg-transparent">
+    <body class="bg-transparent" style="background-color: whitesmoke !important;">
 
         <!-- HOME -->
         <section>
-            <div class="container-alt">
+            <div class="container-alt" >
                 <div class="row">
                     <div class="col-sm-12">
 
                         <div class="wrapper-page">
 
                             <div class="m-t-40 account-pages">
-                                <div class="text-center account-logo-box">
+                                <div class="text-center account-logo-box" style="background-color: #3c4655">
                                     <h2 class="text-uppercase">
-                                        <a href="index.html" class="text-success">
-                                            <span><img src="{{ asset('assets/images/logo.png') }}" alt="" height="36"></span>
+                                        <a href="javascript:void(0);" class="text-success">
+                                            <span><img src="{{ asset('logo/klinic.png') }}" alt="" width="30%"></span>
                                         </a>
                                     </h2>
                                     <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
                                 </div>
-                                <div class="account-content">
+                                <div class="account-content" style="background-color: white !important;">
                                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                                         {{ csrf_field() }}
                                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -94,7 +95,7 @@
                                         
                                         <div class="form-group account-btn text-center m-t-10">
                                             <div class="col-xs-12">
-                                                <button class="btn w-md btn-bordered btn-purple waves-effect waves-light" type="submit">Log In</button>
+                                                <button class="btn w-md btn-bordered btn-info waves-effect waves-light" type="submit">Log In</button>
                                             </div>
                                         </div>
 

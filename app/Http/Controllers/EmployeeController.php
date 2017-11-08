@@ -105,7 +105,6 @@ class EmployeeController extends Controller
         $employee->employee_info = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'country' => $request->country,
             'address' => $request->address,
             'gender' => $request->gender,
             'contact_no' => $request->contact_no,
@@ -155,7 +154,57 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $upload_dir = base_path() . '/public/uploads';
+
+        if ($request->profile_image !== null)
+        {
+            $request->validate([
+                'employee_info' => 'required',
+                'users' => 'required',
+                'profile_image' => 'image|mimes:jpeg,png|max:2048'
+            ]);
+
+            $file = $request->file('profile_image');
+            $ext = $file->getClientOriginalExtension();
+            $filename = $request->get('email').'.'.$ext;
+            $file->move($upload_dir, $filename);
+        }
+        else{
+            $request->validate([
+                'employee_info' => 'required',
+                'users' => 'required',
+
+            ]);
+
+        }
+
+        $employee = UserInformation::findOrFail($id);
+
+        $employee->employee_info = [
+            'first_name' => $request->employee_info['first_name'],
+            'last_name' => $request->employee_info['last_name'],
+            'address' => $request->employee_info['address'],
+            'gender' => $request->employee_info['gender'],
+            'contact_no' => $request->employee_info['contact_no'],
+        ];
+        $employee->save();
+        //dd($request);
+        $user = User::findOrFail($employee->user_id);
+
+        $user->email = $request->users['email'];
+        if($request->password !== null)
+        {
+
+            $user->password = bcrypt($request->password);
+        }
+        if($request->profile_image !== null)
+        {
+            $user->profile_image = $request->profile_image;
+        }
+        $user->save();
+
+        return redirect('employee')->with('message','Employee Edited Successfully');
     }
 
     /**

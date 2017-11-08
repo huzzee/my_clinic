@@ -81,7 +81,7 @@
                                         <div class="form-group row">
                                             <label for="full_name" class="col-sm-3">Password</label>
                                             <div class="col-sm-9">
-                                                <input type="password" name="password" parsley-trigger="change"
+                                                <input type="text" name="password" parsley-trigger="change"
                                                        placeholder="Change Password If needed"  autocomplete="off" class="form-control"/>
 
 

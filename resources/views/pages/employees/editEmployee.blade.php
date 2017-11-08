@@ -56,14 +56,7 @@
 
                                     <div class="p-20" style="clear: both;">
 
-                                        <div class="form-group row">
-                                            <label for="role_id" class="col-sm-3">Role<span class="text-danger">*</span></label>
-                                            <div class="col-sm-9">
-                                                {!!Form::select('users[role_id]',['4'=>'Receptionist', '5'=>'Pharmacist'],null ,['class' => 'form-control select2'])!!}
-
-
-                                            </div>
-                                        </div>
+                                        <input type="hidden" name="role_id" value="4" />
 
                                         <div class="form-group row">
                                             <label for="first_name" class="col-sm-3">First Name<span class="text-danger">*</span></label>
@@ -93,9 +86,8 @@
                                         <div class="form-group row">
                                             <label for="last_name" class="col-sm-3">Password</label>
                                             <div class="col-sm-9">
-                                                <input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
-                                                <input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
-                                                {!! Form::password('password',['class' => 'form-control','autocomplete' => 'false','placeholder' => 'Change Password if needed']) !!}
+
+                                                {!! Form::text('password',null,['class' => 'form-control','autocomplete' => 'false','placeholder' => 'Change Password if needed']) !!}
 
                                             </div>
                                         </div>
@@ -148,7 +140,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3"></div>
                                             <div class="col-sm-9">
-                                                <button type="submit" class="btn btn-inverse">Create Employee</button>
+                                                <button type="submit" class="btn btn-inverse">Update Employee</button>
                                             </div>
                                         </div>
 

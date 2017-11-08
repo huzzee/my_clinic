@@ -2,7 +2,7 @@
 
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <a href="index.html" class="logo"><span>Al <span>Clinic </span></span><i class="mdi mdi-layers"></i></a>
+                    <a href="javascript:void(0);" class="logo"><span><img src="{{asset('logo/klinic.png')}}" style="height: 70%;" alt=""></span><i><img src="{{asset('logo/klinic.png')}}" style="height: 30px;" alt=""></i></a>
                     <!-- Image logo -->
                     <!--<a href="index.html" class="logo">-->
                         <!--<span>-->

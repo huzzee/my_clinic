@@ -49,7 +49,7 @@
                                 <div class="col-sm-12 col-xs-12 col-md-12">
 
 
-                                    <a class="btn btn-purple" href="{{ url('admins') }}">Manage Admins</a>
+                                    <a class="btn btn-info" href="{{ url('admins') }}">Manage Admins</a>
                                     <hr>
                                     <h5>General Information</h5>
                                     <hr>
@@ -81,6 +81,8 @@
                                         <div class="form-group row">
                                             <label for="last_name" class="col-sm-3">Password<span class="text-danger">*</span></label>
                                             <div class="col-sm-9">
+                                                <input type="email" name="email-fake" style="display: none">
+                                                <input type="password" name="password-fake" style="display: none">
                                                 <input type="password" name="password" parsley-trigger="change"
                                                        placeholder="Enter Password" autocomplete="off" class="form-control"/>
 
