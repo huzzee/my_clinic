@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\Schedule;
+use App\models\ScheduleDetail;
 use Illuminate\Http\Request;
 use App\models\UserInformation;
 use App\models\Entity;
@@ -21,7 +22,14 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        $schedule = Schedule::with('user_informations','schedule_details')
+                ->where('entity_id','=',Auth::user()->entity_id)->get();
+
+        return view('pages.schedules.manageSchedule',array(
+            'schedules' => $schedule
+        ));
+
+        //dd($schedule);
     }
 
     /**
@@ -52,7 +60,42 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'opd_day' => 'required',
+            'opd_start_time' => 'required',
+            'opd_end_time' => 'required'
+        ]);
+
+        $schedule = new Schedule;
+        $schedule->entity_id = Auth::user()->entity_id;
+        $schedule->doctor_id = $request->doctor_id;
+        $schedule->save();
+
+        for($i = 0; $i < sizeof($request->opd_day); $i++)
+        {
+            $schedule_detail = new ScheduleDetail;
+            $schedule_detail->type = 0;
+            $schedule_detail->schedule_id = $schedule->id;
+            $schedule_detail->days = $request->opd_day[$i];
+            $schedule_detail->start_time = $request->opd_start_time[$i];
+            $schedule_detail->end_time = $request->opd_end_time[$i];
+
+            $schedule_detail->save();
+        }
+
+        for($i = 0; $i < sizeof($request->app_day); $i++)
+        {
+            $schedule_detail = new ScheduleDetail;
+            $schedule_detail->type = 1;
+            $schedule_detail->schedule_id = $schedule->id;
+            $schedule_detail->days = $request->app_day[$i];
+            $schedule_detail->start_time = $request->app_start_time[$i];
+            $schedule_detail->end_time = $request->app_end_time[$i];
+
+            $schedule_detail->save();
+        }
+
+        return redirect('schedule')->with('message','Successfully Added Schedule');
     }
 
     /**
@@ -103,8 +146,19 @@ class ScheduleController extends Controller
 
     /*Ajax Routes*/
 
-    public function doc_schedule_chk()
+    public function schedule_chk()
     {
-        return 'ok';
+        $doctor = Schedule::where('doctor_id','=',request()->doc_id)->get();
+
+        if(!isset($doctor->doctor_id))
+        {
+            return response()->json(0);
+        }
+        else
+        {
+            return response()->json(1);
+        }
+
+
     }
 }
