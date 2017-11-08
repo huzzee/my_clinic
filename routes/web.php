@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::Resource('drugs','MedicineController');
     Route::post('updateStock/{id}','MedicineController@updateStock');
     Route::Resource('schedule','ScheduleController');
+    Route::get('doc_schedule_chk','ScheduleController@schedule_chk');
 
     Route::get('drugCategory','MedicineController@drugCategory')->name('category');
     Route::post('drugCategory','MedicineController@drugCategoryStore')->name('drugCategoryStore');

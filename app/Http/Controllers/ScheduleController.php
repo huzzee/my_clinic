@@ -99,4 +99,12 @@ class ScheduleController extends Controller
     {
         //
     }
+
+
+    /*Ajax Routes*/
+
+    public function doc_schedule_chk()
+    {
+        return 'ok';
+    }
 }

@@ -154,9 +154,12 @@
         <?php echo $__env->yieldContent('scripts'); ?>;
 
         <!-- App js -->
+
         <script src="<?php echo e(asset('assets/js/jquery.core.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/jquery.app.js')); ?>"></script>
-        <script src="<?php echo e(asset('js/custom.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/app.js')); ?>"></script>
+
+
 
     </body>
 </html>

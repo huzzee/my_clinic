@@ -54,12 +54,11 @@
                                     <div class="p-20" style="clear: both;">
 
 
-                                        <input type="hidden" name="role_id" value="4" />
 
                                         <div class="form-group row">
-                                            <label for="first_name" class="col-sm-3">Doctor<span class="text-danger">*</span></label>
+                                            <label for="doctor_id" class="col-sm-3">Doctor<span class="text-danger">*</span></label>
                                             <div class="col-sm-9">
-                                                <select class="form-control select2" name="stock_unit">
+                                                <select class="form-control select2" id="my_doc" name="doctor_id">
                                                     <option selected disabled="disabled">Select Doctor</option>
 
                                                     <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -71,35 +70,129 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
+                                        <hr>
+                                        <div class="row" style="display:none;">
+                                            <div class="col-md-6" style="border-right: 1px solid lightgrey;border-left: 1px solid lightgrey;">
+                                                <h4 class="text-inverse text-uppercase">Schedule For Opd</h4>
+                                                <hr>
                                                 <div class="form-group row">
-                                                    <label for="first_name" class="col-sm-3">Doctor<span class="text-danger">*</span></label>
-                                                    <div class="col-sm-9">
-                                                        <select class="form-control select2" name="stock_unit">
-                                                            <option selected disabled="disabled">Select Doctor</option>
 
-                                                            <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->users->name); ?></option>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-
+                                                    <div class="col-sm-4 m-b-20">
+                                                        <select class="form-control select2">
+                                                            <option selected disabled="disabled">Select Days</option>
+                                                            <option value="Sunday">Sunday</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                            <option value="Saturday">Saturday</option>
 
                                                         </select>
                                                     </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group clockpicker m-b-20" data-placement="top" data-align="top" data-autoclose="true">
+                                                            <input type="text" class="form-control" placeholder="Start Time">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group clockpicker m-b-20" data-placement="top" data-align="top" data-autoclose="true">
+                                                            <input type="text" class="form-control" placeholder="End Time">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-icon waves-effect waves-light btn-inverse m-b-5 add_schedule" type="button">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <table class="table table-striped m-0">
+
+                                                        <thead>
+                                                        <tr>
+
+
+                                                            <th width="35%">Days</th>
+
+                                                            <th>Start Time</th>
+                                                            <th>End Time</th>
+                                                            <th width="20%">Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="table_row">
+
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6"></div>
+                                            <div class="col-sm-6" style="border-left: 1px solid lightgrey;border-right: 1px solid lightgrey;">
+                                                <h4 class="text-inverse text-uppercase">Schedule For Appointment</h4>
+                                                <hr>
+                                                <div class="form-group row">
+
+                                                    <div class="col-md-4 m-b-20">
+                                                        <select class="form-control select2" >
+                                                            <option selected disabled="disabled">Select Days</option>
+                                                            <option value="Sunday">Sunday</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                            <option value="Saturday">Saturday</option>
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group clockpicker m-b-20" data-placement="top" data-align="top" data-autoclose="true">
+                                                            <input type="text" class="form-control" placeholder="Start Time">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group clockpicker m-b-20" data-placement="top" data-align="top" data-autoclose="true">
+                                                            <input type="text" class="form-control" placeholder="End Time">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-icon waves-effect waves-light btn-inverse m-b-5 add_schedule" type="button">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <table class="table table-striped m-0">
+
+                                                        <thead>
+                                                        <tr>
+
+
+                                                            <th width="35%">Days</th>
+
+                                                            <th>Start Time</th>
+                                                            <th>End Time</th>
+                                                            <th width="20%">Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="table_row">
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
 
 
-                                        
-
+                                        <hr>
 
                                         <div class="form-group row">
-                                            <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
-                                                <button type="submit" class="btn btn-inverse">Add Schedule</button>
+                                            <div class="col-sm-9"></div>
+                                            <div class="col-sm-3">
+                                                <button type="submit" class="btn btn-teal">Add Schedule</button>
                                             </div>
                                         </div>
 
