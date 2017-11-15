@@ -25,4 +25,18 @@ class UserInformation extends Model
     {
         return $this->belongsTo('App\User','user_id');
     }
+
+    public function schedules()
+    {
+        return $this->hasMany('App\models\Schedule','id');
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany('App\models\Leave','id');
+    }
+    public function medical_records()
+    {
+        return $this->hasMany('App\models\MedicalRecord','id');
+    }
 }

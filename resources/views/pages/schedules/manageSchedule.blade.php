@@ -97,7 +97,7 @@
                                             </div>
                                             <div class="modal-body">
 
-                                                Are You Sure.You want to delete This patient.
+                                                Are You Sure.You want to delete it.
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
@@ -108,6 +108,25 @@
                                                     <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
 
                                                 </form>
+
+                                                @if($schedule->status == 1)
+                                                    <form action="{{ url('schedule_inactive/'.$schedule->id) }}" method="post">
+                                                        {{ csrf_field() }}
+
+                                                        <button type="submit" class="btn btn-pink waves-effect" style="float: right;margin-right: 2%;">Deactivate</button>
+
+                                                    </form>
+                                                @else
+                                                    <form action="{{ url('schedule_active/'.$schedule->id) }}" method="post">
+                                                        {{ csrf_field() }}
+
+                                                        <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Activate</button>
+
+                                                    </form>
+
+                                                @endif
+
+
 
                                             </div>
                                         </div>

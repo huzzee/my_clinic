@@ -32,6 +32,29 @@ class ScheduleController extends Controller
         //dd($schedule);
     }
 
+    public function schedule_inactive($id)
+    {
+
+        $schedule = Schedule::findOrFail($id);
+
+        $schedule->status = 0;
+        $schedule->save();
+
+        return redirect('schedule')->with('message','Successfully Deactivate Schedule');
+    }
+
+
+
+    public function schedule_active($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+
+        $schedule->status = 1;
+        $schedule->save();
+
+        return redirect('schedule')->with('message','Successfully Activate Schedule');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -104,9 +127,16 @@ class ScheduleController extends Controller
      * @param  \App\models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function show(Schedule $schedule)
+    public function show($id)
     {
-        //
+        $schedule = Schedule::with('user_informations','schedule_details')
+            ->where('id','=',$id)
+            ->where('entity_id','=',Auth::user()->entity_id)->first();
+        //dd($schedule->schedule_details);
+
+        return view('pages.schedules.showSchedule',array(
+            'schedule' => $schedule
+        ));
     }
 
     /**
@@ -115,9 +145,16 @@ class ScheduleController extends Controller
      * @param  \App\models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function edit(Schedule $schedule)
+    public function edit($id)
     {
-        //
+        $schedule = Schedule::with('user_informations','schedule_details')
+            ->where('id','=',$id)
+            ->where('entity_id','=',Auth::user()->entity_id)->first();
+        //dd($schedule->schedule_details);
+
+        return view('pages.schedules.editSchedule',array(
+            'schedule' => $schedule
+        ));
     }
 
     /**
@@ -127,9 +164,46 @@ class ScheduleController extends Controller
      * @param  \App\models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Schedule $schedule)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'opd_day' => 'required',
+            'opd_start_time' => 'required',
+            'opd_end_time' => 'required'
+        ]);
+
+        $schedule_details = ScheduleDetail::where('schedule_id','=',$id)->get();
+        foreach ($schedule_details as $detail)
+        {
+            $detail->delete();
+        }
+        //dd($schedule_details);
+
+        for($i = 0; $i < sizeof($request->opd_day); $i++)
+        {
+            $schedule_detail = new ScheduleDetail;
+            $schedule_detail->type = 0;
+            $schedule_detail->schedule_id = $id;
+            $schedule_detail->days = $request->opd_day[$i];
+            $schedule_detail->start_time = $request->opd_start_time[$i];
+            $schedule_detail->end_time = $request->opd_end_time[$i];
+
+            $schedule_detail->save();
+        }
+
+        for($i = 0; $i < sizeof($request->app_day); $i++)
+        {
+            $schedule_detail = new ScheduleDetail;
+            $schedule_detail->type = 1;
+            $schedule_detail->schedule_id = $id;
+            $schedule_detail->days = $request->app_day[$i];
+            $schedule_detail->start_time = $request->app_start_time[$i];
+            $schedule_detail->end_time = $request->app_end_time[$i];
+
+            $schedule_detail->save();
+        }
+
+        return redirect('schedule')->with('message','Successfully Updated Schedule');
     }
 
     /**
@@ -138,9 +212,13 @@ class ScheduleController extends Controller
      * @param  \App\models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Schedule $schedule)
+    public function destroy($id)
     {
-        //
+        $schedule = Schedule::findOrFail($id);
+
+        $schedule->delete();
+
+        return redirect('schedule')->with('message','Successfully Deleted Schedule');
     }
 
 
@@ -150,7 +228,7 @@ class ScheduleController extends Controller
     {
         $doctor = Schedule::where('doctor_id','=',request()->doc_id)->get();
 
-        if(!isset($doctor->doctor_id))
+        if(!isset($doctor[0]->doctor_id))
         {
             return response()->json(0);
         }

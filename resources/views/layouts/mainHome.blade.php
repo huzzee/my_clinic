@@ -11,8 +11,15 @@
         <!-- App title -->
         <title>Klenic</title>
 
+
+
+        {{--drawing pad--}}
+        <link href="{{ asset('assets/plugins/jquery.filer/css/jquery.filer.css') }}" rel="stylesheet" />
+
         <!-- Custom box -->
-            <link href="{{ asset('assets/plugins/custombox/css/custombox.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/plugins/custombox/css/custombox.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/plugins/summernote/summernote.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('assets/plugins/tooltipster/tooltipster.bundle.min.css') }}">
 
         <!-- form css-->
         <link href="{{ asset('assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css') }}" rel="stylesheet" />
@@ -49,11 +56,17 @@
         <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="{{ asset('assets/plugins/switchery/switchery.min.css') }}">
 
+
+
+
+
         <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+
         <![endif]-->
 
         <script src="{{ asset('assets/js/modernizr.min.js') }}"></script>
@@ -61,8 +74,15 @@
     </head>
 
     <style>
-        
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height:100%;
 
+        }
 
         @media print{
           body .box-header{
@@ -83,9 +103,35 @@
             -webkit-box-shadow: 0 0 0 1000px white inset !important;
         }
 
-       
+        .links a {
+            padding-left: 10px;
+            margin-left: 10px;
+            border-left: 1px solid #000;
+            text-decoration: none;
+            color: #999;
+        }
+        .links a:first-child {
+            padding-left: 0;
+            margin-left: 0;
+            border-left: none;
+        }
+        .links a:hover {text-decoration: underline;}
+        .column-left {
+            display: inline;
+            float: left;
+        }
+        .column-right {
+            display: inline;
+            float: right;
+        }
+
+
+
+
+
     </style>
     <body class="fixed-left">
+    <input type="hidden" value="{{ url('/') }}" id="baseUrl">
 
         <!-- Begin page -->
         <div id="wrapper">
@@ -142,6 +188,8 @@
 
         <!-- jQuery  -->
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.jqscribble.js') }}"></script>
+        <script src="{{ asset('js/jqscribble.extrabrushes.js') }}"></script>
         <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('assets/js/detect.js') }}"></script>
         <script src="{{ asset('assets/js/fastclick.js') }}"></script>

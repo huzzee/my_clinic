@@ -413,19 +413,18 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody id="item_row1">
-                                                                @for($i = 0; $i < sizeof($patient->drug_allergy['drug_name']); $i++)
-
+                                                                @foreach($patient->drug_allergy as $drug)
                                                                     <tr>
-                                                                        <td>{{ $patient->drug_allergy['drug_name'][$i] }}<input type="hidden" name="drug_allergy[drug_name][]" value="{{ $patient->drug_allergy['drug_name'][$i] }}"></td>
-                                                                        <td>{{ $patient->drug_allergy['drug_comment'][$i] }}<input type="hidden" name="drug_allergy[drug_comment][]" value="{{ $patient->drug_allergy['drug_comment'][$i] }}"></td>
+                                                                        <td>{{ $drug['drug_name'] }}<input type="hidden" name="drug_name[]" value="{{ $drug['drug_name'] }}"></td>
+                                                                        <td>{{ $drug['drug_comment'] }}<input type="hidden" name="drug_comment[]" value="{{ $drug['drug_comment'] }}"></td>
                                                                         <td>
                                                                             <button type="button" class="btn btn-icon btn-danger m-b-5 remove_item1">
                                                                                 <i class="fa fa-remove"></i>
                                                                             </button>
                                                                         </td>
                                                                     </tr>
+                                                                @endforeach
 
-                                                                @endfor
 
                                                             </tbody>
                                                         </table>

@@ -247,9 +247,6 @@
 
     <script src="{{ asset('assets/pages/jquery.form-pickers.init.js') }}"></script>
 
-    <script src="{{ asset('assets/plugins/jquery.steps/js/jquery.steps.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-validation/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.wizard-init.js') }}"></script>
     <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
 
 

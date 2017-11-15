@@ -2,6 +2,7 @@
 
 namespace App\models;
 
+use App\models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
@@ -19,5 +20,10 @@ class Patient extends Model
     public function users()
     {
         return $this->belongsTo('App\User','creator_id');
+    }
+
+    public function medical_records()
+    {
+        return $this->hasMany(MedicalRecord::class);
     }
 }

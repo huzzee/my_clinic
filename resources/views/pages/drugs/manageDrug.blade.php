@@ -119,7 +119,7 @@
                                             </div>
                                             <div class="modal-body">
 
-                                                Are You Sure.You want to Deactivate This User.
+                                                Are You Sure.You want to Delete this.
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>

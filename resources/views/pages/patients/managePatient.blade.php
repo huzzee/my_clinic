@@ -53,7 +53,7 @@
                                 <th width="8%">Age</th>
 
 
-                                <th>Shortcuts</th>
+                                <th width="18%">Shortcuts</th>
                                 <th width="15%">Action</th>
 
                             </tr>
@@ -81,7 +81,34 @@
                                     @endif
                                     @php $age = date('Y', strtotime(Carbon\Carbon::now())) - date('Y', strtotime($patient->patient_info['date_of_birth'])); @endphp
                                     <td>{{ $age }}</td>
-                                    <td></td>
+                                    <td>
+                                        <a href="{{ url('medical_records/'.$patient->id.'/edit') }}"
+                                        style="font-weight: bold; font-size: 200%;"
+                                           data-toggle="tooltip" data-placement="top" title=""
+                                           data-original-title="Add Medical Record">M</a>
+                                        &nbsp;
+                                        <a href="#"
+                                           style="font-weight: bold; font-size: 200%;"
+                                           data-toggle="tooltip" data-placement="top" title=""
+                                           data-original-title="Add Queue">Q</a>
+                                        &nbsp;
+                                        <a href="#"
+                                           style="font-weight: bold; font-size: 200%;"
+                                           data-toggle="tooltip" data-placement="top" title=""
+                                           data-original-title="Add Payment">P</a>
+                                        &nbsp;
+                                        <a href="#"
+                                           style="font-weight: bold; font-size: 200%;"
+                                           data-toggle="tooltip" data-placement="top" title=""
+                                           data-original-title="Add Appointment ">A</a>
+                                        &nbsp;
+                                        <a href="#"
+                                           style="font-weight: bold; font-size: 200%;"
+                                           data-toggle="tooltip" data-placement="top" title=""
+                                           data-original-title="Add Invoice">I</a>
+                                        &nbsp;
+
+                                    </td>
                                     <td>
 
                                         <a href="{{ url('patients/'.$patient->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
@@ -160,6 +187,8 @@
 
     <!-- init -->
     <script src="{{ asset('assets/pages/jquery.datatables.init.js') }}"></script>
+    <script src="{{ asset('assets/plugins/tooltipster/tooltipster.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/pages/jquery.tooltipster.js') }}"></script>
 
 
     <script type="text/javascript">

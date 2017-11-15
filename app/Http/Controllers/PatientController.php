@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\MedicalRecord;
 use App\models\Patient;
 use Illuminate\Http\Request;
 use App\models\UserInformation;
@@ -12,6 +13,7 @@ use Auth;
 
 class PatientController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -19,6 +21,7 @@ class PatientController extends Controller
      */
     public function index()
     {
+
         $patient = Patient::with('users')->where('entity_id','=',Auth::user()->entity_id)
             ->get();
          return view('pages.patients.managePatient',array(
@@ -100,7 +103,17 @@ class PatientController extends Controller
             'insurance' => $request['insurance'],
             'patient_file' => $filename,
         ];
-        $patient->drug_allergy = $request->drug_allergy;
+        $allergy = [];
+        for($i=0; $i < sizeof($request->drug_name); $i++)
+        {
+           $drugs = [
+               'drug_name' => $request->drug_name[$i],
+               'drug_comment' => $request->drug_comment[$i],
+           ];
+
+           array_push($allergy,$drugs);
+        }
+        $patient->drug_allergy = $allergy;
 
         $patient->save();
 
@@ -116,10 +129,18 @@ class PatientController extends Controller
      */
     public function show($id)
     {
+        $patient_dats = Patient::with('users')
+            ->where('entity_id','=',Auth::user()->id)->get();
+
         $patient = Patient::with('users')->where('id','=',$id)->first();
 
+        $medical_records = MedicalRecord::where('status','=',1)
+                    ->where('patient_id','=',$id)->get();
+        //dd($medical_records);
         return view('pages.patients.showPatient',array(
-            'patient' => $patient
+            'patient' => $patient,
+            'patient_dats' => $patient_dats,
+            'medical_records' => $medical_records
         ));
     }
 
@@ -188,7 +209,18 @@ class PatientController extends Controller
             'insurance' => $request['medical_info']['insurance'],
             'patient_file' => $filename,
         ];
-        $patient->drug_allergy = $request->drug_allergy;
+        $allergy = [];
+        for($i=0; $i < sizeof($request->drug_name); $i++)
+        {
+            $drugs = [
+                'drug_name' => $request->drug_name[$i],
+                'drug_comment' => $request->drug_comment[$i],
+            ];
+
+            array_push($allergy,$drugs);
+        }
+        $patient->drug_allergy = $allergy;
+
 
         $patient->save();
 
