@@ -15,4 +15,8 @@ class ClinicController extends Controller
             'clinics' => $clinic
         ));
     }
+    public function show()
+    {
+
+    }
 }

@@ -62,4 +62,12 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::Resource('diagnoses','DiagnoseController');
     Route::Resource('medical_templates','MedicalTemplateController');
     Route::get('record_ajax','MedicalRecordController@template');
+
+    Route::Resource('queues','QueueController');
+    Route::post('queues_doc','QueueController@queue_doc');
+    Route::post('queues_note','QueueController@queue_note');
+
+
+    Route::Resource('payments','PaymentController');
+    Route::get('/drugs_press','PaymentController@drug_press');
 });

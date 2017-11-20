@@ -455,6 +455,7 @@
                                                                                                 @foreach($record->template as $temp)
                                                                                                 <div class="form-group row">
                                                                                                     <label for="patient_id" class="form-label col-sm-12"><span style="float: left;">{{ $temp['question'] }} ?</span></label>
+                                                                                                    @if(sizeof($temp['answers']) > 1)
                                                                                                     @for($i=0; $i < sizeof($temp['answers']); $i++)
                                                                                                     <div class="col-sm-3">
                                                                                                         <input type="text" class="form-control"
@@ -462,6 +463,13 @@
 
                                                                                                     </div>
                                                                                                     @endfor
+                                                                                                    @else
+                                                                                                    <div class="col-sm-3">
+                                                                                                        <input type="text" class="form-control"
+                                                                                                               value="{{ $temp['answers'] }}" readonly>
+
+                                                                                                    </div>
+                                                                                                    @endif
                                                                                                 </div>
                                                                                                 @endforeach
                                                                                             </div>

@@ -23,7 +23,7 @@ class MedicalRecordController extends Controller
     {
         $records = MedicalRecord::with('patients','user_informations')
             ->where('entity_id','=',Auth::user()->entity_id)
-            ->where('status','=',1)->get();
+            ->where('status','=',1)->latest()->get();
 
         $patient = Patient::with('users')
             ->where('entity_id','=',Auth::user()->id)->get();

@@ -23,9 +23,17 @@ class PatientController extends Controller
     {
 
         $patient = Patient::with('users')->where('entity_id','=',Auth::user()->entity_id)
-            ->get();
+            ->latest()->get();
+
+        $doctor = UserInformation::with('users')
+            ->whereNotNull('doctor_info')
+            ->whereHas('users',function ($query){
+                $query->where('entity_id','=',Auth::user()->entity_id);
+            })->get();
+
          return view('pages.patients.managePatient',array(
-             'patients' => $patient
+             'patients' => $patient,
+             'doctors' => $doctor
          ));
     }
 
@@ -135,7 +143,7 @@ class PatientController extends Controller
         $patient = Patient::with('users')->where('id','=',$id)->first();
 
         $medical_records = MedicalRecord::where('status','=',1)
-                    ->where('patient_id','=',$id)->get();
+                    ->where('patient_id','=',$id)->latest()->get();
         //dd($medical_records);
         return view('pages.patients.showPatient',array(
             'patient' => $patient,

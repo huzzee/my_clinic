@@ -7,8 +7,8 @@
 
                             <li class="has_sub">
                                 <a href="{{ url('/') }}" class="waves-effect">
-                                    <i class="mdi mdi-view-dashboard"></i>
-                                    <span> Dashboard </span>
+                                    <i style="color: #39e7e0" class="mdi mdi-view-dashboard"></i>
+                                    <span style="color: lightgrey;"> Dashboard </span>
                                 </a>
                                 
                             </li>
@@ -19,13 +19,13 @@
                                     <li class="has_sub">
                                     @if($menus->menu_slug == '')
                                         <a href="javascript:void(0);" class="waves-effect">
-                                            <i class="{{ $menus->menu_icon }}"></i>
-                                            <span> {{ $menus->menu_name }} </span>
+                                            <i style="color: #39e7e0" class="{{ $menus->menu_icon }}"></i>
+                                            <span style="color: lightgrey;"> {{ $menus->menu_name }} </span>
                                         </a>
                                     @else
                                         <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
-                                            <i class="{{ $menus->menu_icon }}"></i>
-                                            <span> {{ $menus->menu_name }} </span>
+                                            <i style="color: #39e7e0" class="{{ $menus->menu_icon }}"></i>
+                                            <span style="color: lightgrey;"> {{ $menus->menu_name }} </span>
                                         </a>
                                     @endif
 

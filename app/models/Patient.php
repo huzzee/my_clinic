@@ -4,6 +4,7 @@ namespace App\models;
 
 use App\models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
+use App\models\Queue;
 
 class Patient extends Model
 {
@@ -25,5 +26,14 @@ class Patient extends Model
     public function medical_records()
     {
         return $this->hasMany(MedicalRecord::class);
+    }
+
+    public function queues()
+    {
+        return $this->hasMany(Queue::class);
+    }
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class);
     }
 }

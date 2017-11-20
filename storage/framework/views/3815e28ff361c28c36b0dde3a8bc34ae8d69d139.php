@@ -455,6 +455,7 @@
                                                                                                 <?php $__currentLoopData = $record->template; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $temp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                                                 <div class="form-group row">
                                                                                                     <label for="patient_id" class="form-label col-sm-12"><span style="float: left;"><?php echo e($temp['question']); ?> ?</span></label>
+                                                                                                    <?php if(sizeof($temp['answers']) > 1): ?>
                                                                                                     <?php for($i=0; $i < sizeof($temp['answers']); $i++): ?>
                                                                                                     <div class="col-sm-3">
                                                                                                         <input type="text" class="form-control"
@@ -462,6 +463,13 @@
 
                                                                                                     </div>
                                                                                                     <?php endfor; ?>
+                                                                                                    <?php else: ?>
+                                                                                                    <div class="col-sm-3">
+                                                                                                        <input type="text" class="form-control"
+                                                                                                               value="<?php echo e($temp['answers']); ?>" readonly>
+
+                                                                                                    </div>
+                                                                                                    <?php endif; ?>
                                                                                                 </div>
                                                                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                             </div>

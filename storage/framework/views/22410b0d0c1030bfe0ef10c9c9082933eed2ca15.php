@@ -1,8 +1,4 @@
-@extends('layouts.mainHome')
-
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <!-- Start content -->
     <div class="content">
         <div class="container">
@@ -23,28 +19,31 @@
 
             <div class="row">
 
-                    {!! Form::model($patient, ['method' => 'PATCH','url' => ['patients', $patient->id], 'files'=>true]) !!}
+                    <?php echo Form::model($patient, ['method' => 'PATCH','url' => ['patients', $patient->id], 'files'=>true]); ?>
 
-                    {{ csrf_field() }}
 
-                    @if (count($errors) > 0)
+                    <?php echo e(csrf_field()); ?>
+
+
+                    <?php if(count($errors) > 0): ?>
                         <div class="alert alert-danger">
                             <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
-                    @if(session()->has('message'))
+                    <?php endif; ?>
+                    <?php if(session()->has('message')): ?>
                         <div class="alert alert-success">
-                            {{ session()->get('message') }}
+                            <?php echo e(session()->get('message')); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <div class="col-md-12">
                         <div class="card-box">
-                            <a class="btn btn-info" href="{{ url('patients') }}">Manage Patients</a>
+                            <a class="btn btn-info" href="<?php echo e(url('patients')); ?>">Manage Patients</a>
                             <hr>
 
                             <ul class="nav nav-tabs navtab-bg nav-justified">
@@ -89,7 +88,8 @@
                                                 <div class="form-group row">
                                                     <label for="full_name" class="col-sm-3">Full Name<span class="text-danger">*</span></label>
                                                     <div class="col-sm-9">
-                                                        {!! Form::text('patient_info[full_name]' , null ,['class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                        <?php echo Form::text('patient_info[full_name]' , null ,['class' => 'form-control','parsley-trigger' => 'change']); ?>
+
                                                     </div>
                                                 </div>
 
@@ -99,16 +99,19 @@
                                                     <label for="status" class="col-sm-3">Gender<span class="text-danger">*</span></label>
                                                     <div class="col-sm-9">
                                                         <div class="radio radio-info radio-inline">
-                                                            {!! Form::radio('patient_info[gender]', 0,['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('patient_info[gender]', 0,['id' => 'inlineRadio1']); ?>
+
                                                             <label for="inlineRadio1"> Male </label>
                                                         </div>
                                                         <div class="radio radio-pink radio-inline">
-                                                            {!! Form::radio('patient_info[gender]', 1,['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('patient_info[gender]', 1,['id' => 'inlineRadio1']); ?>
+
                                                             <label for="inlineRadio2"> Female </label>
                                                         </div>
 
                                                         <div class="radio radio-purple radio-inline">
-                                                            {!! Form::radio('patient_info[gender]', 2,['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('patient_info[gender]', 2,['id' => 'inlineRadio1']); ?>
+
                                                             <label for="inlineRadio3"> Others </label>
                                                         </div>
                                                     </div>
@@ -117,14 +120,16 @@
                                                 <div class="form-group row">
                                                     <label for="contact_no" class="col-sm-3">Contact No<span class="text-danger">*</span></label>
                                                     <div class="col-sm-9">
-                                                        {!! Form::number('patient_info[contact_no]' , null ,['class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                        <?php echo Form::number('patient_info[contact_no]' , null ,['class' => 'form-control','parsley-trigger' => 'change']); ?>
+
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label for="date_of_birth" class="col-sm-3">Date Of Birth<span class="text-danger">*</span></label>
                                                     <div class="col-sm-9">
-                                                        {!! Form::text('patient_info[date_of_birth]' , null ,['class' => 'form-control','id' => 'datepicker-autoclose','placeholder' => 'mm/dd/yyyy']) !!}
+                                                        <?php echo Form::text('patient_info[date_of_birth]' , null ,['class' => 'form-control','id' => 'datepicker-autoclose','placeholder' => 'mm/dd/yyyy']); ?>
+
 
                                                     </div>
                                                 </div>
@@ -157,7 +162,8 @@
                                                 <div class="form-group row">
                                                     <label for="email" class="col-sm-3">Email Address</label>
                                                     <div class="col-sm-9">
-                                                        {!! Form::text('patient_info[email]' , null ,['class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                        <?php echo Form::text('patient_info[email]' , null ,['class' => 'form-control','parsley-trigger' => 'change']); ?>
+
 
                                                     </div>
                                                 </div>
@@ -168,14 +174,16 @@
                                                 <div class="form-group row">
                                                     <label for="rel_contact_no" class="col-sm-3">Relative Contact No</label>
                                                     <div class="col-sm-9">
-                                                        {!! Form::number('patient_info[rel_contact_no]' , null ,['class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                        <?php echo Form::number('patient_info[rel_contact_no]' , null ,['class' => 'form-control','parsley-trigger' => 'change']); ?>
+
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label for="reason" class="col-sm-3">Address</label>
                                                     <div class="col-sm-9">
-                                                        {!!Form::textarea('patient_info[address]',null ,['class' => 'form-control','maxlength' => '225','rows' => '5', 'id' => 'textarea'])!!}
+                                                        <?php echo Form::textarea('patient_info[address]',null ,['class' => 'form-control','maxlength' => '225','rows' => '5', 'id' => 'textarea']); ?>
+
                                                     </div>
                                                 </div>
 
@@ -184,13 +192,15 @@
                                                 <div class="form-group row">
                                                     <label for="full_name" class="col-sm-3">Patient Id</label>
                                                     <div class="col-sm-2">
-                                                        {!!Form::select('patient_info[patient_identity_name]',['NRIC'=>'NRIC', 'FIN'=>'FIN',
-                                                        'Passport'=>'Passport', 'Foreign Id'=>'Foreign Id','Other'=>'Other'],null ,['class' => 'form-control select2'])!!}
+                                                        <?php echo Form::select('patient_info[patient_identity_name]',['NRIC'=>'NRIC', 'FIN'=>'FIN',
+                                                        'Passport'=>'Passport', 'Foreign Id'=>'Foreign Id','Other'=>'Other'],null ,['class' => 'form-control select2']); ?>
+
 
                                                     </div>
                                                     <div class="col-sm-7">
 
-                                                        {!! Form::text('patient_info[patient_identity_no]' , null ,['class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                        <?php echo Form::text('patient_info[patient_identity_no]' , null ,['class' => 'form-control','parsley-trigger' => 'change']); ?>
+
 
                                                     </div>
                                                 </div>
@@ -199,26 +209,31 @@
                                                     <label for="status" class="col-sm-3">Martial Status</label>
                                                     <div class="col-sm-9">
                                                         <div class="radio radio-danger radio-inline">
-                                                            {!! Form::radio('patient_info[martial]', 'Married',['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('patient_info[martial]', 'Married',['id' => 'inlineRadio1']); ?>
+
                                                             <label for="inlineRadio1"> Married </label>
                                                         </div>
                                                         <div class="radio radio-success radio-inline">
-                                                            {!! Form::radio('patient_info[martial]', 'Unmarried',['id' => 'inlineRadio2']) !!}
+                                                            <?php echo Form::radio('patient_info[martial]', 'Unmarried',['id' => 'inlineRadio2']); ?>
+
                                                             <label for="inlineRadio2"> Unmarried </label>
                                                         </div>
 
                                                         <div class="radio radio-purple radio-inline">
-                                                            {!! Form::radio('patient_info[martial]', 'Divorced',['id' => 'inlineRadio3']) !!}
+                                                            <?php echo Form::radio('patient_info[martial]', 'Divorced',['id' => 'inlineRadio3']); ?>
+
                                                             <label for="inlineRadio3"> Divorced </label>
                                                         </div>
 
                                                         <div class="radio radio-inverse radio-inline">
-                                                            {!! Form::radio('patient_info[martial]', 'Widow',['id' => 'inlineRadio3']) !!}
+                                                            <?php echo Form::radio('patient_info[martial]', 'Widow',['id' => 'inlineRadio3']); ?>
+
                                                             <label for="inlineRadio3"> Widow </label>
                                                         </div>
 
                                                         <div class="radio radio-info radio-inline">
-                                                            {!! Form::radio('patient_info[martial]', 'Other',['id' => 'inlineRadio3']) !!}
+                                                            <?php echo Form::radio('patient_info[martial]', 'Other',['id' => 'inlineRadio3']); ?>
+
                                                             <label for="inlineRadio3"> Other </label>
                                                         </div>
                                                     </div>
@@ -256,10 +271,11 @@
                                                 <div class="form-group row">
                                                     <label for="blood_group" class="col-sm-3">Blood group</label>
                                                     <div class="col-sm-9">
-                                                        {!!Form::select('medical_info[blood_group]',
+                                                        <?php echo Form::select('medical_info[blood_group]',
                                                         ['A+'=>'A+', 'A-'=>'A-', 'B+'=>'B+', 'B-'=>'B-',
                                                         'O+'=>'O+', 'O-'=>'O-', 'AB+'=>'AB+', 'AB-'=>'AB-'],
-                                                        null ,['class' => 'form-control select2'])!!}
+                                                        null ,['class' => 'form-control select2']); ?>
+
                                                     </div>
                                                 </div>
 
@@ -268,17 +284,20 @@
                                                     <label for="status" class="col-sm-3">Had any Surgery?</label>
                                                     <div class="col-sm-9">
                                                         <div class="radio radio-danger radio-inline">
-                                                            {!! Form::radio('medical_info[surgery]', 0,['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('medical_info[surgery]', 0,['id' => 'inlineRadio1']); ?>
+
 
                                                             <label for="inlineRadio1"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-success radio-inline">
-                                                            {!! Form::radio('medical_info[surgery]', 1,['id' => 'inlineRadio2']) !!}
+                                                            <?php echo Form::radio('medical_info[surgery]', 1,['id' => 'inlineRadio2']); ?>
+
                                                             <label for="inlineRadio2"> No </label>
                                                         </div>
 
                                                         <div class="radio radio-purple radio-inline">
-                                                            {!! Form::radio('medical_info[surgery]', 2,['id' => 'inlineRadio3']) !!}
+                                                            <?php echo Form::radio('medical_info[surgery]', 2,['id' => 'inlineRadio3']); ?>
+
                                                             <label for="inlineRadio3"> I Don't Know </label>
                                                         </div>
 
@@ -290,16 +309,19 @@
                                                     <label for="status" class="col-sm-3">Had any medical illness?</label>
                                                     <div class="col-sm-9">
                                                         <div class="radio radio-danger radio-inline">
-                                                            {!! Form::radio('medical_info[illness]', 0,['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('medical_info[illness]', 0,['id' => 'inlineRadio1']); ?>
+
                                                             <label for="inlineRadio1"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-success radio-inline">
-                                                            {!! Form::radio('medical_info[illness]', 1,['id' => 'inlineRadio2']) !!}
+                                                            <?php echo Form::radio('medical_info[illness]', 1,['id' => 'inlineRadio2']); ?>
+
                                                             <label for="inlineRadio2"> No </label>
                                                         </div>
 
                                                         <div class="radio radio-purple radio-inline">
-                                                            {!! Form::radio('medical_info[illness]', 2,['id' => 'inlineRadio3']) !!}
+                                                            <?php echo Form::radio('medical_info[illness]', 2,['id' => 'inlineRadio3']); ?>
+
                                                             <label for="inlineRadio3"> I Don't Know </label>
                                                         </div>
 
@@ -311,16 +333,19 @@
                                                     <label for="status" class="col-sm-3">G6PD deficiency?</label>
                                                     <div class="col-sm-9">
                                                         <div class="radio radio-danger radio-inline">
-                                                            {!! Form::radio('medical_info[g6pd]', 0,['id' => 'inlineRadio1']) !!}
+                                                            <?php echo Form::radio('medical_info[g6pd]', 0,['id' => 'inlineRadio1']); ?>
+
                                                             <label for="inlineRadio1"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-success radio-inline">
-                                                            {!! Form::radio('medical_info[g6pd]', 1,['id' => 'inlineRadio2']) !!}
+                                                            <?php echo Form::radio('medical_info[g6pd]', 1,['id' => 'inlineRadio2']); ?>
+
                                                             <label for="inlineRadio2"> No </label>
                                                         </div>
 
                                                         <div class="radio radio-purple radio-inline">
-                                                            {!! Form::radio('medical_info[g6pd]', 2,['id' => 'inlineRadio3']) !!}
+                                                            <?php echo Form::radio('medical_info[g6pd]', 2,['id' => 'inlineRadio3']); ?>
+
                                                             <label for="inlineRadio3"> I Don't Know </label>
                                                         </div>
 
@@ -332,7 +357,8 @@
                                                     <label for="email" class="col-sm-3">Insurance</label>
                                                     <div class="col-sm-9">
 
-                                                        {!! Form::text('medical_info[insurance]' , null ,['class' => 'form-control','parsley-trigger' => 'change','placeholder' => 'Insurance']) !!}
+                                                        <?php echo Form::text('medical_info[insurance]' , null ,['class' => 'form-control','parsley-trigger' => 'change','placeholder' => 'Insurance']); ?>
+
 
 
                                                     </div>
@@ -413,17 +439,17 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody id="item_row1">
-                                                                @foreach($patient->drug_allergy as $drug)
+                                                                <?php $__currentLoopData = $patient->drug_allergy; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $drug): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <tr>
-                                                                        <td>{{ $drug['drug_name'] }}<input type="hidden" name="drug_name[]" value="{{ $drug['drug_name'] }}"></td>
-                                                                        <td>{{ $drug['drug_comment'] }}<input type="hidden" name="drug_comment[]" value="{{ $drug['drug_comment'] }}"></td>
+                                                                        <td><?php echo e($drug['drug_name']); ?><input type="hidden" name="drug_name[]" value="<?php echo e($drug['drug_name']); ?>"></td>
+                                                                        <td><?php echo e($drug['drug_comment']); ?><input type="hidden" name="drug_comment[]" value="<?php echo e($drug['drug_comment']); ?>"></td>
                                                                         <td>
                                                                             <button type="button" class="btn btn-icon btn-danger m-b-5 remove_item1">
                                                                                 <i class="fa fa-remove"></i>
                                                                             </button>
                                                                         </td>
                                                                     </tr>
-                                                                @endforeach
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
                                                             </tbody>
@@ -445,7 +471,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-5"></div>
                                 <div class="col-sm-7">
-                                    <button type="submit" class="btn btn-inverse">Update Patient</button>
+                                    <button type="submit" class="btn btn-inverse">Add Patient</button>
                                 </div>
                             </div>
                         </div>
@@ -459,42 +485,43 @@
 
     </div> <!-- content -->
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts Here*********-->
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 
 
-    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
-    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/multiselect/js/jquery.multi-select.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/select2/js/select2.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js')); ?>"></script>
 
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.mockjax.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.autocomplete.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/countries.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.autocomplete.init.js') }}"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.mockjax.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.autocomplete.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/countries.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.autocomplete.init.js')); ?>"></script>
 
 
 
-    <script src="{{ asset('assets/plugins/moment/moment.js') }}"></script>
-    <script src="{{ asset('assets/plugins/timepicker/bootstrap-timepicker.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/clockpicker/js/bootstrap-clockpicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script src="<?php echo e(asset('assets/plugins/moment/moment.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/timepicker/bootstrap-timepicker.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/clockpicker/js/bootstrap-clockpicker.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js')); ?>"></script>
 
-    <script src="{{ asset('assets/pages/jquery.form-pickers.init.js') }}"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.form-pickers.init.js')); ?>"></script>
 
-    <script src="{{ asset('assets/plugins/jquery.steps/js/jquery.steps.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-validation/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.wizard-init.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
-@endsection
+    <script src="<?php echo e(asset('assets/plugins/jquery.steps/js/jquery.steps.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/jquery-validation/js/jquery.validate.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.wizard-init.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts End*********-->
+<?php echo $__env->make('layouts.mainHome', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

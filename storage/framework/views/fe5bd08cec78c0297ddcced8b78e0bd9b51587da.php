@@ -27,6 +27,15 @@
 
                         </div>
                     <?php endif; ?>
+                    <?php if(count($errors) > 0): ?>
+                        <div class="alert alert-danger">
+                            <ul>
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="card-box table-responsive">
 
@@ -80,27 +89,26 @@
                                     <td><?php echo e($age); ?></td>
                                     <td>
                                         <a href="<?php echo e(url('medical_records/'.$patient->id.'/edit')); ?>"
-                                        style="font-weight: bold; font-size: 200%;"
+                                        style="font-weight: bold; font-size: 200%;color: #2b4a95"
                                            data-toggle="tooltip" data-placement="top" title=""
                                            data-original-title="Add Medical Record">M</a>
                                         &nbsp;
-                                        <a href="#"
-                                           style="font-weight: bold; font-size: 200%;"
-                                           data-toggle="tooltip" data-placement="top" title=""
-                                           data-original-title="Add Queue">Q</a>
+                                        <button
+                                           style="font-weight: bold; font-size: 200%; background: none; border: none; color: #2b4a95"
+                                            data-toggle="modal" data-target="#con-close-modal<?php echo e($patient->patient_code); ?>">Q</button>
                                         &nbsp;
                                         <a href="#"
-                                           style="font-weight: bold; font-size: 200%;"
+                                           style="font-weight: bold; font-size: 200%;color: #2b4a95"
                                            data-toggle="tooltip" data-placement="top" title=""
                                            data-original-title="Add Payment">P</a>
                                         &nbsp;
                                         <a href="#"
-                                           style="font-weight: bold; font-size: 200%;"
+                                           style="font-weight: bold; font-size: 200%;color: #2b4a95"
                                            data-toggle="tooltip" data-placement="top" title=""
                                            data-original-title="Add Appointment ">A</a>
                                         &nbsp;
                                         <a href="#"
-                                           style="font-weight: bold; font-size: 200%;"
+                                           style="font-weight: bold; font-size: 200%;color: #2b4a95"
                                            data-toggle="tooltip" data-placement="top" title=""
                                            data-original-title="Add Invoice">I</a>
                                         &nbsp;
@@ -147,6 +155,56 @@
                                     </div>
                                 </div>
 
+                                
+                                <div id="con-close-modal<?php echo e($patient->patient_code); ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title">Add To Queue</h4>
+                                            </div>
+                                            <form action="<?php echo e(route('queues.store')); ?>" method="post">
+
+                                            <div class="modal-body">
+
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="pats" class="control-label">Select Doctor<span class="text-danger">*</span></label>
+                                                            <select class="form-control select2" name="doctor_id" id="doctor_id">
+                                                                <option selected disabled="disabled">Select Doctors</option>
+
+                                                                <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->users->name); ?></option>
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                <?php echo e(csrf_field()); ?>
+
+                                                <input type="hidden" name="patient_id" value="<?php echo e($patient->id); ?>">
+
+                                                <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add To Queue</button>
+
+
+                                            </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
 
                                 <?php $i++; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -165,6 +223,22 @@
 <!--*********Page Scripts Here*********-->
 
 <?php $__env->startSection('scripts'); ?>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/multiselect/js/jquery.multi-select.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/select2/js/select2.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js')); ?>"></script>
+
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.mockjax.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.autocomplete.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/countries.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.autocomplete.init.js')); ?>"></script>
+
+    <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
+
     <script src="<?php echo e(asset('assets/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.bootstrap.js')); ?>"></script>
 

@@ -760,6 +760,117 @@ $('.height').keyup(function () {
     var bsa = $('.bsa').val(total);
 });
 
+$('#presc').change(function () {
+    var pres = $(this).val();
+
+    if(pres == 1)
+    {
+        $('#hide_press').css('display','none');
+        $('#show_press').css('display','block');
+        $('#pres_foot').css('display','block');
+    }
+});
+
+$('#drug_pres').change(function () {
+    var drug = $(this).val();
+
+    if (drug !== 0)
+    {
+        $.ajax({
+            url: "../../drugs_press",
+            type: "GET",
+            data: {drug:drug},
+            dataType: "json",
+            success: function(response) {
+                //console.log(response.medicine_info['drug_name']);dosage_unitprice_med
+                $('#stock_unit').val(response.medicine_info['stock_unit']);
+                $('#dosage_unit').val(response.medicine_info['dosage_unit']);
+                $('#price_med').val(response.medicine_info['retail_price']);
+                $('#gst').val(response.medicine_info['retail_gst']);
+
+            }
+
+        });
+    }
+
+
+});
+
+$('#add_pres_here').click(function () {
+
+    var stock_unit = $('#stock_unit').val();
+    var dosage_unit = $('#dosage_unit').val();
+    var price_med = $('#price_med').val();
+    var gst = $('#gst').val();
+    var drug_pres = $('#drug_pres').val();
+    var medicine_qnt = $('#medicine_qnt').val();
+    var dosage_qnt = $('#dosage_qnt').val();
+    var discount = $('#discount').val();
+    var remark = $('#remark').val();
+    var instruction = $('.instruction').val();
+    var days = $('#days').val();
+    var drug_id = $('#drug_pres').val();
+    var drug_name = $('#drug_pres option:selected').text();
+    //alert(drug_name);
+
+    if(dosage_unit !== '' && price_med !== '' && stock_unit !== '' && gst !== '' && drug_pres !== '' &&
+        medicine_qnt !== '' && dosage_qnt !== '' && instruction !== ''
+        && days !== '')
+    {
+        var sub_total = Math.round((medicine_qnt*price_med)*100)/100;
+
+        var gst_total = Math.round(((sub_total/100 *gst)+sub_total)*100)/100;
+
+        var dissc_total = Math.round((gst_total-(gst_total/100 *discount))*100)/100;
+
+        var line_total = dissc_total;
+        var html = `<tr>
+                        <td>`+drug_name+`<input type="hidden" name="drug_name[]" value="`+drug_name+`">
+                        <input type="hidden" name="drug_id" value="`+drug_id+`"></td>
+                        <td>`+medicine_qnt+`<input type="hidden" name="medicine_qnt[]" value="`+medicine_qnt+`"></td>
+                        <td>`+price_med+`<input type="hidden" name="price[]" value="`+price_med+`"></td>
+                        <td>`+sub_total+`<input type="hidden" name="sub_total[]" value="`+sub_total+`"></td>
+                        <td>`+discount+`<input type="hidden" name="discount[]" value="`+discount+`"></td>
+                        <td>`+remark+`<input type="hidden" name="remark[]" value="`+remark+`"></td>
+                        <td>`+gst+`<input type="hidden" name="gst[]" value="`+gst+`"></td>
+                        <td>`+line_total+`<input type="hidden" name="line_total[]" value="`+line_total+`"></td>
+                        <td>
+                        <button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_pres">
+			            <i class="fa fa-remove"></i>
+			            </button></td>
+                    </tr>`;
+        $('#insert_medicine').append(html);
+
+        $('#stock_unit').val('');
+        $('#dosage_unit').val('');
+        $('#price_med').val('');
+        $('#gst').val('');
+        $('#drug_pres').val('');
+        $('#medicine_qnt').val('');
+        $('#dosage_qnt').val('');
+        $('#discount').val(0);
+        $('#remark').val('');
+        $('.instruction').val('');
+        $('#days').val('');
+        $('#drug_pres option').text('Select Medicines');
+
+
+        $(this).attr('data-dismiss','modal');
+    }
+    else
+    {
+        alert('Fill All Fields');
+    }
+
+
+});
+
+$('body').on('click','.remove_table_pres',function () {
+   var item = $(this).parent().parent();
+   item.remove();
+
+});
+
 
 
 

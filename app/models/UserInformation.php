@@ -39,4 +39,14 @@ class UserInformation extends Model
     {
         return $this->hasMany('App\models\MedicalRecord','id');
     }
+
+    public function queues()
+    {
+        return $this->hasMany('App\models\Queue','id');
+    }
+
+    public function prescriptions()
+    {
+        return $this->hasMany('App\models\Prescription','id');
+    }
 }

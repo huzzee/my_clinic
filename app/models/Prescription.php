@@ -4,10 +4,14 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Queue extends Model
+class Prescription extends Model
 {
     protected $fillable = [
-        'entity_id','doctor_id','patient_id','bill','paid','note'
+        'entity_id','doctor_id','patient_id','medicine_info'
+    ];
+
+    protected $casts = [
+        'medicine_info' => 'array'
     ];
 
     public function user_informations()
@@ -19,4 +23,5 @@ class Queue extends Model
     {
         return $this->belongsTo('App\models\Patient','patient_id');
     }
+
 }
