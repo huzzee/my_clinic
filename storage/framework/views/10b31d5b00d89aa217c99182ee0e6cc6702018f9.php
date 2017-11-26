@@ -106,6 +106,7 @@
                                         <div class="form-group row">
                                             <label for="dosage_amount" class="col-sm-3">Dosage Amount<span class="text-danger">*</span></label>
                                             <div class="col-sm-9">
+
                                                 <input type="number" name="dosage_amount" parsley-trigger="change"
                                                        placeholder="Enter Dosage Amount" class="form-control" value="<?php echo e(old('dosage_amount')); ?>" />
 
@@ -117,8 +118,12 @@
 
                                             <label for="purchase_price" class="col-sm-3">Purchase Price</label>
                                             <div class="col-sm-4">
-                                                <input type="number" id="purchase_price" name="purchase_price" parsley-trigger="change"
-                                                       class="form-control" placeholder="Enter Purchase Price" value="<?php echo e(old('purchase_price')); ?>"  />
+                                                <div class="input-group">
+                                                    <input type="number" id="purchase_price" name="purchase_price" parsley-trigger="change"
+                                                       class="form-control" placeholder="Enter Purchase Price"
+                                                       value="<?php echo e(old('purchase_price')); ?>"  />
+                                                    <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
+                                                </div>
 
                                             </div>
                                             <label for="retail_price" class="col-sm-1">GST in %</label>
@@ -134,8 +139,11 @@
 
                                             <label for="retail_price" class="col-sm-3">Retail Price<span class="text-danger">*</span></label>
                                             <div class="col-sm-4">
-                                                <input type="number" id="retail_price" name="retail_price" parsley-trigger="change"
-                                                       class="form-control" placeholder="Enter Retail Price" value="<?php echo e(old('retail_price')); ?>"  />
+                                                <div class="input-group">
+                                                    <input type="number" id="retail_price" name="retail_price" parsley-trigger="change"
+                                                           class="form-control" placeholder="Enter Retail Price" value="<?php echo e(old('retail_price')); ?>"  />
+                                                    <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
+                                                </div>
 
                                             </div>
                                             <label for="retail_price" class="col-sm-1">GST in %</label>

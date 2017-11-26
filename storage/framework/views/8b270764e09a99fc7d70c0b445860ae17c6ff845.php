@@ -8,7 +8,7 @@
                 <div class="col-xs-12">
                     <div class="page-title-box">
 
-                        <h4 class="page-title">Drawing Template</h4>
+                        <h4 class="page-title">Clinic Service Categories</h4>
 
                         <div class="clearfix"></div>
 
@@ -17,24 +17,9 @@
             </div>
             <!-- end row -->
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="card-box">
-
-
-
 
             <div class="row">
                 <div class="col-sm-12">
-                    <?php if(count($errors) > 0): ?>
-                        <div class="alert alert-danger">
-                            <ul>
-                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <li><?php echo e($error); ?></li>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
                     <?php if(session()->has('message')): ?>
                         <div class="alert alert-success">
                             <?php echo e(session()->get('message')); ?>
@@ -42,54 +27,57 @@
                         </div>
                     <?php endif; ?>
                     <div class="card-box table-responsive">
-                        <button class="btn btn-info waves-effect waves-light" data-toggle="modal"
-                              data-target="#con-close-modal">
-                            Add Drawing Template
-
+                        <button class="btn btn-danger waves-effect waves-light" data-toggle="modal"
+                                data-target="#con-close-modal">
+                            Add Service Category
                         </button>
+
+
+
 
                         
 
                         <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                            <form action="<?php echo e(url('drawing_templates')); ?>" method="post" enctype="multipart/form-data">
-                                <?php echo e(csrf_field()); ?>
 
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title">Add Template</h4>
-                                        </div>
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">Add Service Category</h4>
+                                    </div>
+                                    <form action="<?php echo e(route('service_categories.store')); ?>" method="post">
                                         <div class="modal-body">
+
+
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="title" class="control-label">Title<span class="text-danger">*</span></label>
-                                                        <input type="text" name="title" class="form-control" id="field-1" placeholder="Title" required>
+                                                        <label for="pats" class="control-label">Category Name<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="category_name" placeholder="Enter Category Name">
+
                                                     </div>
                                                 </div>
 
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="template_file" class="control-label">Image<span class="text-danger">*</span></label>
-                                                        <input type="file" class="filestyle"  name="images" data-buttonname="btn-teal">
-                                                    </div>
-                                                </div>
 
-                                            </div>
                                         </div>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-inverse waves-effect waves-light">Add Template</button>
+                                            <?php echo e(csrf_field()); ?>
+
+
+
+                                            <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Submit</button>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
+
                         </div><!-- /.modal -->
+
                         <hr>
 
 
@@ -97,8 +85,9 @@
                             <thead>
                             <tr>
                                 <th width="5%">Sr.No</th>
-                                <th width="5%">Image</th>
-                                <th>Title</th>
+                                <th>Category Name</th>
+
+
                                 <th width="20%">Action</th>
 
                             </tr>
@@ -107,19 +96,18 @@
 
                             <tbody>
                             <?php $i=1; ?>
-                            <?php $__currentLoopData = $drawTemplates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $template): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td style="color: teal;"><?php echo e($i); ?></td>
-                                    <td><img src="<?php echo e(asset('uploads/'.$template->images)); ?>" alt="<?php echo e($template->images); ?>" style="height: 50px; width: 50px;"></td>
-                                    <td><?php echo e($template->title); ?></td>
+                                    <td style="font-size: 16px;"><?php echo e($category->category_name); ?></td>
 
                                     <td>
-                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal<?php echo e($template->id); ?>"><i class="fa fa-remove"></i></button>
+                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal<?php echo e($category->id); ?>"><i class="fa fa-remove"></i></button>
                                     </td>
 
                                 </tr>
 
-                                <div id="con-close-modal<?php echo e($template->id); ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div id="con-close-modal<?php echo e($category->id); ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -133,7 +121,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                <form action="<?php echo e(url('drawing_templates/'.$template->id)); ?>" method="post">
+                                                <form action="<?php echo e(url('service_categories/'.$category->id)); ?>" method="post">
                                                     <?php echo e(csrf_field()); ?>
 
                                                     <input type="hidden" name="_method" value="DELETE">
@@ -178,6 +166,7 @@
     <script src="<?php echo e(asset('assets/pages/jquery.autocomplete.init.js')); ?>"></script>
 
     <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
+
 
     <script src="<?php echo e(asset('assets/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.bootstrap.js')); ?>"></script>

@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::post('employeeactivate/{id}','EmployeeController@activated');
     Route::Resource('patients','PatientController');
     Route::Resource('services','ClinicServiceController');
+    Route::Resource('service_categories','ServiceCategoryController');
     Route::Resource('drugs','MedicineController');
     Route::post('updateStock/{id}','MedicineController@updateStock');
     Route::Resource('schedule','ScheduleController');
@@ -66,8 +67,12 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::Resource('queues','QueueController');
     Route::post('queues_doc','QueueController@queue_doc');
     Route::post('queues_note','QueueController@queue_note');
-
+    Route::Resource('invoices','InvoiceController');
 
     Route::Resource('payments','PaymentController');
-    Route::get('/drugs_press','PaymentController@drug_press');
+    Route::get('/drugs_press','InvoiceController@drug_press');
+    Route::get('/services_press','InvoiceController@service_press');
+    Route::get('/services_price','InvoiceController@service_price');
+
+    Route::Resource('prescriptions','PrescriptionController');
 });

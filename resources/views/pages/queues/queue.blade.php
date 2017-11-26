@@ -117,6 +117,7 @@
                                 <th width="12%">Note</th>
                                 <th width="8%">Bill</th>
                                 <th width="8%">Paid</th>
+                                <th width="8%">Balance</th>
 
                                 <th width="14%">Actions</th>
                                 <th width="10%">Status</th>
@@ -192,8 +193,10 @@
 
                                         @if($queue->paid == null)
                                             <td>No</td>
+                                            <td>No</td>
                                         @else
                                             <td>{{$queue->paid}}</td>
+                                            <td>{{ $queue->bill - $queue->paid}}</td>
                                         @endif
                                         <td>
                                             @if($queue->status == 0)
@@ -231,9 +234,7 @@
                                             <a style=" font-size: 80%; background: none;float: left;text-align: left;
                                              border: none; color: #2b4a95" href="{{ url('medical_records/'.$queue->patients->id.'/edit') }}">#Add Medical Record</a><br>
 
-                                            <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                    data-target="#con-close-modal{{$queue->user_informations->id}}">#Add MC</button><br>
+
                                         </td>
                                         @if($queue->status == 0)
                                             <td>Waiting</td>
@@ -327,8 +328,10 @@
 
                                         @if($queue->paid == null)
                                             <td>No</td>
+                                            <td>No</td>
                                         @else
                                             <td>{{$queue->paid}}</td>
+                                            <td>{{ $queue->bill - $queue->paid}}</td>
                                         @endif
                                         <td>
                                         @if($queue->status == 0 || $queue->status == 1)
@@ -414,9 +417,6 @@
                                             <a style=" font-size: 80%; background: none;float: left;text-align: left;
                                              border: none; color: #2b4a95" href="{{ url('medical_records/'.$queue->patients->id.'/edit') }}">#Add Medical Record</a><br>
 
-                                            <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                    data-target="#con-close-modal{{$queue->user_informations->id}}">#Add MC</button><br>
 
 
                                         </td>

@@ -81,7 +81,7 @@
 
                                     <td>{{ $drug->medicine_info['dosage_amount'] }} .{{ $drug->medicine_info['dosage_unit'] }}</td>
 
-                                    <td>{{ $drug->medicine_info['retail_price'] }}</td>
+                                    <td>{{ $drug->medicine_info['retail_price'] }}.{{ Auth::user()->entities->currency }}</td>
 
                                     <td>{{ $drug->medicine_info['current_qnt'] }}</td>
 

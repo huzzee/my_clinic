@@ -161,7 +161,7 @@
                                                     </tr>
                                                     <tr style="height: 40px;">
                                                         <td width="40%" style="background-color: whitesmoke; font-weight: bold;">Purchase Price</td>
-                                                        <td>{{ $drug->medicine_info['purchase_price'] }}</td>
+                                                        <td>{{ $drug->medicine_info['purchase_price'] }}.{{ Auth::user()->entities->currency }}</td>
                                                     </tr>
                                                     <tr style="height: 40px;">
                                                         <td width="40%" style="background-color: whitesmoke; font-weight: bold;">Purchase gst</td>
@@ -184,7 +184,7 @@
 
                                                     <tr style="height: 40px;">
                                                         <td width="40%" style="background-color: whitesmoke; font-weight: bold;">Retail Price</td>
-                                                        <td> {{ $drug->medicine_info['retail_price'] }}</td>
+                                                        <td> {{ $drug->medicine_info['retail_price'] }}.{{ Auth::user()->entities->currency }}</td>
                                                     </tr>
                                                     <tr style="height: 40px;">
                                                         <td width="40%" style="background-color: whitesmoke; font-weight: bold;">Retail gst</td>

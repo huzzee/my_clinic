@@ -774,7 +774,14 @@ $('#presc').change(function () {
 $('#drug_pres').change(function () {
     var drug = $(this).val();
 
-    if (drug !== 0)
+    if(drug == 0)
+    {
+        $('#stock_unit').val('');
+        $('#dosage_unit').val('');
+        $('#price_med').val('');
+        $('#gst').val('');
+    }
+    else if (drug !== 0)
     {
         $.ajax({
             url: "../../drugs_press",
@@ -787,6 +794,7 @@ $('#drug_pres').change(function () {
                 $('#dosage_unit').val(response.medicine_info['dosage_unit']);
                 $('#price_med').val(response.medicine_info['retail_price']);
                 $('#gst').val(response.medicine_info['retail_gst']);
+                $('#current_qnt').val(response.medicine_info['current_qnt']);
 
             }
 
@@ -794,7 +802,14 @@ $('#drug_pres').change(function () {
     }
 
 
+
 });
+
+var net_total = 0;
+var total_discont = 0;
+var after_discount = 0;
+var total_gst = 0;
+var grand_total = 0;
 
 $('#add_pres_here').click(function () {
 
@@ -811,29 +826,38 @@ $('#add_pres_here').click(function () {
     var days = $('#days').val();
     var drug_id = $('#drug_pres').val();
     var drug_name = $('#drug_pres option:selected').text();
-    //alert(drug_name);
+
 
     if(dosage_unit !== '' && price_med !== '' && stock_unit !== '' && gst !== '' && drug_pres !== '' &&
         medicine_qnt !== '' && dosage_qnt !== '' && instruction !== ''
         && days !== '')
     {
-        var sub_total = Math.round((medicine_qnt*price_med)*100)/100;
+        var sub_total = Math.round((medicine_qnt*price_med)*1000)/1000;
 
-        var gst_total = Math.round(((sub_total/100 *gst)+sub_total)*100)/100;
 
-        var dissc_total = Math.round((gst_total-(gst_total/100 *discount))*100)/100;
 
-        var line_total = dissc_total;
+        var dissc_total = Math.round((sub_total/100 *discount)*10000)/10000;
+
+        var after_dis = Math.round((sub_total-dissc_total)*10000)/10000;
+
+        var gst_total = Math.round((sub_total/100 *gst)*10000)/10000;
+
+        var line_total = Math.round((gst_total+after_dis)*10000)/10000;
         var html = `<tr>
                         <td>`+drug_name+`<input type="hidden" name="drug_name[]" value="`+drug_name+`">
-                        <input type="hidden" name="drug_id" value="`+drug_id+`"></td>
-                        <td>`+medicine_qnt+`<input type="hidden" name="medicine_qnt[]" value="`+medicine_qnt+`"></td>
-                        <td>`+price_med+`<input type="hidden" name="price[]" value="`+price_med+`"></td>
-                        <td>`+sub_total+`<input type="hidden" name="sub_total[]" value="`+sub_total+`"></td>
-                        <td>`+discount+`<input type="hidden" name="discount[]" value="`+discount+`"></td>
+                        <input type="hidden" name="drug_id[]" value="`+drug_id+`"></td>
+                        <td>`+medicine_qnt+`<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="`+medicine_qnt+`"></td>
+                        <td>`+price_med+`<input type="hidden" class="price" name="price[]" value="`+price_med+`"></td>
+                        <td>`+sub_total+`<input type="hidden" class="sub_total" name="sub_total[]" value="`+sub_total+`"></td>
+                        <td>`+discount+`%<input type="hidden" class="discount" name="discount[]" value="`+discount+`"></td>
                         <td>`+remark+`<input type="hidden" name="remark[]" value="`+remark+`"></td>
-                        <td>`+gst+`<input type="hidden" name="gst[]" value="`+gst+`"></td>
-                        <td>`+line_total+`<input type="hidden" name="line_total[]" value="`+line_total+`"></td>
+                        <td>`+gst+`%<input type="hidden" class="gst" name="gst[]" value="`+gst+`"></td>
+                        <td>`+line_total+`<input type="hidden" class="line_total" name="line_total[]" value="`+line_total+`">
+                        <input type="hidden" name="pres_type[]" value="0"></td>
+                        <input type="hidden" name="days[]" value="`+days+`"></td>
+                        <input type="hidden" name="instruction[]" value="`+instruction+`"></td>
+                        <input type="hidden" name="dosage_qnt[]" value="`+dosage_qnt+`">
+                        <input type="hidden" name="dosage_unit[]" value="`+dosage_unit+`"></td>
                         <td>
                         <button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_pres">
 			            <i class="fa fa-remove"></i>
@@ -852,7 +876,21 @@ $('#add_pres_here').click(function () {
         $('#remark').val('');
         $('.instruction').val('');
         $('#days').val('');
-        $('#drug_pres option').text('Select Medicines');
+
+
+        net_total += sub_total;
+        var t_total_discont = Math.round((sub_total/100 *discount)*10000)/10000;
+        total_discont += t_total_discont;
+        after_discount += Math.round((sub_total-t_total_discont)*10000)/10000;
+        total_gst += Math.round((sub_total/100 *gst)*10000)/10000;
+        grand_total = after_discount+total_gst;
+
+        $('#net_total').val(net_total);
+        $('#total_discount').val(total_discont);
+        $('#after_discount').val(after_discount);
+        $('#total_gst').val(total_gst);
+        $('#grand_total').val(grand_total);
+
 
 
         $(this).attr('data-dismiss','modal');
@@ -866,9 +904,258 @@ $('#add_pres_here').click(function () {
 });
 
 $('body').on('click','.remove_table_pres',function () {
+
+    var price_med = $(this).parent().parent().find('.price').val();
+    var gst = $(this).parent().parent().find('.gst').val();
+    var medicine_qnt = $(this).parent().parent().find('.medicine_qnt').val();
+    var discount = $(this).parent().parent().find('.discount').val();
+
+    //alert(price_med);
+    //console.log(price_med);
+
+    var sub_total = Math.round((medicine_qnt*price_med)*1000)/1000;
+
+    net_total -= sub_total;
+    var t_total_discont = Math.round((sub_total/100 *discount)*10000)/10000;
+    total_discont -= t_total_discont;
+    var t_after_discount = Math.round((sub_total - t_total_discont)*10000)/10000;
+    after_discount -= t_after_discount;
+    var t_total_gst = Math.round((sub_total/100 *gst)*10000)/10000;
+    total_gst -=t_total_gst;
+    grand_total = after_discount+total_gst;
+
+    $('#net_total').val(net_total);
+    $('#total_discount').val(total_discont);
+    $('#after_discount').val(after_discount);
+    $('#total_gst').val(total_gst);
+    $('#grand_total').val(grand_total);
    var item = $(this).parent().parent();
    item.remove();
 
+});
+
+$('#service_pres').change(function () {
+    var service = $(this).val();
+
+
+    if(service == 1)
+    {
+        $('#hide_our').css('display','block');
+        $('#cat_foot').css('display','block');
+        $('#hide_other').css('display','none');
+    }
+    else if(service == 2)
+    {
+        $('#hide_our').css('display','none');
+        $('#cat_foot').css('display','block');
+        $('#hide_other').css('display','block');
+    }
+    else {
+        $('#hide_our').css('display','none');
+        $('#cat_foot').css('display','none');
+        $('#hide_other').css('display','none');
+    }
+
+});
+
+$('#category_pres').change(function () {
+    var category_id = $(this).val();
+
+    $.ajax({
+        url: "../../services_press",
+        type: "GET",
+        data: {category_id: category_id},
+        dataType: "json",
+        success: function (response) {
+            //console.log(response.clinic_services);
+            var html='<option selected="selected" value="0">Select Test/Service</option>';
+            response.clinic_services.forEach(function (data,i) {
+                html+=`
+                    <option value="`+ data.id +`">`+ data.service_name +`</option>
+                `;
+            });
+
+            $('#serve_press').html(html);
+        }
+    });
+
+
+});
+
+$('body').on('change','#serve_press',function () {
+
+    var service_id = $(this).val();
+
+    $.ajax({
+        url: "../../services_price",
+        type: "GET",
+        data: {service_id: service_id},
+        dataType: "json",
+        success: function (response) {
+            //console.log(response);
+            if(service_id == 0)
+            {
+                $('#service_price').val('');
+            }
+            else {
+                $('#service_price').val(response.rate);
+            }
+
+        }
+    });
+});
+
+$('#add_service_here').click(function () {
+    var category_id = $('#service_pres').val();
+
+
+
+
+    if(category_id == 1)
+    {
+        var servic_id = $('#serve_press').val();
+        var servic_name = $('#serve_press option:selected').text();
+        var service_price = $('#service_price').val();
+        var medicine_qnt = 1;
+
+        var discount = 0;
+        var gst = 0;
+
+        var sub_total = Math.round((medicine_qnt*service_price)*1000)/1000;
+
+
+
+        var dissc_total = Math.round((sub_total/100 *discount)*10000)/10000;
+
+        var after_dis = Math.round((sub_total-dissc_total)*10000)/10000;
+
+        var gst_total = Math.round((sub_total/100 *gst)*10000)/10000;
+
+        var line_total = Math.round((gst_total+after_dis)*10000)/10000;
+
+        if(service_price !== '')
+        {
+            var html = `<tr>
+                        <td>`+servic_name+`<input type="hidden" name="drug_name[]" value="`+servic_name+`">
+                        <input type="hidden" name="drug_id[]" value="`+servic_id+`"></td>
+                        <td>`+medicine_qnt+`<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="`+medicine_qnt+`"></td>
+                        <td>`+service_price+`<input type="hidden" class="price" name="price[]" value="`+service_price+`"></td>
+                        <td>`+sub_total+`<input type="hidden" class="sub_total" name="sub_total[]" value="`+sub_total+`"></td>
+                        <td>`+discount+`%<input type="hidden" class="discount" name="discount[]" value="`+discount+`"></td>
+                        <td><input type="hidden" name="remark[]" value=""></td>
+                        <td>`+gst+`%<input type="hidden" class="gst" name="gst[]" value="`+gst+`"></td>
+                        <td>`+line_total+`<input type="hidden" class="line_total" name="line_total[]" value="`+line_total+`">
+                        <input type="hidden" name="pres_type[]" value="1">
+                        <input type="hidden" name="days[]" value="0"></td>
+                        <input type="hidden" name="instruction[]" value=""></td>
+                        <input type="hidden" name="dosage_qnt[]" value="0">
+                        <input type="hidden" name="dosage_unit[]" value="0"></td>
+                        </td>
+                        
+                        
+                        <td>
+                        <button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_pres">
+			            <i class="fa fa-remove"></i>
+			            </button></td>
+                    </tr>`;
+            $('#insert_medicine').append(html);
+
+            net_total += sub_total;
+            var t_total_discont = Math.round((sub_total/100 *discount)*10000)/10000;
+            total_discont += t_total_discont;
+            after_discount += Math.round((sub_total-t_total_discont)*10000)/10000;
+            total_gst += Math.round((sub_total/100 *gst)*10000)/10000;
+            grand_total = after_discount+total_gst;
+
+            $('#net_total').val(net_total);
+            $('#total_discount').val(total_discont);
+            $('#after_discount').val(after_discount);
+            $('#total_gst').val(total_gst);
+            $('#grand_total').val(grand_total);
+
+
+            $(this).attr('data-dismiss','modal');
+
+        }
+        else
+        {
+            alert('please choose Serivce Name');
+        }
+
+
+    }
+    if(category_id == 2)
+    {
+
+        var service_name = $('#service_name').val();
+        var detail_service = $('.detail_service').val();
+        var medicine_qnt = 1;
+        var service_price = 0;
+
+        var discount = 0;
+        var gst = 0;
+
+        var sub_total = Math.round((medicine_qnt*service_price)*1000)/1000;
+
+
+
+        var dissc_total = Math.round((sub_total/100 *discount)*10000)/10000;
+
+        var after_dis = Math.round((sub_total-dissc_total)*10000)/10000;
+
+        var gst_total = Math.round((sub_total/100 *gst)*10000)/10000;
+
+        var line_total = Math.round((gst_total+after_dis)*10000)/10000;
+        if(service_name !== '')
+        {
+            var html = `<tr>
+                        <td>`+service_name+`<input type="hidden" name="drug_name[]" value="`+service_name+`">
+                        </td>
+                        <td>`+medicine_qnt+`<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="`+medicine_qnt+`"></td>
+                        <td>`+service_price+`<input type="hidden" class="price" name="price[]" value="`+service_price+`"></td>
+                        <td>`+sub_total+`<input type="hidden" class="sub_total" name="sub_total[]" value="`+sub_total+`"></td>
+                        <td>`+discount+`%<input type="hidden" class="discount" name="discount[]" value="`+discount+`"></td>
+                        <td><input type="hidden" name="remark[]" value=""></td>
+                        <td>`+gst+`%<input type="hidden" class="gst" name="gst[]" value="`+gst+`"></td>
+                        <td>`+line_total+`<input type="hidden" class="line_total" name="line_total[]" value="`+line_total+`">
+                        <input type="hidden" name="pres_type[]" value="1">
+                        <input type="hidden" name="days[]" value="0"></td>
+                        <input type="hidden" name="instruction[]" value=""></td>
+                        <input type="hidden" name="dosage_qnt[]" value="0">
+                        <input type="hidden" name="dosage_unit[]" value="0"></td>
+                        </td>
+                        
+                        
+                        <td>
+                        <button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_pres">
+			            <i class="fa fa-remove"></i>
+			            </button></td>
+                    </tr>`;
+            $('#insert_medicine').append(html);
+
+            net_total += sub_total;
+            var t_total_discont = Math.round((sub_total/100 *discount)*10000)/10000;
+            total_discont += t_total_discont;
+            after_discount += Math.round((sub_total-t_total_discont)*10000)/10000;
+            total_gst += Math.round((sub_total/100 *gst)*10000)/10000;
+            grand_total = after_discount+total_gst;
+
+            $('#net_total').val(net_total);
+            $('#total_discount').val(total_discont);
+            $('#after_discount').val(after_discount);
+            $('#total_gst').val(total_gst);
+            $('#grand_total').val(grand_total);
+
+
+            $(this).attr('data-dismiss','modal');
+
+        }
+        else
+        {
+            alert('please choose Serivce Name');
+        }
+
+    }
 });
 
 

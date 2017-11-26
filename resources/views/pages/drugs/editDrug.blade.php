@@ -94,8 +94,10 @@
 
                                             <label for="purchase_price" class="col-sm-3">Purchase Price</label>
                                             <div class="col-sm-4">
-                                                {!! Form::number('medicine_info[purchase_price]' , null ,['placeholder' => 'Enter Purchase Price','class' => 'form-control','parsley-trigger' => 'change']) !!}
-
+                                                <div class="input-group">
+                                                    {!! Form::number('medicine_info[purchase_price]' , null ,['placeholder' => 'Enter Purchase Price','class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                    <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                </div>
 
                                             </div>
                                             <label for="retail_price" class="col-sm-1">GST in %</label>
@@ -111,7 +113,11 @@
 
                                             <label for="retail_price" class="col-sm-3">Retail Price<span class="text-danger">*</span></label>
                                             <div class="col-sm-4">
-                                                {!! Form::number('medicine_info[retail_price]' , null ,['placeholder' => 'Enter Retail Price','class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                <div class="input-group">
+                                                    {!! Form::number('medicine_info[retail_price]' , null ,['placeholder' => 'Enter Retail Price','class' => 'form-control','parsley-trigger' => 'change']) !!}
+                                                    <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                </div>
+
 
 
                                             </div>

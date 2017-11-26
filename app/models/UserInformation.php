@@ -49,4 +49,14 @@ class UserInformation extends Model
     {
         return $this->hasMany('App\models\Prescription','id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany('App\models\Prescription','id');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany('App\models\Invoice','id');
+    }
 }

@@ -12,7 +12,7 @@
                 <div class="col-xs-12">
                     <div class="page-title-box">
 
-                        <h4 class="page-title">Clinic Services</h4>
+                        <h4 class="page-title">Clinic Service Categories</h4>
 
                         <div class="clearfix"></div>
 
@@ -48,43 +48,16 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                         <h4 class="modal-title">Add Service Category</h4>
                                     </div>
-                                    <form action="{{ route('services.store') }}" method="post">
+                                    <form action="{{ route('service_categories.store') }}" method="post">
                                         <div class="modal-body">
 
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="service_category_id" class="control-label">Select Category<span class="text-danger">*</span></label>
-                                                        <select class="form-control select2" id="service_category_id" name="service_category_id">
-                                                            <option selected disabled="disabled">Select Category</option>
-
-                                                            @foreach($categories as $category)
-                                                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                                            @endforeach
-
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="pats" class="control-label">Service Name<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="service_name" placeholder="Enter Service Name">
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
 
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="rate" class="control-label">Service Cost<span class="text-danger">*</span></label>
-                                                        <input type="number" class="form-control" name="rate" placeholder="Enter Service Cost in {{ Auth::user()->entities->currency }}">
+                                                        <label for="pats" class="control-label">Category Name<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="category_name" placeholder="Enter Category Name">
 
                                                     </div>
                                                 </div>
@@ -115,8 +88,8 @@
                             <tr>
                                 <th width="5%">Sr.No</th>
                                 <th>Category Name</th>
-                                <th>Service Name</th>
-                                <th width="20%">Service Rate</th>
+
+
                                 <th width="20%">Action</th>
 
                             </tr>
@@ -125,19 +98,18 @@
 
                             <tbody>
                             @php $i=1; @endphp
-                            @foreach($services as $service)
+                            @foreach($categories as $category)
                                 <tr>
                                     <td style="color: teal;">{{ $i }}</td>
-                                    <td style="font-size: 16px;">{{ $service->service_categories->category_name }}</td>
-                                    <td style="font-size: 16px;">{{ $service->service_name }}</td>
-                                    <td style="font-size: 16px;">{{ $service->rate }}.{{ Auth::user()->entities->currency }}</td>
+                                    <td style="font-size: 16px;">{{ $category->category_name }}</td>
+
                                     <td>
-                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$service->id}}"><i class="fa fa-remove"></i></button>
+                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$category->id}}"><i class="fa fa-remove"></i></button>
                                     </td>
 
                                 </tr>
 
-                                <div id="con-close-modal{{$service->id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div id="con-close-modal{{$category->id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -146,12 +118,12 @@
                                             </div>
                                             <div class="modal-body">
 
-                                                Are You Sure.You want to Disable it.
+                                                Are You Sure.You want to Delete it.
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                <form action="{{ url('services/'.$service->id) }}" method="post">
+                                                <form action="{{ url('service_categories/'.$category->id) }}" method="post">
                                                     {{ csrf_field() }}
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
@@ -163,7 +135,7 @@
                                     </div>
                                 </div>
                                 @php $i++; @endphp
-                                @endforeach
+                            @endforeach
 
                             </tbody>
                         </table>

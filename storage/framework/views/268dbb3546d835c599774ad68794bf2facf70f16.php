@@ -78,7 +78,7 @@
 
                                     <td><?php echo e($drug->medicine_info['dosage_amount']); ?> .<?php echo e($drug->medicine_info['dosage_unit']); ?></td>
 
-                                    <td><?php echo e($drug->medicine_info['retail_price']); ?></td>
+                                    <td><?php echo e($drug->medicine_info['retail_price']); ?>.<?php echo e(Auth::user()->entities->currency); ?></td>
 
                                     <td><?php echo e($drug->medicine_info['current_qnt']); ?></td>
 

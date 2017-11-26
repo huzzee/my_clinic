@@ -115,6 +115,7 @@
                                 <th width="12%">Note</th>
                                 <th width="8%">Bill</th>
                                 <th width="8%">Paid</th>
+                                <th width="8%">Balance</th>
 
                                 <th width="14%">Actions</th>
                                 <th width="10%">Status</th>
@@ -191,8 +192,10 @@
 
                                         <?php if($queue->paid == null): ?>
                                             <td>No</td>
+                                            <td>No</td>
                                         <?php else: ?>
                                             <td><?php echo e($queue->paid); ?></td>
+                                            <td><?php echo e($queue->bill - $queue->paid); ?></td>
                                         <?php endif; ?>
                                         <td>
                                             <?php if($queue->status == 0): ?>
@@ -231,9 +234,7 @@
                                             <a style=" font-size: 80%; background: none;float: left;text-align: left;
                                              border: none; color: #2b4a95" href="<?php echo e(url('medical_records/'.$queue->patients->id.'/edit')); ?>">#Add Medical Record</a><br>
 
-                                            <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                    data-target="#con-close-modal<?php echo e($queue->user_informations->id); ?>">#Add MC</button><br>
+
                                         </td>
                                         <?php if($queue->status == 0): ?>
                                             <td>Waiting</td>
@@ -328,8 +329,10 @@
 
                                         <?php if($queue->paid == null): ?>
                                             <td>No</td>
+                                            <td>No</td>
                                         <?php else: ?>
                                             <td><?php echo e($queue->paid); ?></td>
+                                            <td><?php echo e($queue->bill - $queue->paid); ?></td>
                                         <?php endif; ?>
                                         <td>
                                         <?php if($queue->status == 0 || $queue->status == 1): ?>
@@ -417,9 +420,6 @@
                                             <a style=" font-size: 80%; background: none;float: left;text-align: left;
                                              border: none; color: #2b4a95" href="<?php echo e(url('medical_records/'.$queue->patients->id.'/edit')); ?>">#Add Medical Record</a><br>
 
-                                            <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                    data-target="#con-close-modal<?php echo e($queue->user_informations->id); ?>">#Add MC</button><br>
 
 
                                         </td>

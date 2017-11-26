@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Prescription extends Model
 {
     protected $fillable = [
-        'entity_id','doctor_id','patient_id','medicine_info'
+        'entity_id','doctor_id','patient_id','prescriptions'
     ];
 
     protected $casts = [
-        'medicine_info' => 'array'
+        'prescriptions' => 'array'
     ];
 
     public function user_informations()

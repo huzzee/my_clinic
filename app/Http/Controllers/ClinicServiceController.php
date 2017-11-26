@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\ClinicService;
+use App\models\ServiceCategory;
 use Illuminate\Http\Request;
 use App\models\UserInformation;
 use App\models\Entity;
@@ -19,11 +20,15 @@ class ClinicServiceController extends Controller
      */
     public function index()
     {
-        $services = ClinicService::where('entity_id','=',Auth::user()->entity_id)->get();
+        $services = ClinicService::with('service_categories')
+            ->where('entity_id','=',Auth::user()->entity_id)->get();
+
+        $categories = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->get();
 
 
         return view('pages.services.createService',array(
-            'services' => $services
+            'services' => $services,
+            'categories' => $categories
         ));
     }
 
@@ -46,6 +51,7 @@ class ClinicServiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'service_category_id' => 'required',
             'service_name' => 'required',
             'rate' => 'required'
         ]);
@@ -53,6 +59,7 @@ class ClinicServiceController extends Controller
         $service = new ClinicService;
 
         $service->service_name = $request->service_name;
+        $service->service_category_id = $request->service_category_id;
         $service->rate = $request->rate;
         $service->entity_id = Auth::user()->entity_id;
 

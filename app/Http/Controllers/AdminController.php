@@ -103,7 +103,7 @@ class AdminController extends Controller
 
         $user_id = User::createUsers($request,$filename,$entity_id,$status);
 
-        $admin = new UserInformationController;
+        $admin = new UserInformation;
 
         $admin->user_id = $user_id;
         $admin->admin_info = [

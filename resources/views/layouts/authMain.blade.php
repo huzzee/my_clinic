@@ -45,10 +45,10 @@
                         <div class="wrapper-page">
 
                             <div class="m-t-40 account-pages">
-                                <div class="text-center account-logo-box" style="background-color: #3c4655">
+                                <div class="text-center account-logo-box" style="background-color: #36404e">
                                     <h2 class="text-uppercase">
                                         <a href="javascript:void(0);" class="text-success">
-                                            <span><img src="{{ asset('logo/klinic.png') }}" alt="" width="30%"></span>
+                                            <span><img src="{{ asset('logo/klinic.png') }}" alt="" width="40%"></span>
                                         </a>
                                     </h2>
                                     <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
@@ -57,8 +57,9 @@
                                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                                         {{ csrf_field() }}
                                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                            <label for="email" class="form-label col-xs-12">Email</label>
                                             <div class="col-xs-12">
-                                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                                <input id="email" type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required>
 
                                                 @if ($errors->has('email'))
                                                     <span style="color:red;">
@@ -69,8 +70,9 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                            <label for="email" class="form-label col-xs-12">Password</label>
                                             <div class="col-xs-12">
-                                                <input id="password" type="password" class="form-control" name="password" required>
+                                                <input id="password" type="password" class="form-control" placeholder="Password" name="password" required>
 
                                                 @if ($errors->has('password'))
                                                     <span style="color:red;">

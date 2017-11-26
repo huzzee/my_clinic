@@ -18,11 +18,16 @@ class CreateClinicServicesTable extends Migration
             $table->string('service_name');
             $table->double('rate',15,3)->default(0);
             $table->integer('entity_id')->unsigned()->nullable();
+            $table->unsignedInteger('service_category_id');
             $table->timestamps();
         });
 
         Schema::table('clinic_services',function(Blueprint $table){
-            $table->foreign('entity_id')->references('id')->on('entities');
+            $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
+
+            $table->foreign('service_category_id')->references('id')->on('service_categories')->onDelete('cascade');
+
+
         });
     }
 

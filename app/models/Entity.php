@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Entity extends Model
 {
     protected $fillable=[
-        'entity_name','entity_code','status'
+        'entity_name','entity_code','status','currency'
     ];
 
     protected $table = 'entities';
