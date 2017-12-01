@@ -21,6 +21,6 @@ class Queue extends Model
     }
     public function invoices()
     {
-        return $this->hasOne('App\models\Invoice','id');
+        return $this->hasOne(Invoice::class);
     }
 }

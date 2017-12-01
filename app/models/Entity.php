@@ -3,6 +3,7 @@
 namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Entity extends Model
 {
@@ -14,6 +15,10 @@ class Entity extends Model
 
     public function users()
     {
-        return $this->hasMany('App\User','id');
+        return $this->hasMany(User::class);
+    }
+    public function user_informations()
+    {
+        return $this->hasMany(UserInformation::class);
     }
 }

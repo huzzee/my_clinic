@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2017 at 10:43 PM
+-- Generation Time: Nov 30, 2017 at 03:44 PM
 -- Server version: 5.7.11
 -- PHP Version: 7.1.10
 
@@ -43,7 +43,8 @@ CREATE TABLE `adjustments` (
 INSERT INTO `adjustments` (`id`, `medicine_id`, `user_id`, `bought_qnt`, `adjust`, `created_at`, `updated_at`) VALUES
 (1, 7, 7, 1000.000, 0, '2017-11-07 11:38:27', '2017-11-07 11:38:27'),
 (2, 8, 7, 100.000, 0, '2017-11-09 11:19:43', '2017-11-09 11:19:43'),
-(3, 9, 7, 2000.000, 0, '2017-11-19 12:55:13', '2017-11-19 12:55:13');
+(3, 9, 7, 2000.000, 0, '2017-11-19 12:55:13', '2017-11-19 12:55:13'),
+(4, 8, 7, 100.000, 0, '2017-11-25 06:26:28', '2017-11-25 06:26:28');
 
 -- --------------------------------------------------------
 
@@ -88,7 +89,7 @@ CREATE TABLE `apps_countries_detailed` (
   `languages` varchar(100) DEFAULT NULL,
   `isoAlpha3` char(3) DEFAULT NULL,
   `geonameId` int(10) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `apps_countries_detailed`
@@ -357,6 +358,7 @@ CREATE TABLE `clinic_services` (
   `service_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `rate` double(15,3) NOT NULL DEFAULT '0.000',
   `entity_id` int(10) UNSIGNED DEFAULT NULL,
+  `service_category_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -365,10 +367,10 @@ CREATE TABLE `clinic_services` (
 -- Dumping data for table `clinic_services`
 --
 
-INSERT INTO `clinic_services` (`id`, `service_name`, `rate`, `entity_id`, `created_at`, `updated_at`) VALUES
-(1, 'X-ray', 200.000, 7, '2017-11-05 14:07:11', '2017-11-05 14:07:11'),
-(3, 'Ulltrason', 600.000, 7, '2017-11-05 14:08:15', '2017-11-05 14:08:15'),
-(4, 'abcd', 800.000, 7, '2017-11-09 11:18:04', '2017-11-09 11:18:04');
+INSERT INTO `clinic_services` (`id`, `service_name`, `rate`, `entity_id`, `service_category_id`, `created_at`, `updated_at`) VALUES
+(1, 'Blood  Test', 100.000, 7, 1, '2017-11-24 14:35:01', '2017-11-24 14:35:01'),
+(2, 'CBC', 200.000, 7, 1, '2017-11-24 14:35:12', '2017-11-24 14:35:12'),
+(3, 'Urine Test', 200.000, 7, 2, '2017-11-24 14:35:24', '2017-11-24 14:35:24');
 
 -- --------------------------------------------------------
 
@@ -489,6 +491,7 @@ CREATE TABLE `entities` (
   `id` int(10) UNSIGNED NOT NULL,
   `entity_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `entity_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -498,9 +501,36 @@ CREATE TABLE `entities` (
 -- Dumping data for table `entities`
 --
 
-INSERT INTO `entities` (`id`, `entity_name`, `entity_code`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Super Admin Entity', 'l3f1o8f3', 1, NULL, NULL),
-(7, 'huzaiaa clinic', 'bJgjulUMDT', 1, '2017-10-30 15:13:43', '2017-10-30 16:03:02');
+INSERT INTO `entities` (`id`, `entity_name`, `entity_code`, `currency`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Super Admin Entity', 'l3f1o8f3', 'USD', 1, NULL, NULL),
+(7, 'Tenant 1 Clinic', 'bJgjulUMDT', 'USD', 1, '2017-10-30 15:13:43', '2017-10-30 16:03:02'),
+(9, 'Tenant 2', '9yWAnkZwkj', 'USD', 1, '2017-11-24 13:31:34', '2017-11-24 13:31:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoices`
+--
+
+CREATE TABLE `invoices` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `invoice_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `entity_id` int(10) UNSIGNED NOT NULL,
+  `doctor_id` int(10) UNSIGNED NOT NULL,
+  `patient_id` int(10) UNSIGNED NOT NULL,
+  `queue_id` int(10) UNSIGNED DEFAULT NULL,
+  `grand_total` double(15,3) NOT NULL DEFAULT '0.000',
+  `total_gst` double(15,3) NOT NULL DEFAULT '0.000',
+  `after_discount` double(15,3) NOT NULL DEFAULT '0.000',
+  `total_discount` double(15,3) NOT NULL DEFAULT '0.000',
+  `net_total` double(15,3) NOT NULL DEFAULT '0.000',
+  `paid` double(15,3) NOT NULL DEFAULT '0.000',
+  `balance` double(15,3) NOT NULL DEFAULT '0.000',
+  `prescriptions` json NOT NULL,
+  `invoice_comment` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -588,7 +618,8 @@ CREATE TABLE `medical_templates` (
 INSERT INTO `medical_templates` (`id`, `entity_id`, `title`, `created_at`, `updated_at`) VALUES
 (2, 7, 'first', '2017-11-12 11:13:19', '2017-11-12 11:13:19'),
 (3, 7, 'Fever', '2017-11-12 14:05:25', '2017-11-12 14:05:25'),
-(4, 7, 'hello', '2017-11-19 12:59:27', '2017-11-19 12:59:27');
+(4, 7, 'hello', '2017-11-19 12:59:27', '2017-11-19 12:59:27'),
+(5, 7, 'haris', '2017-11-25 06:33:31', '2017-11-25 06:33:31');
 
 -- --------------------------------------------------------
 
@@ -616,7 +647,10 @@ INSERT INTO `medical_template_details` (`id`, `medical_template_id`, `question`,
 (3, 3, 'How many days have you been in fever?', 2, '["2 days", "3 days", "4 days", "more then 4"]', '2017-11-12 14:05:25', '2017-11-12 14:05:25'),
 (4, 3, 'What Colors do you like', 3, '["white", "black", "blue", "red", "pink", "purple", "yellow"]', '2017-11-12 14:05:25', '2017-11-12 14:05:25'),
 (5, 4, 'how are you', 2, '["fine", "not fine", "don\'t know"]', '2017-11-19 12:59:27', '2017-11-19 12:59:27'),
-(6, 4, 'explain your problem', 1, NULL, '2017-11-19 12:59:27', '2017-11-19 12:59:27');
+(6, 4, 'explain your problem', 1, NULL, '2017-11-19 12:59:27', '2017-11-19 12:59:27'),
+(7, 5, 'blasldasldlasjdlsa', 0, NULL, '2017-11-25 06:33:31', '2017-11-25 06:33:31'),
+(8, 5, 'are you mad', 2, '["yes", "no", "i dont know"]', '2017-11-25 06:33:31', '2017-11-25 06:33:31'),
+(9, 5, 'check boxex', 3, '["abc", "abcd"]', '2017-11-25 06:33:31', '2017-11-25 06:33:31');
 
 -- --------------------------------------------------------
 
@@ -637,9 +671,9 @@ CREATE TABLE `medicines` (
 --
 
 INSERT INTO `medicines` (`id`, `entity_id`, `medicine_info`, `created_at`, `updated_at`) VALUES
-(7, 7, '{"status": 1, "company": "test company", "generic": "test", "min_qnt": "70", "used_qnt": 0, "drug_name": "Panadol", "drug_type": "Tablets", "bought_qnt": 1000, "drug_image": null, "precaution": "abcd", "retail_gst": "5", "stock_unit": "Tablet", "current_qnt": 1000, "dosage_unit": "Mg", "expiry_date": "02/18/2020", "purchase_gst": "5", "retail_price": "25", "dosage_amount": "50", "purchase_price": "19"}', '2017-11-07 08:10:51', '2017-11-07 11:39:03'),
-(8, 7, '{"status": 1, "company": null, "generic": null, "min_qnt": "100", "used_qnt": 0, "drug_name": "Arinac", "drug_type": "Tablets", "bought_qnt": 100, "drug_image": null, "precaution": null, "retail_gst": "5", "stock_unit": "Tablet", "current_qnt": 100, "dosage_unit": "Mg", "expiry_date": "03/07/2019", "purchase_gst": "5", "retail_price": "70", "dosage_amount": "150", "purchase_price": "50"}', '2017-11-09 11:19:13', '2017-11-09 11:20:18'),
-(9, 7, '{"status": 1, "company": null, "generic": null, "min_qnt": "40", "used_qnt": 0, "drug_name": "Parasitamol", "drug_type": "Tablets", "bought_qnt": 2000, "drug_image": null, "precaution": "abcd", "retail_gst": "5", "stock_unit": "Tablet", "current_qnt": 2000, "dosage_unit": "Mg", "expiry_date": "04/10/2020", "purchase_gst": "5", "retail_price": "120", "dosage_amount": "200", "purchase_price": "100"}', '2017-11-19 12:54:42', '2017-11-19 12:55:13');
+(7, 7, '{"status": 1, "company": "test company", "generic": "test", "min_qnt": "70", "used_qnt": 24, "drug_name": "Panadol", "drug_type": "Tablets", "bought_qnt": 1000, "drug_image": null, "precaution": "abcd", "retail_gst": "5", "stock_unit": "Tablet", "current_qnt": 1000, "dosage_unit": "Mg", "expiry_date": "02/18/2020", "purchase_gst": "5", "retail_price": "25", "dosage_amount": "50", "purchase_price": "19"}', '2017-11-07 08:10:51', '2017-11-27 11:14:43'),
+(8, 7, '{"status": 1, "company": null, "generic": null, "min_qnt": "100", "used_qnt": 36, "drug_name": "Arinac", "drug_type": "Tablets", "bought_qnt": 200, "drug_image": null, "precaution": null, "retail_gst": "5", "stock_unit": "Tablet", "current_qnt": 200, "dosage_unit": "Mg", "expiry_date": "11/19/2020", "purchase_gst": "5", "retail_price": "70", "dosage_amount": "150", "purchase_price": "50"}', '2017-11-09 11:19:13', '2017-11-27 11:14:43'),
+(9, 7, '{"status": 1, "company": null, "generic": null, "min_qnt": "40", "used_qnt": 24, "drug_name": "Parasitamol", "drug_type": "Tablets", "bought_qnt": 2000, "drug_image": null, "precaution": "abcd", "retail_gst": "5", "stock_unit": "Tablet", "current_qnt": 2000, "dosage_unit": "Mg", "expiry_date": "04/10/2020", "purchase_gst": "5", "retail_price": "120", "dosage_amount": "200", "purchase_price": "100"}', '2017-11-19 12:54:42', '2017-11-27 09:13:51');
 
 -- --------------------------------------------------------
 
@@ -699,7 +733,17 @@ INSERT INTO `menus` (`id`, `menu_name`, `menu_slug`, `parent_menu_id`, `menu_ico
 (32, 'Diagnoses', 'diagnoses', 27, NULL, 'diagnoses.index', 25, NULL, 1, 0, NULL, NULL),
 (33, 'Add Medical Template', 'medical_templates/create', 27, NULL, 'medical_templates.create', 23, NULL, 1, 0, NULL, NULL),
 (34, 'Deleted Records', 'deleted_medical_records', 27, NULL, 'deleted_medical_records.deleted_record', 22, NULL, 1, 0, NULL, NULL),
-(35, 'Queue', 'queues', NULL, 'fa fa-plus-square-o', 'queues.index', 26, NULL, 1, 0, NULL, NULL);
+(35, 'Queue', NULL, NULL, 'fa fa-plus-square-o', NULL, 26, NULL, 1, 0, NULL, NULL),
+(36, 'Clinic Services', NULL, NULL, 'fa fa-list-alt', NULL, 13, NULL, 1, 0, NULL, NULL),
+(37, 'Service Category', 'service_categories', 36, NULL, 'serivce_categories.index', 13, NULL, 1, 0, NULL, NULL),
+(38, 'Clinic Services', 'services', 36, NULL, 'services.index', 13, NULL, 1, 0, NULL, NULL),
+(39, 'Prescription', 'prescriptions', NULL, 'fa fa-server', 'prescriptions.index', 27, NULL, 1, 0, NULL, NULL),
+(40, 'Accounting', NULL, NULL, 'fa fa-money', NULL, 28, NULL, 1, 0, NULL, NULL),
+(41, 'Invoive', 'invoices', 40, NULL, 'invoices.index', 29, NULL, 1, 0, NULL, NULL),
+(42, 'Payments', 'payments', 40, NULL, 'payments.index', 30, NULL, 1, 0, NULL, NULL),
+(43, 'Manage Queues', 'queues', 35, NULL, 'queues.index', 26, NULL, 1, 0, NULL, NULL),
+(44, 'Settled Queues', 'settled_queues', 35, NULL, 'settled_queues.settled_queues', 26, NULL, 1, 0, NULL, NULL),
+(45, 'Deleted Queues', 'deleted_queues', 35, NULL, 'deleted_queues.deleted_queues', 26, NULL, 1, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -726,13 +770,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2017_10_27_220958_create_menus_table', 1),
 (7, '2017_10_30_015931_create_user_informations_table', 2),
 (12, '2017_11_02_055143_create_patients_table', 3),
-(13, '2017_11_05_042952_create_clinic_services_table', 4),
 (14, '2017_11_05_084851_create_medicines_table', 5),
 (17, '2017_11_06_130502_create_drug_stock_units_table', 6),
 (18, '2017_11_06_130702_create_drug_categories_table', 6),
 (19, '2017_11_07_102254_create_adjustments_table', 7),
 (22, '2017_11_07_192501_create_schedules_table', 8),
-(23, '2017_11_08_102422_create_schedule_details_table', 8),
 (26, '2017_11_08_210459_create_leaves_table', 9),
 (33, '2017_11_10_234300_create_medical_templates_table', 10),
 (34, '2017_11_10_234646_create_drawing_templates_table', 10),
@@ -740,7 +782,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (38, '2017_11_11_212420_create_medical_template_details_table', 12),
 (39, '2017_11_10_234710_create_medical_records_table', 13),
 (46, '2017_11_15_191030_create_queues_table', 14),
-(47, '2017_11_15_191230_create_prescriptions_table', 14);
+(61, '2017_11_08_102422_create_schedule_details_table', 19),
+(67, '2017_11_24_155926_create_service_categories_table', 21),
+(68, '2017_11_05_042952_create_clinic_services_table', 22),
+(72, '2017_11_15_191230_create_prescriptions_table', 23),
+(73, '2017_11_19_194713_create_invoices_table', 23),
+(74, '2017_11_19_200225_create_payments_table', 23);
 
 -- --------------------------------------------------------
 
@@ -784,6 +831,25 @@ INSERT INTO `patients` (`id`, `patient_code`, `creator_id`, `patient_info`, `dru
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `receipt_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `entity_id` int(10) UNSIGNED NOT NULL,
+  `doctor_id` int(10) UNSIGNED NOT NULL,
+  `invoice_id` int(10) UNSIGNED NOT NULL,
+  `paid_amount` double(15,3) NOT NULL DEFAULT '0.000',
+  `payment_method` int(11) DEFAULT NULL,
+  `prescriptions` json NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `prescriptions`
 --
 
@@ -792,7 +858,7 @@ CREATE TABLE `prescriptions` (
   `entity_id` int(10) UNSIGNED NOT NULL,
   `doctor_id` int(10) UNSIGNED NOT NULL,
   `patient_id` int(10) UNSIGNED NOT NULL,
-  `medicine_info` json NOT NULL,
+  `prescriptions` json NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -816,15 +882,6 @@ CREATE TABLE `queues` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `queues`
---
-
-INSERT INTO `queues` (`id`, `entity_id`, `doctor_id`, `patient_id`, `bill`, `paid`, `note`, `checking`, `status`, `created_at`, `updated_at`) VALUES
-(1, 7, 12, 6, NULL, NULL, 'hahahaha', 0, 0, '2017-11-19 08:51:11', '2017-11-19 11:32:32'),
-(2, 7, 7, 7, NULL, NULL, NULL, 0, 1, '2017-11-19 10:57:18', '2017-11-19 15:20:21'),
-(3, 7, 12, 8, NULL, NULL, 'hello', 0, 0, '2017-11-19 13:00:48', '2017-11-19 13:01:10');
 
 -- --------------------------------------------------------
 
@@ -870,8 +927,7 @@ CREATE TABLE `schedules` (
 
 INSERT INTO `schedules` (`id`, `entity_id`, `doctor_id`, `status`, `created_at`, `updated_at`) VALUES
 (4, 7, 7, 1, '2017-11-08 14:56:37', '2017-11-09 11:16:37'),
-(6, 7, 12, 1, '2017-11-09 11:33:01', '2017-11-09 11:33:01'),
-(7, 7, 13, 1, '2017-11-19 12:49:49', '2017-11-19 12:49:49');
+(6, 7, 12, 1, '2017-11-09 11:33:01', '2017-11-09 11:33:01');
 
 -- --------------------------------------------------------
 
@@ -891,20 +947,27 @@ CREATE TABLE `schedule_details` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `schedule_details`
+-- Table structure for table `service_categories`
 --
 
-INSERT INTO `schedule_details` (`id`, `schedule_id`, `type`, `days`, `start_time`, `end_time`, `per_patient_time`, `created_at`, `updated_at`) VALUES
-(18, 4, 0, 'Wednesday', '12:30:00', '18:30:00', NULL, '2017-11-08 15:33:55', '2017-11-08 15:33:55'),
-(19, 4, 0, 'Thursday', '06:30:00', '18:30:00', NULL, '2017-11-08 15:33:55', '2017-11-08 15:33:55'),
-(20, 4, 1, 'Monday', '06:30:00', '09:30:00', NULL, '2017-11-08 15:33:55', '2017-11-08 15:33:55'),
-(21, 4, 1, 'Wednesday', '06:30:00', '08:40:00', NULL, '2017-11-08 15:33:55', '2017-11-08 15:33:55'),
-(25, 6, 0, 'Monday', '06:30:00', '06:36:00', NULL, '2017-11-09 11:33:02', '2017-11-09 11:33:02'),
-(26, 6, 1, 'Tuesday', '12:30:00', '19:35:00', NULL, '2017-11-09 11:33:02', '2017-11-09 11:33:02'),
-(27, 7, 0, 'Sunday', '06:30:00', '08:30:00', NULL, '2017-11-19 12:49:49', '2017-11-19 12:49:49'),
-(28, 7, 0, 'Monday', '05:29:00', '08:30:00', NULL, '2017-11-19 12:49:49', '2017-11-19 12:49:49'),
-(29, 7, 1, 'Monday', '12:30:00', '15:30:00', NULL, '2017-11-19 12:49:49', '2017-11-19 12:49:49');
+CREATE TABLE `service_categories` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `entity_id` int(10) UNSIGNED NOT NULL,
+  `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `service_categories`
+--
+
+INSERT INTO `service_categories` (`id`, `entity_id`, `category_name`, `created_at`, `updated_at`) VALUES
+(1, 7, 'Investigation Blood', '2017-11-24 14:33:50', '2017-11-24 14:33:50'),
+(2, 7, 'Investigation Urine', '2017-11-24 14:34:04', '2017-11-24 14:34:04');
 
 -- --------------------------------------------------------
 
@@ -932,13 +995,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `entity_id`, `role_id`, `status`, `profile_image`, `approved`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Super Admin', 'clinical@gmail.com', '$2y$10$AI8urCjHZLCs8xjfqK94nuVnDxHZ9BKwug3wOsIrQL7JP4KsudddO', 1, 1, 1, 'avatar.png', NULL, 'oHE9gArLMoFlIFROzKjUG9UY9qXHqYGTx2HocSJQh4naZCPwgReCPuK6fOkf', NULL, NULL),
-(7, 'Huzafa', 'huzaifa1@gmail.com', '$2y$10$2eW1m09uUmn7q65iHev96e5/vW2llgUo36nzNCg//9asAU5BVVW4C', 7, 2, 1, 'huzaifa1@gmail.com.jpg', NULL, 'ool993RLRU10IhzStDH7smTQeZXeELlnMEygCR2AcejGLf146L2ovzzGVLrn', '2017-10-30 15:13:44', '2017-11-02 09:21:37'),
-(11, 'Micheal stathon', 'example@gmail.com', '$2y$10$F0vUJERN0eMxSsQV0Amufe8bS8KdkcUFIDgUSzo.jyZ2n/3VOHeaS', 7, 3, 1, '.jpg', NULL, 'HSgeghNUVI9AgUlMjolimXOlponvUBJHGw1NSHGn6C830xxcN8uCMLPceukl', '2017-11-01 06:33:21', '2017-11-19 10:58:59'),
+(1, 'Super Admin', 'clinical@gmail.com', '$2y$10$AI8urCjHZLCs8xjfqK94nuVnDxHZ9BKwug3wOsIrQL7JP4KsudddO', 1, 1, 1, 'avatar.png', NULL, '3EyQCYmIAQEDKWoAHHy50Gd96rSsKzMZjWr1GFRL8JvNbCcD8E24c0rfzSTM', NULL, NULL),
+(7, 'Huzafa', 'huzaifa1@gmail.com', '$2y$10$2eW1m09uUmn7q65iHev96e5/vW2llgUo36nzNCg//9asAU5BVVW4C', 7, 2, 1, 'huzaifa1@gmail.com.jpg', NULL, '9zjK1Lf5oinDKyS9O0R0waO1irwrqogbg1XLTQn4HR12KocUz8lglDCr17Xr', '2017-10-30 15:13:44', '2017-11-02 09:21:37'),
+(11, 'Micheal stathon', 'example@gmail.com', '$2y$10$F0vUJERN0eMxSsQV0Amufe8bS8KdkcUFIDgUSzo.jyZ2n/3VOHeaS', 7, 3, 1, '.jpg', NULL, 'jvOGiPqQQM5WQJlrzvpRtRoiURtBIXh7hoelw9n3OKr92ahgvG74n102UgkU', '2017-11-01 06:33:21', '2017-11-19 10:58:59'),
 (15, 'Receptionist BOy', 'recetionist@gmail.com', '$2y$10$1QRfFh3FynSkO5y5X/D.AOSovm.abhi565ur46nOuw91yRggM0L0m', 7, 4, 1, 'recetionist@gmail.com.jpg', NULL, NULL, '2017-11-05 11:22:39', '2017-11-05 11:22:39'),
 (16, 'Dr.Eden kamara', 'eden@gmail.com', '$2y$10$n5kqslww4xHj/BJ3r/BRw.91OO.VpT6QXsgUAspJH0LPHPJ5eRdmm', 7, 3, 1, 'eden@gmail.com.png', NULL, 'fXiFVpPW8MqKzLmXkZ7yIyQ8CYq9oGvFcxpkqLNnbjeTNgXWeFYmRm6C55sV', '2017-11-09 04:46:20', '2017-11-09 04:46:20'),
 (17, 'Edward methews', 'edward@gmail.com', '$2y$10$/1JCc2ZZjLGxFNLrUIdBqOi016asp1pF8joLLzPwPMMZ/cFcJYETO', 7, 3, 1, 'edward@gmail.com.jpg', NULL, 'F6hJUwTZXcSN0gA4zXUmRwzWAFSUEx22vB2NDaG8noY99hNErchjzZLQ0IWH', '2017-11-19 12:47:28', '2017-11-19 12:47:28'),
-(18, 'Abdul Shakoor', 'Abdul@gmail.com', '$2y$10$7cePwy3J/LImH7nu/Qg.q.hqPqw5GAbpfcVpUoJDiTe5NdohQXUAy', 7, 4, 1, 'avatar.png', NULL, NULL, '2017-11-19 12:51:19', '2017-11-19 12:51:19');
+(18, 'Abdul Shakoor', 'Abdul@gmail.com', '$2y$10$7cePwy3J/LImH7nu/Qg.q.hqPqw5GAbpfcVpUoJDiTe5NdohQXUAy', 7, 4, 1, 'avatar.png', NULL, NULL, '2017-11-19 12:51:19', '2017-11-19 12:51:19'),
+(20, 'Tenant 2', 'tenant2@gmail.com', '$2y$10$aWmotbVogU.IUNAlVnAwFeeQHG2s7Y9XHHXV/UjWaUIw1xKwJAMSS', 9, 2, 1, 'avatar.png', NULL, NULL, '2017-11-24 13:31:34', '2017-11-24 13:31:34');
 
 -- --------------------------------------------------------
 
@@ -966,7 +1030,8 @@ INSERT INTO `user_informations` (`id`, `user_id`, `doctor_info`, `admin_info`, `
 (11, 15, NULL, NULL, '{"gender": "0", "address": "abcd", "last_name": "BOy", "contact_no": "142141241241", "first_name": "Receptionist"}', '2017-11-05 11:22:39', '2017-11-05 11:22:39'),
 (12, 16, '{"gender": "0", "address": "abcd", "last_name": "kamara", "contact_no": "03312880795", "department": "Neorologist", "first_name": "Dr.Eden", "specialist": "skin specialist", "blood_group": "O+", "date_of_birth": "09/27/1989", "qualification": "abcd", "short_biography": "abcd"}', NULL, NULL, '2017-11-09 04:46:20', '2017-11-09 04:46:20'),
 (13, 17, '{"gender": "0", "address": "abcd", "last_name": "methews", "contact_no": "12421512512521", "department": "archiologist", "first_name": "Edward", "specialist": "eye specialist", "blood_group": "B+", "date_of_birth": "07/25/1989", "qualification": "abcd", "short_biography": "abcd"}', NULL, NULL, '2017-11-19 12:47:28', '2017-11-19 12:47:28'),
-(14, 18, NULL, NULL, '{"gender": "0", "address": "abcd", "last_name": "Shakoor", "contact_no": "094489324325", "first_name": "Abdul"}', '2017-11-19 12:51:20', '2017-11-19 12:51:20');
+(14, 18, NULL, NULL, '{"gender": "0", "address": "abcd", "last_name": "Shakoor", "contact_no": "094489324325", "first_name": "Abdul"}', '2017-11-19 12:51:20', '2017-11-19 12:51:20'),
+(15, 20, NULL, '{"gender": "0", "address": "abcd", "country": "American Samoa", "full_name": "Tenant 2", "contact_no": "03115773462"}', NULL, '2017-11-24 13:31:34', '2017-11-24 13:31:34');
 
 --
 -- Indexes for dumped tables
@@ -998,7 +1063,8 @@ ALTER TABLE `apps_countries_detailed`
 --
 ALTER TABLE `clinic_services`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `clinic_services_entity_id_foreign` (`entity_id`);
+  ADD KEY `clinic_services_entity_id_foreign` (`entity_id`),
+  ADD KEY `clinic_services_service_category_id_foreign` (`service_category_id`);
 
 --
 -- Indexes for table `diagnoses`
@@ -1033,6 +1099,16 @@ ALTER TABLE `drug_stock_units`
 --
 ALTER TABLE `entities`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `invoices_entity_id_foreign` (`entity_id`),
+  ADD KEY `invoices_doctor_id_foreign` (`doctor_id`),
+  ADD KEY `invoices_patient_id_foreign` (`patient_id`),
+  ADD KEY `invoices_queue_id_foreign` (`queue_id`);
 
 --
 -- Indexes for table `leaves`
@@ -1099,6 +1175,15 @@ ALTER TABLE `patients`
   ADD KEY `patients_entity_id_foreign` (`entity_id`);
 
 --
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `payments_entity_id_foreign` (`entity_id`),
+  ADD KEY `payments_doctor_id_foreign` (`doctor_id`),
+  ADD KEY `payments_invoice_id_foreign` (`invoice_id`);
+
+--
 -- Indexes for table `prescriptions`
 --
 ALTER TABLE `prescriptions`
@@ -1138,6 +1223,13 @@ ALTER TABLE `schedule_details`
   ADD KEY `schedule_details_schedule_id_foreign` (`schedule_id`);
 
 --
+-- Indexes for table `service_categories`
+--
+ALTER TABLE `service_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `service_categories_entity_id_foreign` (`entity_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1161,7 +1253,7 @@ ALTER TABLE `user_informations`
 -- AUTO_INCREMENT for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `admins`
 --
@@ -1176,7 +1268,7 @@ ALTER TABLE `apps_countries_detailed`
 -- AUTO_INCREMENT for table `clinic_services`
 --
 ALTER TABLE `clinic_services`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `diagnoses`
 --
@@ -1201,6 +1293,11 @@ ALTER TABLE `drug_stock_units`
 -- AUTO_INCREMENT for table `entities`
 --
 ALTER TABLE `entities`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `invoices`
+--
+ALTER TABLE `invoices`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `leaves`
@@ -1216,12 +1313,12 @@ ALTER TABLE `medical_records`
 -- AUTO_INCREMENT for table `medical_templates`
 --
 ALTER TABLE `medical_templates`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `medical_template_details`
 --
 ALTER TABLE `medical_template_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `medicines`
 --
@@ -1231,27 +1328,32 @@ ALTER TABLE `medicines`
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+--
 -- AUTO_INCREMENT for table `prescriptions`
 --
 ALTER TABLE `prescriptions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `queues`
 --
 ALTER TABLE `queues`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `roles`
 --
@@ -1266,17 +1368,22 @@ ALTER TABLE `schedules`
 -- AUTO_INCREMENT for table `schedule_details`
 --
 ALTER TABLE `schedule_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `service_categories`
+--
+ALTER TABLE `service_categories`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `user_informations`
 --
 ALTER TABLE `user_informations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- Constraints for dumped tables
 --
@@ -1298,7 +1405,8 @@ ALTER TABLE `admins`
 -- Constraints for table `clinic_services`
 --
 ALTER TABLE `clinic_services`
-  ADD CONSTRAINT `clinic_services_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`);
+  ADD CONSTRAINT `clinic_services_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `clinic_services_service_category_id_foreign` FOREIGN KEY (`service_category_id`) REFERENCES `service_categories` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `diagnoses`
@@ -1323,6 +1431,15 @@ ALTER TABLE `drug_categories`
 --
 ALTER TABLE `drug_stock_units`
   ADD CONSTRAINT `drug_stock_units_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`);
+
+--
+-- Constraints for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD CONSTRAINT `invoices_doctor_id_foreign` FOREIGN KEY (`doctor_id`) REFERENCES `user_informations` (`id`),
+  ADD CONSTRAINT `invoices_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `invoices_patient_id_foreign` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `invoices_queue_id_foreign` FOREIGN KEY (`queue_id`) REFERENCES `queues` (`id`);
 
 --
 -- Constraints for table `leaves`
@@ -1364,6 +1481,14 @@ ALTER TABLE `patients`
   ADD CONSTRAINT `patients_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`);
 
 --
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_doctor_id_foreign` FOREIGN KEY (`doctor_id`) REFERENCES `user_informations` (`id`),
+  ADD CONSTRAINT `payments_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `payments_invoice_id_foreign` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `prescriptions`
 --
 ALTER TABLE `prescriptions`
@@ -1391,6 +1516,12 @@ ALTER TABLE `schedules`
 --
 ALTER TABLE `schedule_details`
   ADD CONSTRAINT `schedule_details_schedule_id_foreign` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `service_categories`
+--
+ALTER TABLE `service_categories`
+  ADD CONSTRAINT `service_categories_entity_id_foreign` FOREIGN KEY (`entity_id`) REFERENCES `entities` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `users`

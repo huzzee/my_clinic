@@ -153,6 +153,20 @@
                                                 </select>
 
                                             </div>
+
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="country" class="col-sm-3">Currency<span class="text-danger">*</span></label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control select2" name="currency">
+                                                    <option selected disabled>Select Currency</option>
+                                                    @foreach($currencies as $currency)
+                                                        <option value="{{ $currency->currencyCode }}">{{ $currency->currencyCode }}({{ $currency->countryName }})</option>
+                                                    @endforeach
+
+                                                </select>
+
+                                            </div>
                                         </div>
 
                                         <div class="form-group row">

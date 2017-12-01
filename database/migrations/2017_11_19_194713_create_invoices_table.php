@@ -19,7 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->unsignedInteger('entity_id');
             $table->unsignedInteger('doctor_id');
             $table->unsignedInteger('patient_id');
-            $table->unsignedInteger('queue_id');
+            $table->unsignedInteger('queue_id')->nullable();
             $table->double('grand_total',15,3)->default(0);
             $table->double('total_gst',15,3)->default(0);
             $table->double('after_discount',15,3)->default(0);

@@ -21,26 +21,28 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                    <div class="hidden-print">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
-                    @if(session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
+                        @if(session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
                         @if(session()->has('message2'))
                             <div class="alert alert-warning">
                                 {{ session()->get('message2') }}
                             </div>
                         @endif
+                    </div>
                     <div class="card-box">
                         <div class="row">
                             <div class="col-lg-12 col-md-12">

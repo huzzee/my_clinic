@@ -17,28 +17,30 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <?php if(count($errors) > 0): ?>
-                        <div class="alert alert-danger">
-                            <ul>
-                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <li><?php echo e($error); ?></li>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
+                    <div class="hidden-print">
+                        <?php if(count($errors) > 0): ?>
+                            <div class="alert alert-danger">
+                                <ul>
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if(session()->has('message')): ?>
-                        <div class="alert alert-success">
-                            <?php echo e(session()->get('message')); ?>
+                        <?php if(session()->has('message')): ?>
+                            <div class="alert alert-success">
+                                <?php echo e(session()->get('message')); ?>
 
-                        </div>
-                    <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
                         <?php if(session()->has('message2')): ?>
                             <div class="alert alert-warning">
                                 <?php echo e(session()->get('message2')); ?>
 
                             </div>
                         <?php endif; ?>
+                    </div>
                     <div class="card-box">
                         <div class="row">
                             <div class="col-lg-12 col-md-12">

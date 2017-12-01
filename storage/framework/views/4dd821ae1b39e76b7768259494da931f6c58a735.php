@@ -29,10 +29,15 @@
                     <?php endif; ?>
 
                     <div class="card-box table-responsive">
-                        <button class="btn btn-danger waves-effect waves-light" data-toggle="modal"
+                        <button class="btn btn-info waves-effect waves-light" data-toggle="modal"
                                 data-target="#con-close-modal">
                             Add Patient to Queue
                         </button>
+
+
+                        <a href="<?php echo e(url('settled_queues')); ?>" class="btn btn-success">Settled Queues</a>
+
+                        <a href="<?php echo e(url('deleted_queues')); ?>" class="btn btn-danger">Deleted Queues</a>
 
 
 
@@ -187,18 +192,27 @@
                                         <?php if($queue->bill == null): ?>
                                             <td>No</td>
                                         <?php else: ?>
-                                            <td><?php echo e($queue->bill); ?></td>
+                                            <td><?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
                                         <?php endif; ?>
 
                                         <?php if($queue->paid == null): ?>
                                             <td>No</td>
                                             <td>No</td>
                                         <?php else: ?>
-                                            <td><?php echo e($queue->paid); ?></td>
-                                            <td><?php echo e($queue->bill - $queue->paid); ?></td>
+                                            <td><?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
+                                            <td><?php echo e($queue->bill - $queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
                                         <?php endif; ?>
                                         <td>
-                                            <?php if($queue->status == 0): ?>
+                                            <?php if($queue->status == 2): ?>
+                                                <?php if($queue->invoices->paid !==  $queue->invoices->grand_total && $queue->invoices->user_informations->user_id == Auth::user()->id): ?>
+                                                    <a href="<?php echo e(url('invoices/'.$queue->invoices->id)); ?>"
+                                                       style=" font-size: 80%;color: #2b4a95"
+                                                       data-toggle="tooltip" data-placement="top" title=""
+                                                       data-original-title="Edit Invoice">#Edit Invoice</a>
+
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            <?php if($queue->status == 0 || $queue->status == 1): ?>
                                                 <button style=" font-size: 80%; background: none;float: left;text-align: left;
                                              border: none; color: #2b4a95" data-toggle="modal"
                                                         data-target="#con-close-modal<?php echo e($queue->id); ?>delete">#Delete Queue</button><br>
@@ -258,7 +272,8 @@
                                              border: none; color: #2b4a95" href="<?php echo e(url('payments/'.$queue->id.'/edit')); ?>">Check Out</a><br>
                                             </td>
                                         <?php elseif($queue->status == 2): ?>
-                                            <td>Add Payment</td>
+                                            <td><a style=" font-size: 100%; font-weight: bold; background: none;float: left;text-align: left;
+                                             border: none; color: #2b4a95" href="<?php echo e(url('payments/'.$queue->invoices->id)); ?>">Add Payment</a></td>
                                         <?php elseif($queue->status == 3): ?>
                                             <td>Payment Completed</td>
                                         <?php elseif($queue->status == 4): ?>
@@ -324,15 +339,15 @@
                                         <?php if($queue->bill == null): ?>
                                             <td>No</td>
                                         <?php else: ?>
-                                            <td><?php echo e($queue->bill); ?></td>
+                                            <td><?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
                                         <?php endif; ?>
 
                                         <?php if($queue->paid == null): ?>
                                             <td>No</td>
                                             <td>No</td>
                                         <?php else: ?>
-                                            <td><?php echo e($queue->paid); ?></td>
-                                            <td><?php echo e($queue->bill - $queue->paid); ?></td>
+                                            <td><?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
+                                            <td><?php echo e($queue->bill - $queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
                                         <?php endif; ?>
                                         <td>
                                         <?php if($queue->status == 0 || $queue->status == 1): ?>
@@ -368,6 +383,7 @@
                                                     </div>
                                                 </div>
                                         <?php endif; ?>
+
                                         <?php if($queue->status == 0): ?>
                                                 <button style=" font-size: 80%; background: none;float: left;text-align: left;
                                              border: none; color: #2b4a95" data-toggle="modal"

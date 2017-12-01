@@ -1,3 +1,4 @@
+
 @extends('layouts.mainHome')
 
 
@@ -12,7 +13,7 @@
                 <div class="col-xs-12">
                     <div class="page-title-box">
 
-                        <h4 class="page-title">Manage Clinics</h4>
+                        <h4 class="page-title">Manage Payments</h4>
 
                         <div class="clearfix"></div>
 
@@ -22,7 +23,6 @@
             <!-- end row -->
 
 
-
             <div class="row">
                 <div class="col-sm-12">
                     @if(session()->has('message'))
@@ -30,52 +30,50 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-
                     <div class="card-box table-responsive">
-
-                        <a class="btn btn-danger" href="{{ url('admins/create') }}">Create Admins</a>
-
-                        <hr>
-
 
                         <table id="datatable-buttons" class="table table-striped table-bordered">
                             <thead>
                             <tr>
-                                <th width="2%">Sr.No</th>
+                                <th width="1%">Sr.No</th>
+                                <th width="14%">Patient Name</th>
+                                <th width="14%">Invoice No</th>
+                                <th width="14%">Receipt No</th>
+                                <th width="14%">Payment Date</th>
+                                <th width="10%">Paid Amount</th>
 
-                                <th>Clinic Name</th>
-
-
-
-                                <th width="8%">Status</th>
-
-                                <th width="8%">Action</th>
+                                <th width="5%">Action</th>
 
                             </tr>
                             </thead>
 
 
                             <tbody>
-                            @php $i=1;@endphp
-                            @foreach($clinics as $clinic)
+                            @php $i=1; @endphp
+                            @foreach($payments as $payment)
+                                <tr>
+                                    <td>{{$i}}</td>
+                                    <td>{{ $payment->invoices->patients->patient_info['full_name'] }}</td>
+                                    <td>{{ $payment->invoices->invoice_code }}</td>
+                                    <td>{{ $payment->receipt_no }}</td>
+                                    <td>{{ date('d-M-Y',strtotime($payment->created_at)) }}</td>
 
-                                <td>{{ $i }}</td>
-                                <td>{{ $clinic->entity_name }}</td>
+                                    <td style="color: green;">{{ $payment->paid_amount }} {{Auth::user()->entities->currency}}</td>
 
+                                    <td>
 
-                                @if($clinic->status == 1)
-                                    <td>Activate</td>
-                                @else
-                                    <td>Deactivate</td>
-                                @endif
-                                <td>
-                                    <a href="{{ url('clinics/'.$clinic->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                </td>
+                                        <a href="{{ url('payments_print/'.$payment->id) }}"
+                                           class="btn btn-inverse"
+                                           target="_blank"
+                                           data-toggle="tooltip" data-placement="top" title=""
+                                           data-original-title="Print Payment"><i class="fa fa-print"></i></a>
+
+                                    </td>
+                                </tr>
 
                                 @php $i++; @endphp
                             @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -91,6 +89,23 @@
 <!--*********Page Scripts Here*********-->
 
 @section('scripts')
+    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+    <script src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
+    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+
+    <script src="{{ asset('assets/plugins/autocomplete/jquery.mockjax.js') }}"></script>
+    <script src="{{ asset('assets/plugins/autocomplete/jquery.autocomplete.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/autocomplete/countries.js') }}"></script>
+    <script src="{{ asset('assets/pages/jquery.autocomplete.init.js') }}"></script>
+
+    <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
+
+
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.js') }}"></script>
 
@@ -108,6 +123,8 @@
     <script src="{{ asset('assets/plugins/datatables/dataTables.scroller.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.colVis.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custombox/js/custombox.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custombox/js/legacy.min.js') }}"></script>
 
     <!-- init -->
     <script src="{{ asset('assets/pages/jquery.datatables.init.js') }}"></script>

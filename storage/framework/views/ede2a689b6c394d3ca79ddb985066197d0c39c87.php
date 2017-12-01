@@ -151,6 +151,20 @@
                                                 </select>
 
                                             </div>
+
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="country" class="col-sm-3">Currency<span class="text-danger">*</span></label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control select2" name="currency">
+                                                    <option selected disabled>Select Currency</option>
+                                                    <?php $__currentLoopData = $currencies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $currency): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($currency->currencyCode); ?>"><?php echo e($currency->currencyCode); ?>(<?php echo e($currency->countryName); ?>)</option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                                </select>
+
+                                            </div>
                                         </div>
 
                                         <div class="form-group row">

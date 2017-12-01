@@ -27,7 +27,7 @@ class Invoice extends Model
 
     public function payments()
     {
-        return $this->hasMany('App\models\Prescription','id');
+        return $this->hasMany(Payment::class);
     }
 
     public function queues()

@@ -8,7 +8,7 @@
                 <div class="col-xs-12">
                     <div class="page-title-box">
 
-                        <h4 class="page-title">Manage Clinics</h4>
+                        <h4 class="page-title">Settled Queues</h4>
 
                         <div class="clearfix"></div>
 
@@ -16,7 +16,6 @@
                 </div>
             </div>
             <!-- end row -->
-
 
 
             <div class="row">
@@ -27,52 +26,44 @@
 
                         </div>
                     <?php endif; ?>
-
                     <div class="card-box table-responsive">
-
-                        <a class="btn btn-danger" href="<?php echo e(url('admins/create')); ?>">Create Admins</a>
-
-                        <hr>
-
 
                         <table id="datatable-buttons" class="table table-striped table-bordered">
                             <thead>
                             <tr>
-                                <th width="2%">Sr.No</th>
+                                <th width="5%">Sr.No</th>
+                                <th>Patient Name</th>
+                                <th>Doctor Name</th>
+                                <th>Invoice no</th>
 
-                                <th>Clinic Name</th>
+                                <th width="12%">Bill</th>
+                                <th width="12%">Paid</th>
 
 
-
-                                <th width="8%">Status</th>
-
-                                <th width="8%">Action</th>
 
                             </tr>
                             </thead>
 
 
                             <tbody>
-                            <?php $i=1;?>
-                            <?php $__currentLoopData = $clinics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $clinic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $i=1; ?>
+                            <?php $__currentLoopData = $queues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $queue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td><?php echo e($i); ?></td>
+                                    <td><?php echo e($queue->patients->patient_info['full_name']); ?></td>
+                                    <td><?php echo e($queue->user_informations->users->name); ?></td>
+                                    <td><?php echo e($queue->invoices->invoice_code); ?></td>
+                                    <td><?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
+                                    <td><?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
 
-                                <td><?php echo e($i); ?></td>
-                                <td><?php echo e($clinic->entity_name); ?></td>
 
 
-                                <?php if($clinic->status == 1): ?>
-                                    <td>Activate</td>
-                                <?php else: ?>
-                                    <td>Deactivate</td>
-                                <?php endif; ?>
-                                <td>
-                                    <a href="<?php echo e(url('clinics/'.$clinic->id)); ?>" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                </td>
+                                </tr>
+
 
                                 <?php $i++; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
                             </tbody>
                         </table>
                     </div>
@@ -88,6 +79,23 @@
 <!--*********Page Scripts Here*********-->
 
 <?php $__env->startSection('scripts'); ?>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/multiselect/js/jquery.multi-select.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/select2/js/select2.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js')); ?>"></script>
+
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.mockjax.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.autocomplete.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/countries.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.autocomplete.init.js')); ?>"></script>
+
+    <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
+
+
     <script src="<?php echo e(asset('assets/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.bootstrap.js')); ?>"></script>
 
@@ -105,6 +113,8 @@
     <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.scroller.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.colVis.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.fixedColumns.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/custombox/js/custombox.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/custombox/js/legacy.min.js')); ?>"></script>
 
     <!-- init -->
     <script src="<?php echo e(asset('assets/pages/jquery.datatables.init.js')); ?>"></script>

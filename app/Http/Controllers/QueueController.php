@@ -13,10 +13,11 @@ class QueueController extends Controller
 {
     public function index()
     {
-        $queues = Queue::with('user_informations','patients')
+        $queues = Queue::with('user_informations','patients','invoices')
             ->where('entity_id','=',Auth::user()->entity_id)
             ->where('status','!=',4)
-            ->orderBy('checking','asc')->get();
+            ->where('status','!=',3)
+            ->latest()->get();
 
         $patients = Patient::with('users')
             ->where('entity_id','=',Auth::user()->entity_id)->get();
@@ -71,9 +72,35 @@ class QueueController extends Controller
 
         return redirect('queues')->with('message','Added Note successfully');
     }
+
+    public function settled_queues()
+    {
+        $queues = Queue::with('user_informations','patients','invoices')
+            ->where('entity_id','=',Auth::user()->entity_id)
+            ->where('status','=',3)
+            ->latest()->get();
+
+        return view('pages.queues.settledQueue',array(
+            'queues' => $queues,
+        ));
+    }
+
+    public function deleted_queues()
+    {
+        $queues = Queue::with('invoices','user_informations','patients')
+            ->where('entity_id','=',Auth::user()->entity_id)
+            ->where('status','=',4)
+            ->latest()->get();
+
+        return view('pages.queues.deletedQueue',array(
+            'queues' => $queues,
+        ));
+    }
+
     public function destroy($id)
     {
         $queue = Queue::findOrFail($id);
+
         $queue->status = 4;
         $queue->save();
 

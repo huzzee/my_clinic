@@ -805,11 +805,15 @@ $('#drug_pres').change(function () {
 
 });
 
-var net_total = 0;
-var total_discont = 0;
-var after_discount = 0;
-var total_gst = 0;
-var grand_total = 0;
+var net_total = $('#net_total').val()*1;
+var total_discont = $('#total_discount').val()*1;
+var after_discount = $('#after_discount').val()*1;
+var total_gst = $('#total_gst').val()*1;
+var grand_total = $('#grand_total').val()*1;
+
+
+
+
 
 $('#add_pres_here').click(function () {
 

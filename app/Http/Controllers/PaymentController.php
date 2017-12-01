@@ -14,6 +14,16 @@ use Auth;
 
 class PaymentController extends Controller
 {
+    public function index()
+    {
+        $payments = Payment::with('invoices','user_informations')
+            ->where('entity_id','=',Auth::user()->entity_id)->latest()->get();
+
+        return view('pages.payments.managePayments',array(
+            'payments' => $payments
+        ));
+    }
+
     public function edit($id)
     {
 
@@ -43,8 +53,19 @@ class PaymentController extends Controller
         ));
     }
 
+    public function payments_print($id)
+    {
+        $payment = Payment::with('invoices','user_informations')
+            ->where('id','=',$id)->first();
+
+        return view('pages.payments.printPayments',array(
+            'payment' => $payment
+        ));
+    }
+
     public function store(Request $request)
     {
+
         $request->validate([
             'payment_cash' => 'required|min:1'
         ]);
@@ -68,7 +89,7 @@ class PaymentController extends Controller
         $payment->prescriptions = $invoice->prescriptions;
         $payment->save();
 
-        if ($request->blnc == $request->paid)
+        if ($request->blnc == $request->payment_cash)
         {
 
             for ($i = 0; $i < sizeof($payment->prescriptions); $i++) {
@@ -81,15 +102,21 @@ class PaymentController extends Controller
             }
 
 
-            $queue = Queue::findOrFail($invoice->queues_id);
-            $queue->status = 4;
+            $queue = Queue::findOrFail($invoice->queue_id);
+            $queue->status = 3;
+            $queue->paid = $invoice->paid;
             $queue->save();
 
-            return redirect('invoices/'.$invoice->id)->with('message','Payment Complete');
+            return redirect('invoices/'.$request->invoice_id)->with('message','Payment Complete');
         }
-        elseif ($invoice->balance > 0)
+        else
         {
-            return redirect('invoices/'.$invoice->id)->with('message2','Payment InComplete');
+            $queue = Queue::findOrFail($invoice->queue_id);
+            $queue->status = 2;
+            $queue->paid = $invoice->paid;
+            $queue->save();
+
+            return redirect('invoices/'.$request->invoice_id)->with('message2','Payment InComplete');
         }
 
 

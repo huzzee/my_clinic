@@ -31,9 +31,11 @@ class AdminController extends Controller
         //dd(Entity::all());
         //check_code($code);
         $country = DB::table('apps_countries_detailed')->orderBy('CountryName','asc')->get();
+        $currency = DB::table('apps_countries_detailed')->orderBy('currencyCode','asc')->get();
 
         return view('pages.admins.createAdmin',array(
-            'countries' => $country
+            'countries' => $country,
+            'currencies' => $currency
         ));
     }
 
@@ -60,6 +62,7 @@ class AdminController extends Controller
                 'gender' => 'required',
                 'entity_name' => 'required|unique:entities',
                 'country' => 'required',
+                'currency' => 'required',
                 'contact_no' => 'required',
                 'profile_image' => 'image|mimes:jpeg,png|max:2048'
             ]);
@@ -78,6 +81,7 @@ class AdminController extends Controller
                 'gender' => 'required',
                 'entity_name' => 'required|unique:entities',
                 'country' => 'required',
+                'currency' => 'required',
                 'contact_no' => 'required',
 
             ]);
@@ -96,6 +100,7 @@ class AdminController extends Controller
         $entity = new Entity([
             'entity_name' => $request['entity_name'],
             'entity_code' => str_random(10),
+            'currency' => $request->currency
         ]);
         $entity->save();
 

@@ -76,7 +76,7 @@
                                         <div class="form-group row">
                                             <label for="reason" class="col-sm-3">Reason<span class="text-danger">*</span></label>
                                             <div class="col-sm-9">
-                                                <textarea name="reason" id="textarea" class="form-control" maxlength="500" rows="5" placeholder="Address" value="{{ old('reason') }}"></textarea>
+                                                <textarea name="reason" id="textarea" class="form-control" maxlength="500" rows="5" placeholder="Reason" value="{{ old('reason') }}"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">

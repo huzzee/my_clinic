@@ -61,7 +61,7 @@
                                         <td style="color: green;">{{ $invoice->paid }} {{Auth::user()->entities->currency}}</td>
                                         <td>
                                             @if($invoice->paid < $invoice->grand_total)
-                                                Unbalanced
+                                                UnPaid
                                             @elseif($invoice->paid == $invoice->grand_total)
                                                 Paid
                                             @endif
@@ -69,20 +69,96 @@
                                         <td>
                                             @if($invoice->paid < $invoice->grand_total)
                                                 <a href="{{ url('payments/'.$invoice->id) }}"
-                                                   class="btn btn-inverse"
+                                                   style="font-weight: bold; font-size: 140%;color: #2b4a95"
                                                    data-toggle="tooltip" data-placement="top" title=""
                                                    data-original-title="Add Payment"><i class="fa fa-dollar"></i></a>
                                             @elseif($invoice->paid == $invoice->grand_total)
-                                                <a href="javascript:void(0);"
-                                                   class="btn btn-inverse"
-                                                   data-toggle="tooltip" data-placement="top" title=""
-                                                   data-original-title="Add Payment" disabled="disabled"><i class="fa fa-dollar"></i></a>
+                                                <a
+                                                   style="font-weight: bold; font-size: 120%;color: #2abfcc"
+                                                   disabled="disabled"><i class="fa fa-dollar"></i></a>
                                             @endif
 
+                                            &nbsp;
+
                                             <a href="{{ url('invoices/'.$invoice->id) }}"
-                                               class="btn btn-teal"
+                                               style="font-weight: bold; font-size: 120%;color: #2b4a95"
                                                data-toggle="tooltip" data-placement="top" title=""
                                                data-original-title="Show Invoice"><i class="fa fa-eye"></i></a>
+                                                &nbsp;
+
+                                            @if($invoice->paid !==  $invoice->grand_total && $invoice->user_informations->user_id == Auth::user()->id)
+                                            <a href="{{ url('invoices/'.$invoice->id.'/edit') }}"
+                                                style="font-weight: bold; font-size: 120%;color: #2b4a95"
+                                                data-toggle="tooltip" data-placement="top" title=""
+                                                data-original-title="Edit Invoice"><i class="fa fa-pencil"></i></a>
+                                            @else
+
+                                            <a
+                                               style="font-weight: bold; font-size: 120%;color: #2abfcc"
+                                               ><i class="fa fa-pencil"></i></a>
+                                            @endif
+                                                &nbsp;
+
+                                                &nbsp;
+
+                                            <button
+                                               style="font-weight: bold; border: none; background: none; font-size: 120%;color: #2b4a95"
+                                               data-toggle="modal" data-target="#full-width-modal{{ $invoice->id }}"><i class="fa fa-list"></i></button>
+
+                                            <div id="full-width-modal{{ $invoice->id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
+                                                <div class="modal-dialog modal-full">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                            <h4 class="modal-title" id="full-width-modalLabel">Receipts List</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <table class="table m-t-30">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th width="1%">Sr.No</th>
+                                                                    <th width="14%">Patient Name</th>
+                                                                    <th width="14%">Receipt No</th>
+                                                                    <th width="14%">Payment Date</th>
+                                                                    <th width="10%">Paid Amount</th>
+                                                                    <th width="5%">Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                @php $i=1; @endphp
+                                                                @foreach($invoice->payments as $payment)
+                                                                    <tr>
+                                                                        <td>{{$i}}</td>
+                                                                        <td>{{ $invoice->patients->patient_info['full_name'] }}</td>
+
+                                                                        <td>{{ $payment->receipt_no }}</td>
+                                                                        <td>{{ date('d-M-Y',strtotime($payment->created_at)) }}</td>
+
+                                                                        <td style="color: green;">{{ $payment->paid_amount }} {{Auth::user()->entities->currency}}</td>
+
+                                                                        <td>
+
+                                                                            <a href="{{ url('payments_print/'.$payment->id) }}"
+                                                                               class="btn btn-inverse"
+                                                                               target="_blank"
+                                                                               data-toggle="tooltip" data-placement="top" title=""
+                                                                               data-original-title="Print Payment"><i class="fa fa-print"></i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    @php $i++; @endphp
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->
+
 
                                         </td>
                                     </tr>
