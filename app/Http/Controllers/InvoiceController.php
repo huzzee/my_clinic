@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\models\ClinicService;
 use App\models\Invoice;
+use App\models\Patient;
 use App\models\Prescription;
 use App\models\Queue;
 use App\models\ServiceCategory;
+use App\models\UserInformation;
 use Illuminate\Http\Request;
 use App\models\Medicine;
 use Auth;
@@ -20,15 +22,58 @@ class InvoiceController extends Controller
 
         //dd($invoice);
 
+        $patients = Patient::with('users')
+            ->where('entity_id','=',Auth::user()->entity_id)->get();
+
+        $doctor = UserInformation::with('users')
+            ->whereNotNull('doctor_info')
+            ->whereHas('users',function ($query){
+                $query->where('entity_id','=',Auth::user()->entity_id);
+            })->get();
+
+
         return view('pages.invoices.ManageInvoice',array(
             'invoices' => $invoice,
+            'patients' => $patients,
+            'doctors' => $doctor
+        ));
+    }
 
+    public function add_invoice(Request $request)
+    {
+        $patient = Patient::findOrFail($request->patient_id);
+
+        $doctor = UserInformation::with('users')->where('user_id','=',$request->doctor_id)->first();
+
+        $medicines = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
+
+        $services = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->get();
+
+        return redirect('invoice_add/'.$patient->id.'/'.$doctor->id);
+
+    }
+
+    public function create_invoice($patient_id , $doctor_id)
+    {
+        $patient = Patient::findOrFail($patient_id);
+
+        $doctor = UserInformation::with('users')->where('id','=',$doctor_id)->first();
+
+        $medicines = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
+
+        $services = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->get();
+
+        return view('pages.invoices.createInvoice',array(
+            'patients' => $patient,
+            'doctor' => $doctor,
+            'medicines' => $medicines,
+            'services' => $services
         ));
     }
 
     public function store(Request $request)
     {
-        //dd($request->pres_type);
+        //dd($request->queue_id);
         $request->validate([
             'pres_type' => 'required'
         ]);

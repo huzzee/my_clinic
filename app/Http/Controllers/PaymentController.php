@@ -101,20 +101,25 @@ class PaymentController extends Controller
                 }
             }
 
-
-            $queue = Queue::findOrFail($invoice->queue_id);
-            $queue->status = 3;
-            $queue->paid = $invoice->paid;
-            $queue->save();
+            if($invoice->queue_id !== null)
+            {
+                $queue = Queue::findOrFail($invoice->queue_id);
+                $queue->status = 3;
+                $queue->paid = $invoice->paid;
+                $queue->save();
+            }
 
             return redirect('invoices/'.$request->invoice_id)->with('message','Payment Complete');
         }
         else
         {
-            $queue = Queue::findOrFail($invoice->queue_id);
-            $queue->status = 2;
-            $queue->paid = $invoice->paid;
-            $queue->save();
+            if($invoice->queue_id !== null)
+            {
+                $queue = Queue::findOrFail($invoice->queue_id);
+                $queue->status = 2;
+                $queue->paid = $invoice->paid;
+                $queue->save();
+            }
 
             return redirect('invoices/'.$request->invoice_id)->with('message2','Payment InComplete');
         }

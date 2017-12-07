@@ -71,6 +71,8 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::get('deleted_queues','QueueController@deleted_queues')->name('deleted_queues');
 
     Route::Resource('invoices','InvoiceController');
+    Route::post('invoice_add','InvoiceController@add_invoice');
+    Route::get('invoice_add/{patient}/{doctor}','InvoiceController@create_invoice');
 
     Route::Resource('payments','PaymentController');
     Route::get('payments_print/{id}','PaymentController@payments_print')->name('payments_print');

@@ -13,38 +13,26 @@
                                 
                             </li>
 
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect">
+                                    <i style="color: #39e7e0" class="mdi mdi-account-key"></i>
+                                    <span style="color: lightgrey;"> Admins </span>
+                                </a>
+                                <ul class="list-unstyled">
 
-                            @foreach(callMenus() as $menus)
-                                @if($menus->parent_menu_id == '')
-                                    <li class="has_sub">
-                                    @if($menus->menu_slug == '')
-                                        <a href="javascript:void(0);" class="waves-effect">
-                                            <i style="color: #39e7e0" class="{{ $menus->menu_icon }}"></i>
-                                            <span style="color: lightgrey;"> {{ $menus->menu_name }} </span>
-                                        </a>
-                                    @else
-                                        <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
-                                            <i style="color: #39e7e0" class="{{ $menus->menu_icon }}"></i>
-                                            <span style="color: lightgrey;"> {{ $menus->menu_name }} </span>
-                                        </a>
-                                    @endif
+                                    <li>
+                                        <a href="{{ url('admins/create') }}">Create Admins</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('admins') }}">Manage Admins</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
 
 
-
-
-
-                                                <ul class="list-unstyled">
-                                                    @foreach(callMenus() as $submenus)
-                                                        @if($submenus->parent_menu_id == $menus->id)
-                                                            <li>
-                                                                <a href="{{ url($submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
-                                                            </li>
-                                                        @endif
-                                                    @endforeach
-                                                </ul>
-                                        </li>
-                                    @endif
-                                @endforeach
                             <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">

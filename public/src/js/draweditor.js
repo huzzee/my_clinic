@@ -47,7 +47,7 @@ $(function () {
     else if(w < 600)
     {
         ctx.canvas.height = 200;
-        ctx.canvas.width = 260;
+        ctx.canvas.width = 230;
     }
     /*$(window).resize(function () {
         //alert('ok');
@@ -136,7 +136,7 @@ $(function () {
                 canvas.renderAll.bind(canvas), {
 
                     width: 430,
-                    height: 300,
+                    height: 350,
                     backgroundImageStretch: false
                 });
         }
@@ -146,8 +146,8 @@ $(function () {
 
                 canvas.renderAll.bind(canvas), {
 
-                    width: 330,
-                    height: 200,
+                    width: 350,
+                    height: 250,
                     backgroundImageStretch: false
                 });
         }
@@ -158,7 +158,7 @@ $(function () {
                 canvas.renderAll.bind(canvas), {
 
                     width: 200,
-                    height: 100,
+                    height: 140,
                     backgroundImageStretch: false
                 });
         }
@@ -189,7 +189,7 @@ $(function () {
 
                     }, {
                         "scaleX": 0.80,
-                        "scaleY": 0.70
+                        "scaleY": 0.80
                     });
 
                 }
@@ -199,8 +199,8 @@ $(function () {
                         canvas.add(oImg);
 
                     }, {
-                        "scaleX": 0.60,
-                        "scaleY": 0.50
+                        "scaleX": 0.65,
+                        "scaleY": 0.60
                     });
                 }
                 else if(w < 800 && w > 600)
@@ -209,8 +209,8 @@ $(function () {
                         canvas.add(oImg);
 
                     }, {
-                        "scaleX": 0.40,
-                        "scaleY": 0.35
+                        "scaleX": 0.50,
+                        "scaleY": 0.50,
                     });
                 }
                 else if(w < 600)
@@ -219,8 +219,8 @@ $(function () {
                         canvas.add(oImg);
 
                     }, {
-                        "scaleX": 0.20,
-                        "scaleY": 0.15
+                        "scaleX": 0.25,
+                        "scaleY": 0.30
                     });
                 }
 

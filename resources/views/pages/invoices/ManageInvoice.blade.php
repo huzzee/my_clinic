@@ -29,7 +29,83 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
+
+
                     <div class="card-box table-responsive">
+
+                        @if(Auth::user()->role_id == 3 || Auth::user()->role_id == 2)
+                        <button class="btn btn-danger waves-effect waves-light" data-toggle="modal"
+                                data-target="#con-close-modal">
+                            Add Invoice
+                        </button>
+                        @endif
+
+                        <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">Add Invoice</h4>
+                                    </div>
+                                    <form action="{{ url('invoice_add') }}" method="post">
+                                        <div class="modal-body">
+
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="pats" class="control-label">Select Patient<span class="text-danger">*</span></label>
+                                                        <select class="form-control select2" id="patient_id" name="patient_id">
+                                                            <option selected disabled="disabled">Select Patient</option>
+
+                                                            @foreach($patients as $patient)
+                                                                <option value="{{ $patient->id }}">{{ $patient->patient_info['full_name'] }}({{$patient->patient_code}})</option>
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
+                                                        @if(Auth::user()->role_id == 3)
+                                                            <input type="text" readonly="readonly" value="{{ Auth::user()->name }}">
+                                                            <input type="hidden" name="doctor_id" value="{{ Auth::user()->id }}">
+                                                        @else
+                                                        <select class="form-control select2" id="doctor_id" name="doctor_id">
+                                                            <option selected disabled="disabled">Select Doctors</option>
+
+                                                            @foreach($doctors as $doctor)
+                                                                <option value="{{ $doctor->user_id }}">{{ $doctor->users->name}}</option>
+                                                            @endforeach
+
+                                                        </select>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                            {{ csrf_field() }}
+
+
+                                            <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add To Invoice</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div><!-- /.modal -->
+
+                        <hr>
 
                         <table id="datatable-buttons" class="table table-striped table-bordered">
                             <thead>
