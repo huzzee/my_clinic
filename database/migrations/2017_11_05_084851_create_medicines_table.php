@@ -21,7 +21,7 @@ class CreateMedicinesTable extends Migration
         });
 
         Schema::table('medicines', function (Blueprint $table) {
-           $table->foreign('entity_id')->references('id')->on('entities');
+           $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
         });
     }
 

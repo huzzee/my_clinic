@@ -15,6 +15,10 @@ use Auth;
 
 class InvoiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store','update','add_invoice']]);
+    }
     public function index()
     {
         $invoice = Invoice::with('payments','user_informations','patients')

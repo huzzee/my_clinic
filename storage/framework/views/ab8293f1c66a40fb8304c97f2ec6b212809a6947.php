@@ -106,24 +106,7 @@
 
                                                 </form>
 
-                                                <?php if($schedule->status == 1): ?>
-                                                    <form action="<?php echo e(url('schedule_inactive/'.$schedule->id)); ?>" method="post">
-                                                        <?php echo e(csrf_field()); ?>
 
-
-                                                        <button type="submit" class="btn btn-pink waves-effect" style="float: right;margin-right: 2%;">Deactivate</button>
-
-                                                    </form>
-                                                <?php else: ?>
-                                                    <form action="<?php echo e(url('schedule_active/'.$schedule->id)); ?>" method="post">
-                                                        <?php echo e(csrf_field()); ?>
-
-
-                                                        <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Activate</button>
-
-                                                    </form>
-
-                                                <?php endif; ?>
 
 
 

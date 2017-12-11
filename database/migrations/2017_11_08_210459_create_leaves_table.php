@@ -26,6 +26,7 @@ class CreateLeavesTable extends Migration
 
         Schema::table('leaves', function (Blueprint $table) {
             $table->foreign('doctor_id')->references('id')->on('user_informations')->onDelete('cascade');
+            $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
 
         });
     }

@@ -1163,5 +1163,77 @@ $('#add_service_here').click(function () {
 });
 
 
+/* Permissions Scripts */
+
+$('#permit_role').change(function () {
+    var role_id = $(this).val();
+    $.ajax({
+       url : 'role_chk',
+       type : 'GET',
+       data : {role_id:role_id},
+       dataType : 'Json',
+       success : function (response) {
+           //console.log(response);
+           var html = "";
+           var checked = "";
+
+           response.forEach(function(res){
+               var checked2 = "";
+               var html2 = "";
+               response.forEach(function (sub_res) {
+                   if(sub_res['active']==1) {checked2="checked";} else{checked2="";}
+                   if (sub_res['menus']['parent_menu_id'] == res['menus']['id'])
+                   {
+                       html2 += `
+                        <div class="checkbox checkbox-success checkbox-circle">
+                            <input id="checkbox-` + sub_res['id'] + `" class="postmenu" data-id="` + sub_res['id'] + `" type="checkbox" ` + checked2 + `>
+                        
+                            <label for="checkbox-` + sub_res['id'] + `" style="font-weight: bold">
+                            ` + sub_res['menus']['menu_name'] + `
+                            </label>
+                        </div>
+                        `;
+                   }
+               });
+               if(res['active']==1) {checked="checked";} else{checked="";}
+               if(res['menus']['parent_menu_id'] == null) {
+                   html += `
+                    <div class="checkbox checkbox-success checkbox-circle">
+                        <input id="checkbox-` + res['id'] + `" class="postmenu" data-id="` + res['id'] + `" type="checkbox" ` + checked + `>
+                        <label for="checkbox-` + res['id'] + `" style="font-weight: bold">
+                            ` + res['menus']['menu_name'] + `
+                        </label>
+                        `+html2+`
+                    </div>
+               `;
+               }
+
+           });
+
+           $('#check_permission').html(html);
+       }
+    });
+});
+
+$('#check_permission').on('click', '.postmenu', function(){
 
 
+    var pid = $(this).data('id');
+    var chk = $(this).is(':checked');
+
+    //alert(pid);
+
+    $.ajax({
+        url: "ajaxupdatepermissions",
+        type: "GET",
+        data: {permission_id: pid, active: chk},
+        dataType: "json",
+        success: function(response) {
+            //console.log(response);
+
+        }
+
+
+    });
+
+});

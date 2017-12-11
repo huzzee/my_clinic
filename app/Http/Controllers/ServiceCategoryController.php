@@ -8,6 +8,11 @@ use Auth;
 
 class ServiceCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store']]);
+    }
+
     public function index()
     {
         $categories = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->latest()->get();

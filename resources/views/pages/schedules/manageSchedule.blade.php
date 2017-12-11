@@ -109,22 +109,7 @@
 
                                                 </form>
 
-                                                @if($schedule->status == 1)
-                                                    <form action="{{ url('schedule_inactive/'.$schedule->id) }}" method="post">
-                                                        {{ csrf_field() }}
 
-                                                        <button type="submit" class="btn btn-pink waves-effect" style="float: right;margin-right: 2%;">Deactivate</button>
-
-                                                    </form>
-                                                @else
-                                                    <form action="{{ url('schedule_active/'.$schedule->id) }}" method="post">
-                                                        {{ csrf_field() }}
-
-                                                        <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Activate</button>
-
-                                                    </form>
-
-                                                @endif
 
 
 

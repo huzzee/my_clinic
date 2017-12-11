@@ -85,12 +85,14 @@
                                         <a href="<?php echo e(url('doctors/'.$doctor->id)); ?>" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
                                             <i class="fa fa-eye"></i>
                                         </a>
-
+                                        <?php if(Auth::user()->id == $doctor->user_id || Auth::user()->role_id == 2): ?>
 
                                         <a href="<?php echo e(url('doctors/'.$doctor->id.'/edit')); ?>" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
+                                        <?php endif; ?>
 
+                                        <?php if(Auth::user()->role_id == 2): ?>
                                         <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal<?php echo e($doctor->id); ?>"><i class="fa fa-remove"></i></button>
-
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
 
@@ -103,7 +105,7 @@
                                             </div>
                                             <div class="modal-body">
 
-                                                Are You Sure.You want to Deactivate This User.
+                                                Are You Sure.You want to Delete This User.
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
@@ -112,7 +114,7 @@
                                                     <?php echo e(csrf_field()); ?>
 
                                                     <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
+                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
 
                                                 </form>
 

@@ -8,6 +8,11 @@ use Auth;
 
 class PrescriptionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage');
+    }
+
     public function index()
     {
         $prescriptions = Prescription::with('user_informations','patients')

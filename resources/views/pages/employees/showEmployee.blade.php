@@ -37,15 +37,21 @@
                                         </div>
 
                                         <div class="">
-                                            <h4 class="m-b-5">{{ $employee->admin_info['full_name'] }}</h4>
+
                                             <p class="text-muted">{{ $employee->users->roles->role_name }}</p>
                                         </div>
                                         <div class="box-header">
+                                            @if(Auth::user()->id == $employee->user_id || Auth::user()->role_id == 2)
                                             <a href="{{ url('employee/'.$employee->id.'/edit') }}" class="btn btn-info btn-sm w-sm waves-effect m-t-10 waves-light">Edit Profile</a>
-                                            @if($employee->users->status == 0)
-                                                <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
-                                            @elseif($employee->users->status == 1)
-                                                <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
+                                            @endif
+
+                                            @if(Auth::user()->role_id == 2)
+
+                                                @if($employee->users->status == 0)
+                                                    <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
+                                                @elseif($employee->users->status == 1)
+                                                    <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
+                                                @endif
                                             @endif
                                         </div>
                                         {{--model for activate and deactivate users--}}
@@ -66,7 +72,7 @@
                                                         <form action="{{ url('employeeactivate/'.$employee->id) }}" method="post">
                                                             {{ csrf_field() }}
 
-                                                            <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Yes Activate it</button>
+                                                            <button type="submit" name="flag" value="1" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Yes Activate it</button>
 
                                                         </form>
 
@@ -89,17 +95,18 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                        <form action="{{ url('employee/'.$employee->id) }}" method="post">
+                                                        <form action="{{ url('employeeactivate/'.$employee->id) }}" method="post">
                                                             {{ csrf_field() }}
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
+
+                                                            <button type="submit" name="flag" value="0"  class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
 
                                                         </form>
 
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>                                     <hr/>
+                                        </div>
+                                        <hr/>
                                         {{--end model--}}
                                         <div class="text-left">
                                             <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">{{ $employee->users['name'] }}</span></p>

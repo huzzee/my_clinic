@@ -15,6 +15,11 @@ use App\models\DrugStockUnit;
 
 class ScheduleController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store']]);
+    }
     /**
      * Display a listing of the resource.
      *

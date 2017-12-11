@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store','update']]);
+    }
+
     public function index()
     {
         $admins = UserInformation::with('users')

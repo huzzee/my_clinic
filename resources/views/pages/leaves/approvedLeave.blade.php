@@ -87,7 +87,7 @@
 
                                     <td>{{$leave->reason}}</td>
 
-                                    @if($leave->approved === null)
+                                    @if($leave->approved === null && Auth::user()->role_id == 2)
                                     <td>
                                         <form action="{{ url('leaves_approved/'.$leave->id) }}" method="post">
                                             {{ csrf_field() }}
@@ -95,10 +95,10 @@
                                             <button type="submit" class="btn btn-icon waves-effect waves-light btn-success m-b-5" style="float: left"><i class="fa fa-check"></i></button>
 
                                         </form>
-                                        <form action="{{ url('leaves_rejected/'.$leave->id) }}" method="post">
+                                        <form action="{{ url('leaves/'.$leave->id) }}" method="post">
                                             {{ csrf_field() }}
-
-                                            <button type="submit" class="btn btn-icon waves-effect waves-light btn-danger m-b-5"><i class="fa fa-remove"></i></button>
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Rejected it</button>
 
                                         </form>
 
@@ -106,7 +106,7 @@
 
                                     </td>
                                     @else
-                                    <td>Rejected</td>
+                                    <td>Pending..!</td>
                                     @endif
                                 </tr>
 

@@ -456,7 +456,8 @@
                                         @elseif($queue->status == 1)
                                             <td>Engaging</td>
                                         @elseif($queue->status == 2)
-                                            <td>Add Payment</td>
+                                            <td><a style=" font-size: 100%; font-weight: bold; background: none;float: left;text-align: left;
+                                             border: none; color: #2b4a95" href="{{ url('payments/'.$queue->invoices->id) }}">Add Payment</a></td>
                                         @elseif($queue->status == 3)
                                             <td>Payment Completed</td>
                                         @elseif($queue->status == 4)

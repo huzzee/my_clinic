@@ -22,7 +22,7 @@ class CreateDrugStockUnitsTable extends Migration
         });
 
         Schema::table('drug_stock_units', function (Blueprint $table) {
-            $table->foreign('entity_id')->references('id')->on('entities');
+            $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
         });
     }
 

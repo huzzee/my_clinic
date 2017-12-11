@@ -11,6 +11,10 @@ use Auth;
 
 class DoctorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store','update']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +66,7 @@ class DoctorController extends Controller
             'address' => 'required',
             'gender' => 'required',
             'contact_no' => 'required',
-            'profile_image' => 'image|mimes:jpeg,png|max:2048',
+            'profile_image' => 'required|image|mimes:jpeg,png|max:2048',
             'doctor_department' => 'required',
             'specialist' => 'required',
             'date_of_birth' => 'required',
@@ -224,21 +228,38 @@ class DoctorController extends Controller
 
         $user = User::findOrFail($doctor->user_id);
 
-        $user->status = 0;
-        $user->save();
+        //->delete();
+        $user->delete();
 
-        return redirect('doctors/'.$doctor->id)->with('message','Clinic Doctor Deactivated');
+        return redirect('doctors')->with('message','Clinic Doctor deleted Successfully');
     }
 
-    public function activated($id)
+    public function activated(Request $request,$id)
     {
-        $doctor = UserInformation::findOrFail($id);
+        if ($request->flag == 0)
+        {
+            $doctor = UserInformation::findOrFail($id);
 
-        $user = User::findOrFail($doctor->user_id);
+            $user = User::findOrFail($doctor->user_id);
 
-        $user->status = 1;
-        $user->save();
+            $user->status = 0;
+            $user->save();
 
-        return redirect('doctors/'.$doctor->id)->with('message','Clinic Doctor Activated');
+            return redirect('doctors/'.$doctor->id)->with('message','Clinic Doctor Deactivated');
+        }
+        elseif ($request->flag == 1)
+        {
+            $doctor = UserInformation::findOrFail($id);
+
+            $user = User::findOrFail($doctor->user_id);
+
+            $user->status = 1;
+            $user->save();
+
+            return redirect('doctors/'.$doctor->id)->with('message','Clinic Doctor Activated');
+        }
+
+
+
     }
 }

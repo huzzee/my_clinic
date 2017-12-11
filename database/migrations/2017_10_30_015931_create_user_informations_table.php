@@ -23,7 +23,7 @@ class CreateUserInformationsTable extends Migration
         });
 
         Schema::table('user_informations', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

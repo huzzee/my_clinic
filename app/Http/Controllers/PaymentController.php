@@ -14,6 +14,13 @@ use Auth;
 
 class PaymentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store']]);
+    }
+
+
     public function index()
     {
         $payments = Payment::with('invoices','user_informations')

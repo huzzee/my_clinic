@@ -59,7 +59,7 @@
                                 <th width="8%">Age</th>
 
 
-                                <th width="18%">Shortcuts</th>
+                                <th width="15%">Shortcuts</th>
                                 <th width="15%">Action</th>
 
                             </tr>
@@ -88,6 +88,16 @@
                                     <?php $age = date('Y', strtotime(Carbon\Carbon::now())) - date('Y', strtotime($patient->patient_info['date_of_birth'])); ?>
                                     <td><?php echo e($age); ?></td>
                                     <td>
+                                        <form action="<?php echo e(url('invoice_add')); ?>" method="post">
+                                            <?php echo e(csrf_field()); ?>
+
+                                            <input type="hidden" name="patient_id" value="<?php echo e($patient->id); ?>">
+                                            <input type="hidden" name="doctor_id" value="<?php echo e(Auth::user()->id); ?>">
+                                            <button
+                                                    style="margin-right:10px; font-weight: bold;float: left; font-size: 200%; background: none; border: none; color: #2b4a95"
+                                                    type="submit">I</button>
+                                        </form>
+                                        
                                         <a href="<?php echo e(url('medical_records/'.$patient->id.'/edit')); ?>"
                                         style="font-weight: bold; font-size: 200%;color: #2b4a95"
                                            data-toggle="tooltip" data-placement="top" title=""
@@ -96,21 +106,13 @@
                                         <button
                                            style="font-weight: bold; font-size: 200%; background: none; border: none; color: #2b4a95"
                                             data-toggle="modal" data-target="#con-close-modal<?php echo e($patient->patient_code); ?>">Q</button>
-                                        &nbsp;
+
                                         <a href="#"
-                                           style="font-weight: bold; font-size: 200%;color: #2b4a95"
-                                           data-toggle="tooltip" data-placement="top" title=""
-                                           data-original-title="Add Payment">P</a>
-                                        &nbsp;
-                                        <a href="#"
-                                           style="font-weight: bold; font-size: 200%;color: #2b4a95"
+                                           style="font-weight: bold; font-size: 200%;color: #2b4a95; margin-left: 5px;"
                                            data-toggle="tooltip" data-placement="top" title=""
                                            data-original-title="Add Appointment ">A</a>
-                                        &nbsp;
-                                        <a href="#"
-                                           style="font-weight: bold; font-size: 200%;color: #2b4a95"
-                                           data-toggle="tooltip" data-placement="top" title=""
-                                           data-original-title="Add Invoice">I</a>
+
+
                                         &nbsp;
 
                                     </td>

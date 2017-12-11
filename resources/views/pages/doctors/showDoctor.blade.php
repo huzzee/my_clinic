@@ -37,15 +37,20 @@
                                         </div>
 
                                         <div class="">
-                                            <h4 class="m-b-5">{{ $doctor->user['name'] }}</h4>
+
                                             <p class="text-muted">DOCTOR</p>
                                         </div>
                                         <div class="box-header">
+                                            @if(Auth::user()->id == $doctor->user_id || Auth::user()->role_id == 2)
                                             <a href="{{ url('doctors/'.$doctor->id.'/edit') }}" class="btn btn-info btn-sm w-sm waves-effect m-t-10 waves-light">Edit Profile</a>
-                                            @if($doctor->users->status == 0)
-                                                <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
-                                            @elseif($doctor->users->status == 1)
-                                                <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
+                                            @endif
+
+                                            @if(Auth::user()->role_id == 2)
+                                                @if($doctor->users->status == 0)
+                                                    <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
+                                                @elseif($doctor->users->status == 1)
+                                                    <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
+                                                @endif
                                             @endif
                                         </div>
                                         {{--model for activate and deactivate users--}}
@@ -66,7 +71,7 @@
                                                         <form action="{{ url('doctoractive/'.$doctor->id) }}" method="post">
                                                             {{ csrf_field() }}
 
-                                                            <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Yes Activate it</button>
+                                                            <button type="submit" name="flag" value="1" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Yes Activate it</button>
 
                                                         </form>
 
@@ -89,10 +94,10 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                        <form action="{{ url('doctors/'.$doctor->id) }}" method="post">
+                                                        <form action="{{ url('doctoractive/'.$doctor->id) }}" method="post">
                                                             {{ csrf_field() }}
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
+
+                                                            <button type="submit" name="flag" value="0" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
 
                                                         </form>
 

@@ -12,6 +12,10 @@ use Auth;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=> ['store','update']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -219,21 +223,34 @@ class EmployeeController extends Controller
 
         $user = User::findOrFail($employee->user_id);
 
-        $user->status = 0;
-        $user->save();
 
-        return redirect('employee/'.$employee->id)->with('message','Clinic Employee Deactivated');
+        $user->delete();
+
+        return redirect('employee')->with('message','Clinic Employee Deleted');
     }
 
-    public function activated($id)
+    public function activated(Request $request,$id)
     {
-        $employee = UserInformation::findOrFail($id);
+        if ($request->flag == 0) {
+            $employee = UserInformation::findOrFail($id);
 
-        $user = User::findOrFail($employee->user_id);
+            $user = User::findOrFail($employee->user_id);
 
-        $user->status = 1;
-        $user->save();
+            $user->status = 0;
+            $user->save();
 
-        return redirect('employee/'.$employee->id)->with('message','Clinic Employee Activated');
+            return redirect('employee/'.$employee->id)->with('message','Clinic Employee Deactivated');
+        }
+        elseif ($request->flag == 1) {
+            $employee = UserInformation::findOrFail($id);
+
+            $user = User::findOrFail($employee->user_id);
+
+            $user->status = 1;
+            $user->save();
+
+            return redirect('employee/'.$employee->id)->with('message','Clinic Employee Activated');
+        }
+
     }
 }

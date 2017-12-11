@@ -68,28 +68,7 @@
                                                 </div>
 
                                             </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
-                                                        @if(Auth::user()->role_id == 3)
-                                                            <input type="text" readonly="readonly" value="{{ Auth::user()->name }}">
-                                                            <input type="hidden" name="doctor_id" value="{{ Auth::user()->id }}">
-                                                        @else
-                                                        <select class="form-control select2" id="doctor_id" name="doctor_id">
-                                                            <option selected disabled="disabled">Select Doctors</option>
-
-                                                            @foreach($doctors as $doctor)
-                                                                <option value="{{ $doctor->user_id }}">{{ $doctor->users->name}}</option>
-                                                            @endforeach
-
-                                                        </select>
-                                                        @endif
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                            <input type="hidden" name="doctor_id" value="{{Auth::user()->id}}">
                                         </div>
 
                                         <div class="modal-footer">
@@ -113,7 +92,7 @@
                                 <th width="1%">Sr.No</th>
                                 <th width="14%">Patient Name</th>
                                 <th>Invoice No</th>
-                                <th width="14%">Doctor</th>
+                                <th width="14%">Created By</th>
                                 <th width="12%">Grand Total</th>
                                 <th width="10%">Balance</th>
                                 <th width="10%">Paid</th>

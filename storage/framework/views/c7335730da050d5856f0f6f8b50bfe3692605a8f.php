@@ -13,38 +13,26 @@
                                 
                             </li>
 
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect">
+                                    <i style="color: #39e7e0" class="mdi mdi-account-key"></i>
+                                    <span style="color: lightgrey;"> Admins </span>
+                                </a>
+                                <ul class="list-unstyled">
 
-                            <?php $__currentLoopData = callMenus(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($menus->parent_menu_id == ''): ?>
-                                    <li class="has_sub">
-                                    <?php if($menus->menu_slug == ''): ?>
-                                        <a href="javascript:void(0);" class="waves-effect">
-                                            <i style="color: #39e7e0" class="<?php echo e($menus->menu_icon); ?>"></i>
-                                            <span style="color: lightgrey;"> <?php echo e($menus->menu_name); ?> </span>
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="<?php echo e(url($menus->menu_slug)); ?>" class="waves-effect">
-                                            <i style="color: #39e7e0" class="<?php echo e($menus->menu_icon); ?>"></i>
-                                            <span style="color: lightgrey;"> <?php echo e($menus->menu_name); ?> </span>
-                                        </a>
-                                    <?php endif; ?>
+                                    <li>
+                                        <a href="<?php echo e(url('admins/create')); ?>">Create Admins</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="<?php echo e(url('admins')); ?>">Manage Admins</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
 
 
-
-
-
-                                                <ul class="list-unstyled">
-                                                    <?php $__currentLoopData = callMenus(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $submenus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php if($submenus->parent_menu_id == $menus->id): ?>
-                                                            <li>
-                                                                <a href="<?php echo e(url($submenus->menu_slug)); ?>"><?php echo e($submenus->menu_name); ?></a>
-                                                            </li>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                </ul>
-                                        </li>
-                                    <?php endif; ?>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">

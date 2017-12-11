@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
         });
 
         Schema::table('users',function(Blueprint $table){
-            $table->foreign('entity_id')->references('id')->on('entities');
+            $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
             $table->foreign('role_id')->references('id')->on('roles');
         });
     }

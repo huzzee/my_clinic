@@ -30,11 +30,12 @@
 
                     <div class="card-box table-responsive">
 
-
-                        <button class="btn btn-info waves-effect waves-light" data-toggle="modal"
+                        <?php if(Auth::user()->role_id == 3 || Auth::user()->role_id == 2): ?>
+                        <button class="btn btn-danger waves-effect waves-light" data-toggle="modal"
                                 data-target="#con-close-modal">
                             Add Invoice
                         </button>
+                        <?php endif; ?>
 
                         <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 
@@ -64,28 +65,7 @@
                                                 </div>
 
                                             </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
-                                                        <?php if(Auth::user()->role_id == 3): ?>
-                                                            <input type="text" readonly="readonly" value="<?php echo e(Auth::user()->name); ?>">
-                                                            <input type="hidden" name="doctor_id" value="<?php echo e(Auth::user()->id); ?>">
-                                                        <?php else: ?>
-                                                        <select class="form-control select2" id="doctor_id" name="doctor_id">
-                                                            <option selected disabled="disabled">Select Doctors</option>
-
-                                                            <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <option value="<?php echo e($doctor->user_id); ?>"><?php echo e($doctor->users->name); ?></option>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                                        </select>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                            <input type="hidden" name="doctor_id" value="<?php echo e(Auth::user()->id); ?>">
                                         </div>
 
                                         <div class="modal-footer">
@@ -110,7 +90,7 @@
                                 <th width="1%">Sr.No</th>
                                 <th width="14%">Patient Name</th>
                                 <th>Invoice No</th>
-                                <th width="14%">Doctor</th>
+                                <th width="14%">Created By</th>
                                 <th width="12%">Grand Total</th>
                                 <th width="10%">Balance</th>
                                 <th width="10%">Paid</th>

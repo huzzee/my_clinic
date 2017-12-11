@@ -14,18 +14,18 @@
             </li>
 
 
-            @foreach(callMenus2() as $menus)
-                @if($menus->parent_menu_id == '')
+            @foreach(callMenus() as $menus)
+                @if($menus->menus->parent_menu_id == '')
                     <li class="has_sub">
-                        @if($menus->menu_slug == '')
+                        @if($menus->menus->menu_slug == '')
                             <a href="javascript:void(0);" class="waves-effect">
-                                <i style="color: #39e7e0" class="{{ $menus->menu_icon }}"></i>
-                                <span style="color: lightgrey;"> {{ $menus->menu_name }} </span>
+                                <i style="color: #39e7e0" class="{{ $menus->menus->menu_icon }}"></i>
+                                <span style="color: lightgrey;"> {{ $menus->menus->menu_name }} </span>
                             </a>
                         @else
-                            <a href="{{ url($menus->menu_slug) }}" class="waves-effect">
-                                <i style="color: #39e7e0;" class="{{ $menus->menu_icon }}"></i>
-                                <span style="color: lightgrey;"> {{ $menus->menu_name }} </span>
+                            <a href="{{ url($menus->menus->menu_slug) }}" class="waves-effect">
+                                <i style="color: #39e7e0;" class="{{ $menus->menus->menu_icon }}"></i>
+                                <span style="color: lightgrey;"> {{ $menus->menus->menu_name }} </span>
                             </a>
                         @endif
 
@@ -34,10 +34,10 @@
 
 
                         <ul class="list-unstyled">
-                            @foreach(callMenus2() as $submenus)
-                                @if($submenus->parent_menu_id == $menus->id)
+                            @foreach(callMenus() as $submenus)
+                                @if($submenus->menus->parent_menu_id == $menus->menus->id)
                                     <li>
-                                        <a href="{{ url($submenus->menu_slug) }}">{{ $submenus->menu_name }}</a>
+                                        <a href="{{ url($submenus->menus->menu_slug) }}">{{ $submenus->menus->menu_name }}</a>
                                     </li>
                                 @endif
                             @endforeach

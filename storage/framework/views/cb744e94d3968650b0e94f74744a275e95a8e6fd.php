@@ -81,9 +81,11 @@
 
                                                 </div>
                                                 <div class="pull-right m-t-30">
-                                                    <p><strong>Doctor Name: </strong>  <?php echo e($invoice->user_informations->users['name']); ?></p>
-                                                    <p><strong>Department: </strong><?php echo e($invoice->user_informations->doctor_info['department']); ?></p>
+
+                                                    <p><strong>Created By: </strong>  <?php echo e($invoice->user_informations->users['name']); ?></p>
+                                                    <p><strong>Role: </strong><?php echo e($invoice->user_informations->users->roles->role_name); ?></p>
                                                     <p><strong>Created At: </strong>  <?php echo e(date('d-M-Y', strtotime($invoice->created_at))); ?></p>
+
                                                 </div>
                                             </div><!-- end col -->
                                         </div>

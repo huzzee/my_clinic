@@ -26,7 +26,7 @@ class CreatePatientsTable extends Migration
 
         Schema::table('patients', function (Blueprint $table) {
             $table->foreign('creator_id')->references('id')->on('users');
-            $table->foreign('entity_id')->references('id')->on('entities');
+            $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
         });
 
 

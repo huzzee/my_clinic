@@ -11,6 +11,13 @@ use Auth;
 
 class QueueController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store','queue_doc'.'queue_note']]);
+    }
+
+
     public function index()
     {
         $queues = Queue::with('user_informations','patients','invoices')

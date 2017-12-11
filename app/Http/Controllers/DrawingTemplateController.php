@@ -8,6 +8,11 @@ use Auth;
 
 class DrawingTemplateController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store','update']]);
+    }
     /**
      * Display a listing of the resource.
      *

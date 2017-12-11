@@ -15,6 +15,10 @@ use App\models\DrugStockUnit;
 
 class MedicineController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['drugCategoryStore','drugCategoryStore','store','updateStock','update']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class MedicalTemplateController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['store','update']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -78,16 +78,14 @@
                                 <div class="text-center card-box" style="min-height: 270px">
                                     <div class="member-card">
 
-                                        <h4>Doctor Information</h4>
+                                        <h4>User Information</h4>
                                         <hr>
                                         <div class="text-left">
-                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">
+                                            <p class="text-muted font-13"><strong>Created By :</strong> <span class="m-l-15">
                                                     <?php echo e($doctor->users['name']); ?></span></p>
 
-                                            <p class="text-muted font-13"><strong>Department :</strong><span class="m-l-15">
-                                                <?php echo e($doctor->doctor_info['department']); ?></span></p>
-
-
+                                            <p class="text-muted font-13"><strong>Role :</strong> <span class="m-l-15">
+                                                    <?php echo e(Auth::user()->roles->role_name); ?></span></p>
 
                                         </div>
 
