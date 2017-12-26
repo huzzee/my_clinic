@@ -17,7 +17,8 @@ class InvoiceController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['store','update','add_invoice']]);
+        $this->middleware('user_privilage',['except'=>['store','update',
+            'add_invoice','service_price','service_press','drug_press']]);
     }
     public function index()
     {

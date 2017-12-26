@@ -74,7 +74,7 @@
                                                     <option value="1">Paragraph Text Field</option>
                                                     <option value="2">Radio Buttons</option>
                                                     <option value="3">Check Boxes(Multiple)</option>
-                                                    <option value="4">Multiple Select</option>
+                                                    <option value="4">Select</option>
 
                                                 </select>
                                             </div>

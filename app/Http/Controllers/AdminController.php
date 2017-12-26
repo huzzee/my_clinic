@@ -38,7 +38,7 @@ class AdminController extends Controller
         $country = DB::table('apps_countries_detailed')->orderBy('CountryName','asc')->get();
         $currency = DB::table('apps_countries_detailed')->orderBy('currencyCode','asc')->get();
 
-        return view('pages.admins.createAdmin',array(
+        return view('pages.admins.createadmin',array(
             'countries' => $country,
             'currencies' => $currency
         ));

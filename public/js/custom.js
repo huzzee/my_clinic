@@ -1,5 +1,6 @@
 
 var base_uri = $('#baseUrl').val();
+var g_day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 $('.add_drug').click(function(){
     //alert('ok');
     var drug_name = $('.drug_name').val();
@@ -120,13 +121,13 @@ $('.add_opd').click(function(){
     var end = $('.opd_end').val();
 
 
-    if(day !== '' && start !== '' && end !== '')
+    if(day !== null && start !== '' && end !== '')
     {
 
         var html = `
 					<tr>
 					    
-			            <td>`+day+`<input type="hidden" name="opd_day[]" value="`+day+`"></td>
+			            <td>`+g_day[day]+`<input type="hidden" name="opd_day[]" value="`+day+`"></td>
 			            <td>`+start+`<input type="hidden" name="opd_start_time[]" value="`+start+`"></td>
 			            <td>`+end+`<input type="hidden" name="opd_end_time[]" value="`+end+`"></td>
 			            <td>
@@ -160,17 +161,20 @@ $('.add_app').click(function(){
     var day = $('.app_day').val();
     var start = $('.app_start').val();
     var end = $('.app_end').val();
+    var app_token = $('.app_token').val();
 
 
-    if(day !== '' && start !== '' && end !== '')
+
+    if(day !== null && start !== '' && end !== '' && app_token !== '')
     {
 
         var html = `
 					<tr>
 					    
-			            <td>`+day+`<input type="hidden" name="app_day[]" value="`+day+`"></td>
+			            <td>`+g_day[day]+`<input type="hidden" name="app_day[]" value="`+day+`"></td>
 			            <td>`+start+`<input type="hidden" name="app_start_time[]" value="`+start+`"></td>
 			            <td>`+end+`<input type="hidden" name="app_end_time[]" value="`+end+`"></td>
+			            <td>`+app_token+`<input type="hidden" name="app_tokens[]" value="`+app_token+`"></td>
 			            <td>
 			            <button type="button" class="btn btn-icon btn-danger m-b-5 remove_table2">
 			            <i class="fa fa-remove"></i>
@@ -187,6 +191,7 @@ $('.add_app').click(function(){
 
         $('.app_start').val('');
         $('.app_end').val('');
+        $('.app_token').val('');
     }
     else{
         alert('please Enter Required Information');
@@ -1229,11 +1234,233 @@ $('#check_permission').on('click', '.postmenu', function(){
         data: {permission_id: pid, active: chk},
         dataType: "json",
         success: function(response) {
-            //console.log(response);
+            //
+        }
+    });
+});
+
+//For Appointments Dates
+Array.prototype.getUnique = function (createArray) {
+    createArray = createArray === true ? true : false;
+    var temp = JSON.stringify(this);
+    temp = JSON.parse(temp);
+    if (createArray) {
+        var unique = temp.filter(function (elem, pos) {
+            return temp.indexOf(elem) == pos;
+        }.bind(this));
+        return unique;
+    }
+    else {
+        var unique = this.filter(function (elem, pos) {
+            return this.indexOf(elem) == pos;
+        }.bind(this));
+        this.length = 0;
+        this.splice(0, 0, unique);
+    }
+}
+
+
+$('#app_doc_id').change(function () {
+    var doc_id = $(this).val();
+
+    $.ajax({
+        url: '../../get_schedule',
+        type: 'GET',
+        data: {doc_id:doc_id},
+        dataType: 'json',
+        success: function (response) {
+            var ndays = [];
+            var ndow = [0,1,2,3,4,5,6];
+
+
+            if(response == 0)
+            {
+                $('#app_date_here').css('display','none');
+                alert('Sorry! No Appointment Schedule Available of this doctor');
+            }
+            else {
+                $('#app_date_here').css('display','block');
+
+                var html = '';
+                response.schedule_details.forEach(function (data, i) {
+                    html += `
+                        <tr>
+                            <td>` + g_day[data.days] + `</td>
+                            <td>` + data.start_time + ` <b>&nbsp;&nbsp;TO&nbsp;&nbsp;</b> ` + data.end_time + `</td>
+                            <td>` + data.tokens + `</td>
+                        </tr>
+                `;
+                    ndays.push(data.days);
+                });
+
+                var abc = ndays.getUnique(true);
+                //console.log(abc);
+
+                var position = '';
+
+
+                abc.forEach(function(data,index){
+                    position = ndow.indexOf(data*1);
+                    ndow.splice(position, 1);
+                    //console.log(ndow);
+                });
+                //console.log(ndow);
+
+                $('#datepicker2').datepicker({
+                    startDate: new Date(),
+                }).datepicker('setDaysOfWeekDisabled', ndow);
+
+                $('#table_row_app').html(html);
+            }
+
 
         }
-
-
     });
-
 });
+
+$('#datepicker2').change(function () {
+    var app_date = $(this).val();
+    var doc_id = $('#app_doc_id').val();
+    $.ajax({
+        url: '../../get_token_chek',
+        type: 'GET',
+        data: {
+            app_date: app_date,
+            doc_id: doc_id
+        },
+        dataType: 'json',
+        success: function (response) {
+            //console.log(response.check);
+            if(response.check == 2)
+            {
+                var timing = '';
+
+                response.schedule_details.forEach(function (data,index) {
+                    timing += `
+                        <option value="`+data.id+`">`+data.start_time+` to `+data.end_time+`</option>
+                    `;
+                });
+
+                var html2 = `
+                    <span style="color: #0000F0"><b>Day has two schedules select any one time</b></span>
+                    <br>
+                    <br>
+                    <select class="form-control" name="time" id="select_time">
+                        <option selected disabled="disabled">Select Time</option>
+                        `+timing+`
+                    </select>
+                    div
+                `;
+                $('#problem_app').attr('disabled','disabled');
+                $('#time_here').html(html2);
+            }
+            else if(response.check == 1)
+            {
+                var html2 = `
+                    <br><span style="color: #2ca02c"><b>Token Available !</b></span>
+                    <input type="hidden" name="schedule_detail_id" value="`+response.schedule_details[0].id+`">
+                    
+                `;
+                $('#problem_app').removeAttr('disabled','disabled');
+                $('#time_here').html(html2);
+            }
+            else if(response.check == 0)
+            {
+                var html2 = `
+                    <br><span style="color: #ac2925"><b>Token Full Sorry !</b></span>
+                    
+                `;
+                $('#problem_app').attr('disabled','disabled');
+                $('#time_here').html(html2);
+            }
+        }
+    });
+});
+
+$('body').on('change','#select_time',function () {
+
+    var app_date = $('#datepicker2').val();
+    var schedule_id = $(this).val();
+
+    $.ajax({
+        url: '../../get_token_time_chek',
+        type: 'GET',
+        data: {
+            schedule_id: schedule_id,
+            app_date: app_date
+        },
+        dataType: 'json',
+        success: function (response) {
+            if(response.check == 1)
+            {
+                var html2 = `
+                    <br><span style="color: #2ca02c"><b>Token Available !</b></span>
+                    <input type="hidden" name="schedule_detail_id" value="`+response.schedule_details.id+`">
+                    
+                `;
+                $('#problem_app').removeAttr('disabled','disabled');
+                $('#time_here').append(html2);
+            }
+            else if(response.check == 0)
+            {
+                var html2 = `
+                    <br><span style="color: #ac2925"><b>Token Full Sorry !</b></span>
+                    <input type="hidden" name="schedule_detail_id" value="`+response.schedule_details.id+`">
+                    
+                `;
+                $('#problem_app').attr('disabled','disabled');
+                $('#time_here').append(html2);
+            }
+        }
+    });
+});
+
+/*
+$('.modal_select').click(function () {
+    $(".select2").select2('refresh');
+    //abc.select2('refresh');
+    //abc.select2('open');
+});*/
+/*states for cities*/
+$('#country').change(function () {
+    var country_id = $(this).val();
+    $.ajax({
+        url: 'get_states',
+        type: 'GET',
+        data: {country_id: country_id},
+        dataType: 'json',
+        success: function (response) {
+            var html = '<option disabled selected>Select State</option>';
+            response.forEach(function (data) {
+                html+= `
+                    <option value="`+data.id+`">`+data.name+`</option>
+                `;
+            });
+
+            $('#state').html(html);
+        }
+    });
+});
+
+$('#state').change(function () {
+    var state_id = $(this).val();
+    $.ajax({
+        url: 'get_cities',
+        type: 'GET',
+        data: {state_id: state_id},
+        dataType: 'json',
+        success: function (response) {
+            var html = '<option disabled selected>Select City</option>';
+            response.forEach(function (data) {
+                html+= `
+                    <option value="`+data.id+`">`+data.name+`</option>
+                `;
+            });
+
+            $('#city').html(html);
+        }
+    });
+});
+
+
+

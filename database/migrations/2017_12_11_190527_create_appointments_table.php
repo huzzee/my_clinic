@@ -19,12 +19,18 @@ class CreateAppointmentsTable extends Migration
             $table->unsignedInteger('patient_id');
             $table->unsignedInteger('doctor_id');
             $table->unsignedInteger('schedule_detail_id');
-            $table->date('');
+            $table->date('appointment_date');
+            $table->integer('token_no');
+            $table->integer('status');
             $table->timestamps();
         });
 
-        Schema::table('appointments', function (Blueprint $table){
-            
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+            $table->foreign('doctor_id')->references('id')->on('user_informations')->onDelete('cascade');
+            $table->foreign('schedule_detail_id')->references('id')->on('schedule_details')->onDelete('cascade');
+
         });
     }
 

@@ -6,10 +6,11 @@ use App\models\MedicalRecord;
 use App\models\Patient;
 use Illuminate\Http\Request;
 use App\models\UserInformation;
+use Illuminate\Support\Facades\Cache;
 use App\models\Entity;
 use App\User;
-use Illuminate\Support\Facades\DB;
 use Auth;
+use DB;
 
 class PatientController extends Controller
 {
@@ -26,8 +27,21 @@ class PatientController extends Controller
     public function index()
     {
 
-        $patient = Patient::with('users')->where('entity_id','=',Auth::user()->entity_id)
+        $patient = Patient::with('users','medical_records')->where('entity_id','=',Auth::user()->entity_id)
             ->latest()->get();
+
+        //dd($patient);
+        //$states = DB::table('states')->get();
+        $countries = Cache::rememberForever('countries2', function() {
+            return DB::table('countries2')->get();
+        });
+
+        $languages =  DB::table('languages')->get();
+
+        //$cities = DB::table('cities')->get();
+        /*$cities = Cache::rememberForever('cities', function() {
+            return DB::table('cities')->get();
+        });*/
 
         $doctor = UserInformation::with('users')
             ->whereNotNull('doctor_info')
@@ -35,11 +49,41 @@ class PatientController extends Controller
                 $query->where('entity_id','=',Auth::user()->entity_id);
             })->get();
 
+        $doctor_create = UserInformation::with('users')->whereNotNull('doctor_info')
+            ->whereHas('users',function ($query){
+                $query->where('users.status','=',1);
+            })->get();
+
          return view('pages.patients.managePatient',array(
              'patients' => $patient,
-             'doctors' => $doctor
+             'doctors' => $doctor,
+             'docs' => $doctor_create,
+             'countries' => $countries,
+             'languages' => $languages,
+
          ));
     }
+
+    /*
+     * ajax functions
+     * also have privilage security
+     * add to constructor*/
+    public function get_state()
+    {
+        $state = DB::table('states')->where('states.country_id',request()->country_id)->get();
+
+        return response()->json($state);
+    }
+
+    public function get_cities()
+    {
+        $cities = DB::table('cities')->where('cities.state_id',request()->state_id)->get();
+
+        return response()->json($cities);
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,7 +110,7 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
         $upload_dir = base_path() . '/public/uploads';
 
         $request->validate([

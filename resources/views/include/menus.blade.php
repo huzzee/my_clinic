@@ -32,6 +32,14 @@
 
                             </li>
 
+                            <li class="has_sub">
+                                <a href="{{ url('permissions_klenic_abc') }}" class="waves-effect">
+                                    <i style="color: #39e7e0" class="fa fa-ban"></i>
+                                    <span style="color: lightgrey;"> Role Permissions </span>
+                                </a>
+
+                            </li>
+
 
                             <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>

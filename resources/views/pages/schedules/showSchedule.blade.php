@@ -94,7 +94,7 @@
                                                         @if($detail->type == 0)
                                                             <tr>
 
-                                                                <td>{{ $detail->days }}</td>
+                                                                <td>{{ dformat($detail->days) }}</td>
                                                                 <td>{{ $detail->start_time }}</td>
                                                                 <td>{{ $detail->end_time }}</td>
                                                             </tr>
@@ -127,7 +127,7 @@
                                                         @if($detail->type == 1)
                                                             <tr>
 
-                                                                <td>{{ $detail->days }}</td>
+                                                                <td>{{ dformat($detail->days) }}</td>
                                                                 <td>{{ $detail->start_time }}</td>
                                                                 <td>{{ $detail->end_time }}</td>
 

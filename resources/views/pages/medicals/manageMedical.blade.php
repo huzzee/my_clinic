@@ -72,6 +72,7 @@
                                         </div>
 
                                         <div class="modal-footer">
+
                                             <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
                                             <a href="#" class="btn btn-inverse waves-effect waves-light" id="add_here">Add Record</a>
                                         </div>
@@ -114,11 +115,9 @@
                                             <i class="fa fa-eye"></i>
                                         </a>
 
-
-
-
+                                        @if(Auth::user()->role_id == 2)
                                         <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$record->id}}"><i class="fa fa-remove"></i></button>
-
+                                        @endif
                                     </td>
                                 </tr>
 

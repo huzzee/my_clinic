@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
         <meta name="author" content="Coderthemes">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
@@ -12,6 +13,7 @@
         <title>Klenic</title>
 
 
+        {{--<link href="{{ asset('assets/plugins/c3/c3.min.css') }}" rel="stylesheet" type="text/css"  />--}}
 
         {{--drawing pad--}}
         <link href="{{ asset('assets/plugins/jquery.filer/css/jquery.filer.css') }}" rel="stylesheet" />
@@ -125,12 +127,20 @@
             float: right;
         }
 
+        .table-condensed tbody tr .disabled {
+            background-color: white !important;
+            color: lightgrey !important;
+        }
+
+
+
 
 
 
 
     </style>
     <body class="fixed-left">
+    @php delete_app(); @endphp
     <input type="hidden" value="{{ url('/') }}" id="baseUrl">
 
         <!-- Begin page -->

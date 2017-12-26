@@ -11,7 +11,10 @@ class PermissionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage');
+        $this->middleware('user_privilage',['except' => [
+            'role_chk',
+            'updatePermissions'
+        ]]);
     }
 
     public function index()

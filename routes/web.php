@@ -33,7 +33,13 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::post('doctoractive/{id}','DoctorController@activated')->name('doctoractive.activate');
     Route::Resource('employee','EmployeeController');
     Route::post('employeeactivate/{id}','EmployeeController@activated')->name('employeeactivate.activate');
+
     Route::Resource('patients','PatientController');
+    Route::get('get_states','PatientController@get_state');
+    Route::get('get_cities','PatientController@get_cities');
+
+
+
     Route::Resource('services','ClinicServiceController');
     Route::Resource('service_categories','ServiceCategoryController');
     Route::Resource('drugs','MedicineController');
@@ -86,4 +92,13 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::get('role_chk','PermissionController@role_chk');
     Route::get('ajaxupdatepermissions','PermissionController@updatePermissions');
 
+    Route::Resource('appointments','AppointmentController');
+    Route::post('appointments_add','AppointmentController@add_app');
+    Route::get('appointments_cancel','AppointmentController@canceled')->name('appointments_cancel.canceled');
+    Route::get('appointments_today','AppointmentController@today_app')->name('appointments_today.today_app');
+    Route::get('appointments_complete','AppointmentController@complete_app')->name('appointments_complete.complete_app');
+    Route::post('appointments_cancel/{id}','AppointmentController@cancelation');
+    Route::get('get_schedule','AppointmentController@get_schedule');
+    Route::get('get_token_chek','AppointmentController@get_token_chek');
+    Route::get('get_token_time_chek','AppointmentController@get_token_time_chek');
 });

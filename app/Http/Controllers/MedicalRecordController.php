@@ -16,7 +16,8 @@ class MedicalRecordController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['store','update']]);
+        $this->middleware('user_privilage',['except'=>['store','update',
+            'temp_change','template']]);
     }
     /**
      * Display a listing of the resource.

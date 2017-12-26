@@ -92,9 +92,9 @@
                                         @if(Auth::user()->id == $employee->user_id || Auth::user()->role_id == 2)
 
                                         <a href="{{ url('employee/'.$employee->id.'/edit') }}" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
-
+                                        @if(Auth::user()->role_id == 2)
                                         <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$employee->id}}"><i class="fa fa-remove"></i></button>
-
+                                        @endif
                                         @endif
                                     </td>
                                 </tr>

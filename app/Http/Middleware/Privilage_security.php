@@ -16,14 +16,14 @@ class Privilage_security
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->role_id !== 1)
+        /*if(Auth::user()->role_id !== 1)
         {
 
             if(!check_user_privilage(Auth::user()->role_id))
             {
                 return abort(408);
             }
-        }
+        }*/
         return $next($request);
     }
 }

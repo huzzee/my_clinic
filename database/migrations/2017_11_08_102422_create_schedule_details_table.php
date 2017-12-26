@@ -20,7 +20,7 @@ class CreateScheduleDetailsTable extends Migration
             $table->string('days');
             $table->time('start_time');
             $table->time('end_time');
-            $table->time('per_patient_time')->nullable();
+            $table->integer('tokens')->nullable();
             $table->timestamps();
         });
 

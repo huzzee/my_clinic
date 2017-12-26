@@ -86,9 +86,9 @@
                                         <td>{{ $leave->reason }}</td>
                                     <td>
 
-
+                                        @if(Auth::user()->role_id == 2)
                                         <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$leave->id}}"><i class="fa fa-remove"></i></button>
-
+                                        @endif
                                     </td>
                                 </tr>
 

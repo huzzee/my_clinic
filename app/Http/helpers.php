@@ -1,7 +1,14 @@
 <?php
 use App\models\Menu;
 use App\models\Permission;
+use App\models\Appointment;
+use Carbon\Carbon;
 
+function dformat($nday) {
+
+    $dowMap = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+    return $dowMap[$nday];
+}
 
 function callMenus(){
 
@@ -54,5 +61,35 @@ function check_user_privilage($role_id){
     return $data;
 
 
+}
+
+function delete_app()
+{
+    $appointments = Appointment::with('schedule_details','user_informations','patients')
+        ->where('status','=',0)
+        ->where('appointment_date','<',date('Y-m-d',strtotime(Carbon::now(get_local_time()))))
+        ->where('entity_id','=',auth()->user()->entity_id)->get()->toArray();
+
+    //dd($appointments[0]);
+
+    if (sizeof($appointments) >= 1)
+    {
+        for($i=0; $i < sizeof($appointments); $i++)
+        {
+            $app = Appointment::findOrFail($appointments[$i]['id']);
+            $app->status = 2;
+            $app->save();
+        }
+    }
+}
+
+function get_local_time()
+{
+    /*$ip = file_get_contents("http://ipecho.net/plain");
+    $url = 'http://ip-api.com/json/'.$ip;
+    $tz = file_get_contents($url);
+    $tz = json_decode($tz,true)['timezone'];
+
+    return $tz;*/
 }
 

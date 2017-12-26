@@ -23,8 +23,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-       //dd($code);
-
-        return view('home');
+       //dd('ok');
+        /*if(Auth::user()->role_id == 2)
+        {
+            return view('dashboards.adminDashboard');
+        }*/
+        return view('dashboards.adminDashboard');
     }
 }

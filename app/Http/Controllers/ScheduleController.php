@@ -18,7 +18,7 @@ class ScheduleController extends Controller
 
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['store']]);
+        $this->middleware('user_privilage',['except'=>['store','update','schedule_chk']]);
     }
     /**
      * Display a listing of the resource.
@@ -119,6 +119,7 @@ class ScheduleController extends Controller
             $schedule_detail->days = $request->app_day[$i];
             $schedule_detail->start_time = $request->app_start_time[$i];
             $schedule_detail->end_time = $request->app_end_time[$i];
+            $schedule_detail->tokens = $request->app_tokens[$i];
 
             $schedule_detail->save();
         }
@@ -204,6 +205,7 @@ class ScheduleController extends Controller
             $schedule_detail->days = $request->app_day[$i];
             $schedule_detail->start_time = $request->app_start_time[$i];
             $schedule_detail->end_time = $request->app_end_time[$i];
+            $schedule_detail->tokens = $request->app_tokens[$i];
 
             $schedule_detail->save();
         }

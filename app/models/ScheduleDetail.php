@@ -14,4 +14,9 @@ class ScheduleDetail extends Model
     {
         return $this->belongsTo(Schedule::class);
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\models\Appointment;
 use App\models\Patient;
 use App\models\Queue;
 use App\models\UserInformation;
 use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 
 
 class QueueController extends Controller
@@ -48,6 +50,19 @@ class QueueController extends Controller
         $request->validate([
             'doctor_id' => 'required'
         ]);
+
+        $appointments = Appointment::with('patients')
+            ->where('patient_id','=',$request->patient_id)
+            ->where('status','=',0)
+            ->where('appointment_date','=',date('Y-m-d',strtotime(Carbon::now(get_local_time()))))
+            ->first();
+        //dd($appointments);
+
+        if($appointments !== null)
+        {
+            $appointments->status = 1;
+            $appointments->save();
+        }
 
         $queue = new Queue;
         $queue->doctor_id = $request->doctor_id;
@@ -113,6 +128,8 @@ class QueueController extends Controller
 
         return redirect('queues')->with('message','deleted successfully');
     }
+
+
 
 
 }

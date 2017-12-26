@@ -75,7 +75,7 @@
                                         </div>
                                         <hr>
                                         <div class="row" id="display_schedule" style="display:none;">
-                                            <div class="col-md-6" style="border-right: 1px solid lightgrey;border-left: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">
+                                            <div class="col-md-5" style="border-right: 1px solid lightgrey;border-left: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">
                                                 <h4 class="text-inverse text-uppercase">Schedule For Opd</h4>
                                                 <hr>
                                                 <div class="form-group row">
@@ -83,13 +83,13 @@
                                                     <div class="col-sm-4 m-b-20">
                                                         <select class="form-control select2 opd_day">
                                                             <option selected disabled="disabled">Select Days</option>
-                                                            <option value="Sunday">Sunday</option>
-                                                            <option value="Monday">Monday</option>
-                                                            <option value="Tuesday">Tuesday</option>
-                                                            <option value="Wednesday">Wednesday</option>
-                                                            <option value="Thursday">Thursday</option>
-                                                            <option value="Friday">Friday</option>
-                                                            <option value="Saturday">Saturday</option>
+                                                            <option value="0">Sunday</option>
+                                                            <option value="1">Monday</option>
+                                                            <option value="2">Tuesday</option>
+                                                            <option value="3">Wednesday</option>
+                                                            <option value="4">Thursday</option>
+                                                            <option value="5">Friday</option>
+                                                            <option value="6">Saturday</option>
 
                                                         </select>
                                                     </div>
@@ -131,37 +131,42 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6" style="border-left: 1px solid lightgrey;border-right: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">
+                                            <div class="col-sm-7" style="border-left: 1px solid lightgrey;border-right: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">
                                                 <h4 class="text-inverse text-uppercase">Schedule For Appointment</h4>
                                                 <hr>
                                                 <div class="form-group row">
 
-                                                    <div class="col-md-4 m-b-20">
+                                                    <div class="col-md-3 m-b-20">
                                                         <select class="form-control select2 app_day" >
                                                             <option selected disabled="disabled">Select Days</option>
-                                                            <option value="Sunday">Sunday</option>
-                                                            <option value="Monday">Monday</option>
-                                                            <option value="Tuesday">Tuesday</option>
-                                                            <option value="Wednesday">Wednesday</option>
-                                                            <option value="Thursday">Thursday</option>
-                                                            <option value="Friday">Friday</option>
-                                                            <option value="Saturday">Saturday</option>
+                                                            <option value="0">Sunday</option>
+                                                            <option value="1">Monday</option>
+                                                            <option value="2">Tuesday</option>
+                                                            <option value="3">Wednesday</option>
+                                                            <option value="4">Thursday</option>
+                                                            <option value="5">Friday</option>
+                                                            <option value="6">Saturday</option>
 
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-md-3">
                                                         <div class="input-group clockpicker m-b-20" data-placement="top" data-align="top" data-autoclose="true">
                                                             <input type="text" class="form-control app_start" placeholder="Start Time">
 
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-md-2">
                                                         <div class="input-group clockpicker m-b-20" data-placement="top" data-align="top" data-autoclose="true">
                                                             <input type="text" class="form-control app_end" placeholder="End Time">
 
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-md-2">
+
+                                                        <input type="number" class="form-control app_token" placeholder="Slot">
+
+                                                    </div>
+                                                    <div class="col-md-2">
                                                         <button class="btn btn-icon waves-effect waves-light btn-inverse m-b-5 add_app" type="button">
                                                             <i class="fa fa-plus"></i>
                                                         </button>
@@ -178,6 +183,7 @@
 
                                                             <th>Start Time</th>
                                                             <th>End Time</th>
+                                                            <th>Tokens</th>
                                                             <th width="20%">Action</th>
                                                         </tr>
                                                         </thead>
