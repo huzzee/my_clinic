@@ -6,23 +6,41 @@ use Illuminate\Http\Request;
 use App\models\UserInformation;
 use App\models\Entity;
 use App\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['store','update']]);
+        $this->middleware('user_privilage',['except'=>['store','update','show']]);
     }
 
     public function index()
     {
+        $countries = Cache::rememberForever('countries2', function() {
+            return DB::table('countries2')->get();
+        });
+        //check_code($code);
+
+        $edit_countries = Cache::rememberForever('countries22', function() {
+            return DB::table('countries2')->pluck('name','name');
+        });
+
+        $currency = DB::table('apps_countries_detailed')->orderBy('currencyCode','asc')->get();
+        $edit_currency = DB::table('apps_countries_detailed')->pluck('currencyCode','currencyCode');
+
         $admins = UserInformation::with('users')
             ->whereNotNull('admin_info')->get();
         //dd($admins[0]->admin_info);
 
         return view('pages.admins.adminManage',array(
-            'admins' => $admins
+            'admins' => $admins,
+            'currencies' => $currency,
+            'countries' => $countries,
+            'edit_countries' => $edit_countries,
+            'edit_currencies' => $edit_currency
         ));
     }
 
@@ -34,13 +52,17 @@ class AdminController extends Controller
     public function create()
     {
         //dd(Entity::all());
+        $countries = Cache::rememberForever('countries2', function() {
+            return DB::table('countries2')->get();
+        });
         //check_code($code);
-        $country = DB::table('apps_countries_detailed')->orderBy('CountryName','asc')->get();
+
         $currency = DB::table('apps_countries_detailed')->orderBy('currencyCode','asc')->get();
 
         return view('pages.admins.createadmin',array(
-            'countries' => $country,
-            'currencies' => $currency
+
+            'currencies' => $currency,
+            'countries' => $countries
         ));
     }
 
@@ -67,6 +89,8 @@ class AdminController extends Controller
                 'gender' => 'required',
                 'entity_name' => 'required|unique:entities',
                 'country' => 'required',
+                'state' => 'required',
+                'city' => 'required',
                 'currency' => 'required',
                 'contact_no' => 'required',
                 'profile_image' => 'image|mimes:jpeg,png|max:2048'
@@ -86,6 +110,8 @@ class AdminController extends Controller
                 'gender' => 'required',
                 'entity_name' => 'required|unique:entities',
                 'country' => 'required',
+                'state' => 'required',
+                'city' => 'required',
                 'currency' => 'required',
                 'contact_no' => 'required',
 
@@ -105,6 +131,9 @@ class AdminController extends Controller
         $entity = new Entity([
             'entity_name' => $request['entity_name'],
             'entity_code' => str_random(10),
+            'country' => $request['country'],
+            'city' => $request['city'],
+            'state' => $request['state'],
             'currency' => $request->currency
         ]);
         $entity->save();
@@ -122,6 +151,10 @@ class AdminController extends Controller
             'address' => $request->address,
             'gender' => $request->gender,
             'contact_no' => $request->contact_no,
+            'city' => $request->city,
+            'state' => $request->state,
+            'website' => $request->website,
+
         ];
 
 
@@ -143,8 +176,15 @@ class AdminController extends Controller
     {
         $admin = UserInformation::with('users')->where('id',$id)->first();
 
+        $edit_countries = Cache::rememberForever('countries22', function() {
+            return DB::table('countries2')->pluck('name','name');
+        });
+        $edit_currency = DB::table('apps_countries_detailed')->pluck('currencyCode','currencyCode');
+
         return view('pages.admins.showAdmin',array(
-            'admin' => $admin
+            'admin' => $admin,
+            'edit_countries' => $edit_countries,
+            'edit_currencies' => $edit_currency
         ));
     }
 
@@ -154,17 +194,19 @@ class AdminController extends Controller
      * @param  \App\models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+   /* public function edit($id)
     {
-        $country = DB::table('apps_countries_detailed')->orderBy('CountryName','asc')->pluck('countryName','countryName');
+
         //dd($country);
         $admin = UserInformation::with('users')->where('id',$id)->first();
 
+
+
         return view('pages.admins.editAdmin',array(
             'admin' => $admin,
-            'country' => $country
+
         ));
-    }
+    }*/
 
     /**
      * Update the specified resource in storage.
@@ -191,6 +233,7 @@ class AdminController extends Controller
             $file = $request->file('profile_image');
             $ext = $file->getClientOriginalExtension();
             $filename = $request->get('email').'.'.$ext;
+            //Storage::Delete($upload_dir.'/'.$filename);
             $file->move($upload_dir, $filename);
         }
         else{
@@ -198,7 +241,6 @@ class AdminController extends Controller
                 'admin_info' => 'required',
                 'email' => 'required',
                 'users' => 'required',
-
 
             ]);
 
@@ -214,6 +256,9 @@ class AdminController extends Controller
             'address' => $request->admin_info['address'],
             'gender' => $request->admin_info['gender'],
             'contact_no' => $request->admin_info['contact_no'],
+            'city' => $request->city,
+            'state' => $request->state,
+            'website' => $request->admin_info['website'],
         ];
 
         $users = User::findOrFail($admin->users->id);
@@ -231,6 +276,13 @@ class AdminController extends Controller
         $entity = Entity::findOrFail($users->entity_id);
 
         $entity->entity_name = $request->users['entities']['entity_name'];
+
+        $entity->country = $request['country'];
+        $entity->city = $request['city'];
+        $entity->state = $request['state'];
+        $entity->currency = $request->users['entities']['currency'];
+
+
         $entity->save();
 
         //dd($users);
@@ -240,7 +292,7 @@ class AdminController extends Controller
 
         $admin->save();
 
-        return redirect('admins')
+        return redirect()->back()
             ->with('message', 'Admin Edited Successfully!');
     }
 

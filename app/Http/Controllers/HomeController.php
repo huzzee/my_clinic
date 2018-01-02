@@ -7,6 +7,7 @@ use App\models\Entity;
 
 use Illuminate\Http\Request;
 
+
 class HomeController extends Controller
 {
 
@@ -23,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //dd(Auth::user()->user_informations);
        //dd('ok');
         /*if(Auth::user()->role_id == 2)
         {

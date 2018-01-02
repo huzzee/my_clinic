@@ -64,6 +64,10 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
 
     Route::Resource('medical_records','MedicalRecordController');
     Route::get('deleted_medical_records','MedicalRecordController@deleted_record')->name('deleted_medical_records.deleted_record');
+    Route::post('medical_edit','MedicalRecordController@medical_edit');
+    Route::get('medical_records/{pat_id}/{doc_id}','MedicalRecordController@edit_2')->name('medical_records.edit_2');
+
+
     Route::get('temp_change','MedicalRecordController@temp_change');
     Route::Resource('drawing_templates','DrawingTemplateController');
     Route::Resource('diagnoses','DiagnoseController');

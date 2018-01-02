@@ -8,13 +8,14 @@ use App\models\Entity;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class EmployeeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=> ['store','update']]);
+        $this->middleware('user_privilage',['except'=> ['store','update','edit']]);
     }
     /**
      * Display a listing of the resource.
@@ -144,6 +145,7 @@ class EmployeeController extends Controller
     {
         $employee = UserInformation::with('users')->where('id','=',$id)->first();
 
+        //dd($employee);
         return view('pages.employees.editEmployee',array(
             'employee' => $employee
         ));
@@ -158,7 +160,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        //dd($request->email);
         $upload_dir = base_path() . '/public/uploads';
 
         if ($request->profile_image !== null)
@@ -171,7 +173,8 @@ class EmployeeController extends Controller
 
             $file = $request->file('profile_image');
             $ext = $file->getClientOriginalExtension();
-            $filename = $request->get('email').'.'.$ext;
+            $filename = $request->users['email'].'.'.$ext;
+            Storage::Delete($upload_dir.'/'.$filename);
             $file->move($upload_dir, $filename);
         }
         else{
@@ -204,11 +207,11 @@ class EmployeeController extends Controller
         }
         if($request->profile_image !== null)
         {
-            $user->profile_image = $request->profile_image;
+            $user->profile_image = $filename;
         }
         $user->save();
 
-        return redirect('employee')->with('message','Employee Edited Successfully');
+        return redirect()->back()->with('message','Employee Edited Successfully');
     }
 
     /**
@@ -239,7 +242,7 @@ class EmployeeController extends Controller
             $user->status = 0;
             $user->save();
 
-            return redirect('employee/'.$employee->id)->with('message','Clinic Employee Deactivated');
+            return redirect('employee')->with('message','Clinic Employee Deactivated');
         }
         elseif ($request->flag == 1) {
             $employee = UserInformation::findOrFail($id);
@@ -249,7 +252,7 @@ class EmployeeController extends Controller
             $user->status = 1;
             $user->save();
 
-            return redirect('employee/'.$employee->id)->with('message','Clinic Employee Activated');
+            return redirect('employee')->with('message','Clinic Employee Activated');
         }
 
     }

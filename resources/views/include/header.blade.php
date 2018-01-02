@@ -69,7 +69,16 @@
                                     <li>
                                         <h5>Hi, {{ Auth::user()->name }} </h5>
                                     </li>
-                                    <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    @if(Auth::user()->role_id == 1)
+                                        <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    @elseif(Auth::user()->role_id == 2)
+                                        <li><a href="{{ url('admins/'.Auth::user()->user_informations->id) }}"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    @elseif(Auth::user()->role_id == 3)
+                                        <li><a href="{{ url('doctors/'.Auth::user()->user_informations->id) }}"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    @elseif(Auth::user()->role_id == 4)
+                                        <li><a href="{{ url('employee/'.Auth::user()->user_informations->id.'/edit') }}"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    @endif
+
                                     <li><li><a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

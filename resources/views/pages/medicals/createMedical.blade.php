@@ -46,94 +46,47 @@
                             <a class="btn btn-info" href="{{ url('medical_records') }}">Manage Medical Records</a>
                             <hr>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
 
                                         <label for="patient_id" class="control-label">Patient Name<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control input-sm"
                                                value="{{ $patients->patient_info['full_name'] }}" readonly="" required>
                                         <input type="hidden" value="{{ $patients->id }}" name="patient_id">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
 
                                         <label for="patient_id" class="control-label">Patient Code<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control input-sm"
                                                value="{{ $patients['patient_code'] }}" readonly required>
 
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+
+                                        <label for="patient_id" class="control-label">Doctor Name</label>
+
+                                        <input type="text" class="form-control input-sm"
+                                               value="{{ $doctors->users['name'] }}" readonly="" required>
+                                        <input type="hidden" value="{{ $doctors->id }}" name="doctor_id">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <label for="patient_id" class="control-label">Diagnose</label>
+                                        <textarea name="diagnose" id="textarea" class="form-control" maxlength="500" rows="3" placeholder="Diagnoses" value="{{ old('diagnose') }}"></textarea>
                                     </div>
                                 </div>
                             </div>
 
 
-
+                            <hr>
                             <div id="hide_one">
-
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <div class="form-group">
-
-                                            <label for="patient_id" class="control-label">Select Doctor<span class="text-danger">*</span></label>
-
-                                            <select class="form-control select2" name="doctor_id">
-                                                <option selected disabled="disabled">Select Doctor</option>
-
-                                                @foreach($doctors as $doctor)
-                                                    <option value="{{ $doctor->id }}">{{ $doctor->users->name }}</option>
-                                                @endforeach
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group row">
-                                    <label for="doctor_id" class="col-sm-12">Diagnose</label>
-                                    <div class="col-sm-3">
-                                        <select class="form-control select2" name="diagnose[]">
-                                            <option selected disabled="disabled">Select Diagnosis</option>
-                                            @foreach($diagnoses as $diagnose)
-                                                <option value="{{ $diagnose->diagnose_name }}">{{ $diagnose->diagnose_name}}</option>
-                                            @endforeach
-
-                                        </select>
-
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <select class="form-control select2" name="diagnose[]">
-                                            <option selected disabled="disabled">Select Diagnosis</option>
-                                            @foreach($diagnoses as $diagnose)
-                                                <option value="{{ $diagnose->diagnose_name }}">{{ $diagnose->diagnose_name}}</option>
-                                            @endforeach
-
-                                        </select>
-
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <select class="form-control select2" name="diagnose[]">
-                                            <option selected disabled="disabled">Select Diagnosis</option>
-                                            @foreach($diagnoses as $diagnose)
-                                                <option value="{{ $diagnose->diagnose_name }}">{{ $diagnose->diagnose_name}}</option>
-                                            @endforeach
-                                        </select>
-
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <select class="form-control select2" name="diagnose[]">
-                                            <option selected disabled="disabled">Select Diagnosis</option>
-                                            @foreach($diagnoses as $diagnose)
-                                                <option value="{{ $diagnose->diagnose_name }}">{{ $diagnose->diagnose_name}}</option>
-                                            @endforeach
-                                        </select>
-
-                                    </div>
-
-                                </div>
-                                <hr>
-
-
 
                                 <ul class="nav nav-tabs navtab-bg nav-justified">
                                     <li class="active">
@@ -427,6 +380,7 @@
 
                                 </div>
 
+
                                 <div class="form-group row">
                                     <div class="col-sm-5"></div>
                                     <div class="col-sm-7">
@@ -434,6 +388,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div> <!-- end col -->
                 </form>

@@ -69,7 +69,16 @@
                                     <li>
                                         <h5>Hi, <?php echo e(Auth::user()->name); ?> </h5>
                                     </li>
-                                    <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    <?php if(Auth::user()->role_id == 1): ?>
+                                        <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    <?php elseif(Auth::user()->role_id == 2): ?>
+                                        <li><a href="<?php echo e(url('admins/'.Auth::user()->user_informations->id)); ?>"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    <?php elseif(Auth::user()->role_id == 3): ?>
+                                        <li><a href="<?php echo e(url('doctors/'.Auth::user()->user_informations->id)); ?>"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    <?php elseif(Auth::user()->role_id == 4): ?>
+                                        <li><a href="<?php echo e(url('employee/'.Auth::user()->user_informations->id.'/edit')); ?>"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                    <?php endif; ?>
+
                                     <li><li><a href="<?php echo e(route('logout')); ?>"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

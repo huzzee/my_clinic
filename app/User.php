@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\models\UserInformation;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -37,9 +38,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\models\Role','role_id');
     }
 
-    public function users_informations()
+    public function user_informations()
     {
-        return $this->hasMany('App\models\UserInformation','id');
+        return $this->hasOne(UserInformation::class);
     }
 
     public function patients()

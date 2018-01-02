@@ -132,6 +132,10 @@
             color: lightgrey !important;
         }
 
+        span.select2-container {
+            z-index:10050;
+        }
+
 
 
 

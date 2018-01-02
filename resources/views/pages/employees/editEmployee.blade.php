@@ -46,13 +46,8 @@
 
 
                             <div class="row">
-                                <div class="col-sm-12 col-xs-12 col-md-12">
 
-
-                                    <a class="btn btn-purple" href="{{ url('employee') }}">Manage Employee</a>
-
-                                    <hr>
-
+                                <div class="col-md-12">
 
                                     <div class="p-20" style="clear: both;">
 
@@ -92,13 +87,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label for="item_image" class="col-sm-3">Profile Image</label>
-                                            <div class="col-sm-9">
-                                                <input type="file" class="filestyle" data-placeholder="Not Important" name="profile_image" data-buttonname="btn-inverse">
-                                                <span>Change image if needed</span>
-                                            </div>
-                                        </div>
+
 
                                         <div class="form-group row">
                                             <label for="reason" class="col-sm-3">Address<span class="text-danger">*</span></label>
@@ -134,18 +123,34 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label for="item_image" class="col-sm-3">Profile Image</label>
+                                            <div class="col-sm-6">
+                                                <input type="file" data-input="false" class="filestyle" data-placeholder="Not Important" name="profile_image">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div style="width: 250px;height: 200px;">
+                                                    <img src="{{ asset('uploads/'.$employee->users['profile_image']) }}" style="width: 100%; height: 100%">
+                                                </div>
+                                            </div>
 
-
+                                        </div>
+                                        <hr>
 
                                         <div class="form-group row">
-                                            <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
-                                                <button type="submit" class="btn btn-inverse">Update Employee</button>
+                                            <div class="col-sm-9"></div>
+
+                                            <div class="col-sm-3">
+                                                <button type="submit" class="btn btn-inverse m-b-5">Update Profile</button>
                                             </div>
                                         </div>
 
+
+
                                     </div>
+
                                 </div>
+
 
                             </div>
 

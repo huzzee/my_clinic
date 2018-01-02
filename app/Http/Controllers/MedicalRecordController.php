@@ -17,7 +17,7 @@ class MedicalRecordController extends Controller
     public function __construct()
     {
         $this->middleware('user_privilage',['except'=>['store','update',
-            'temp_change','template']]);
+            'temp_change','template','medical_edit']]);
     }
     /**
      * Display a listing of the resource.
@@ -32,11 +32,32 @@ class MedicalRecordController extends Controller
 
         $patient = Patient::with('users')
             ->where('entity_id','=',Auth::user()->id)->get();
+
+        $doctors = UserInformation::with('users')
+            ->wherehas('users',function ($query){
+                $query->where('users.entity_id','=',Auth::user()->entity_id);
+            })
+            ->whereNotNull('doctor_info')->get();
         //dd($records);
         return view('pages.medicals.manageMedical' ,array(
             'records' => $records,
-            'patients' => $patient
+            'patients' => $patient,
+            'doctors' => $doctors
         ));
+    }
+
+    /*
+     * for chose doctor for medicl records
+     * */
+
+    public function medical_edit(Request $request)
+    {
+        $request->validate([
+            'patient_id' => 'required',
+            'doctor_id' => 'required'
+        ]);
+
+       return redirect('medical_records/'.$request->patient_id.'/'.$request->doctor_id);
     }
 
     public function deleted_record()
@@ -58,10 +79,7 @@ class MedicalRecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+
     /*---ajax Functions*/
     public function template()
     {
@@ -122,7 +140,7 @@ class MedicalRecordController extends Controller
         {
             $file = $request->file('uploads')[$i];
             $ext = $file->getClientOriginalName();
-            $filename = $request->patient_id.'_'.$ext;
+            $filename = $request->patient_code.'_'.$i.'_'.$ext;
             $file->move($upload_dir, $filename);
 
             array_push($filesname,$filename);
@@ -144,7 +162,7 @@ class MedicalRecordController extends Controller
      * @param  \App\MedicalRecord  $medicalRecord
      * @return \Illuminate\Http\Response
      */
-    public function show(MedicalRecord $medicalRecord)
+    public function show($id)
     {
         //
     }
@@ -155,17 +173,14 @@ class MedicalRecordController extends Controller
      * @param  \App\MedicalRecord  $medicalRecord
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit_2($pat_id,$doc_id)
     {
         $patient = Patient::with('users')
-            ->where('id','=',$id)->first();
+            ->where('id','=',$pat_id)->first();
 
 
         $doctors = UserInformation::with('users')
-            ->whereNotNull('doctor_info')
-            ->whereHas('users',function ($r){
-                $r->where('entity_id','=',Auth::user()->entity_id);
-            })->get();
+            ->where('id','=',$doc_id)->first();
 
         $diagnoses = Diagnose::where('entity_id','=',Auth::user()->entity_id)->get();
 

@@ -585,12 +585,6 @@ $('.temp_submt').one('submit',function(e) {
 /*----------------------------------------------------------------*/
 /*----------------------------------------------------------------*/
 
-$('#pats').change(function () {
-    var pat_id = $(this).val();
-
-    $('#add_here').attr("href",base_uri+"/medical_records/"+pat_id+"/edit");
-});
-
 $('#draw_pad').click(function () {
     $('.bootstrap-filestyle').css('display','block');
 });
@@ -658,8 +652,8 @@ $('#chk_temp').change(function () {
                     data.answers.forEach(function (ans,j) {
                         radio+=`
                             <div class="radio radio-inverse radio-inline">
-                                <input type="radio" id="inlineRadio1" name="answers[`+abcd+`]" value="`+ans+`">
-                                <label for="inlineRadio1"> `+ans+` </label>
+                                <input type="radio" id="inlineRadio`+ans+`" name="answers[`+abcd+`]" value="`+ans+`">
+                                <label for="inlineRadio`+ans+`"> `+ans+` </label>
                             </div></br>
                         `;
                     });
@@ -732,7 +726,7 @@ $('#chk_temp').change(function () {
 
                 }
                 abcd++;
-                console.log(abcd);
+                //console.log(abcd);
             });
 
             $('#templating').html(html);
@@ -1433,7 +1427,7 @@ $('#country').change(function () {
             var html = '<option disabled selected>Select State</option>';
             response.forEach(function (data) {
                 html+= `
-                    <option value="`+data.id+`">`+data.name+`</option>
+                    <option value="`+data.name+`">`+data.name+`</option>
                 `;
             });
 
@@ -1453,7 +1447,7 @@ $('#state').change(function () {
             var html = '<option disabled selected>Select City</option>';
             response.forEach(function (data) {
                 html+= `
-                    <option value="`+data.id+`">`+data.name+`</option>
+                    <option value="`+data.name+`">`+data.name+`</option>
                 `;
             });
 
@@ -1461,6 +1455,96 @@ $('#state').change(function () {
         }
     });
 });
+
+/*for edit patients*/
+$('.edit_patient_modal').click(function () {
+    var patient_id = $(this).data('patientid');
+
+    var country_id = $('#country'+patient_id).val();
+    var state_id = $('#state'+patient_id).val();
+    var city_id = $('#city'+patient_id).val();
+
+    $.ajax({
+        url: 'get_states',
+        type: 'GET',
+        data: {country_id: country_id},
+        dataType: 'json',
+        success: function (response) {
+            var html = `<option selected>`+state_id+`</option>`;
+            response.forEach(function (data) {
+                html+= `
+                    <option value="`+data.name+`">`+data.name+`</option>
+                `;
+            });
+
+            $('#state'+patient_id).html(html);
+        }
+    });
+
+    $.ajax({
+        url: 'get_cities',
+        type: 'GET',
+        data: {state_id: state_id},
+        dataType: 'json',
+        success: function (response) {
+            var html = '<option selected>'+city_id+'</option>';
+            response.forEach(function (data) {
+                html+= `
+                    <option value="`+data.name+`">`+data.name+`</option>
+                `;
+            });
+
+            $('#city'+patient_id).html(html);
+        }
+    });
+});
+$('.country2').change(function () {
+    var patient_id = $(this).data('patientid');
+
+    var country_id = $(this).val();
+    $.ajax({
+        url: 'get_states',
+        type: 'GET',
+        data: {country_id: country_id},
+        dataType: 'json',
+        success: function (response) {
+            var html = '<option disabled selected>Select State</option>';
+            var html2 = '<option disabled selected>Select City</option>';
+            response.forEach(function (data) {
+                html+= `
+                    <option value="`+data.name+`">`+data.name+`</option>
+                `;
+            });
+
+            $('#state'+patient_id).html(html);
+
+            $('#city'+patient_id).html(html2);
+        }
+    });
+});
+
+$('.state2').change(function () {
+    var patient_id = $(this).data('patientid');
+
+    var state_id = $(this).val();
+    $.ajax({
+        url: 'get_cities',
+        type: 'GET',
+        data: {state_id: state_id},
+        dataType: 'json',
+        success: function (response) {
+            var html = '<option disabled selected>Select City</option>';
+            response.forEach(function (data) {
+                html+= `
+                    <option value="`+data.name+`">`+data.name+`</option>
+                `;
+            });
+
+            $('#city'+patient_id).html(html);
+        }
+    });
+});
+$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
 
 

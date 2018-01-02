@@ -14,21 +14,11 @@
                             </li>
 
                             <li class="has_sub">
-                                <a href="javascript:void(0);" class="waves-effect">
+                                <a href="{{ url('admins') }}" class="waves-effect">
                                     <i style="color: #39e7e0" class="mdi mdi-account-key"></i>
                                     <span style="color: lightgrey;"> Admins </span>
                                 </a>
-                                <ul class="list-unstyled">
 
-                                    <li>
-                                        <a href="{{ url('admins/create') }}">Create Admins</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="{{ url('admins') }}">Manage Admins</a>
-                                    </li>
-
-                                </ul>
 
                             </li>
 

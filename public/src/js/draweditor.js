@@ -399,7 +399,7 @@ $(function () {
 
         $('#hide_one').append(html);
 
-        $(this).submit();
+        //$(this).submit();
 
     });
     /*$("#save").click(function () {

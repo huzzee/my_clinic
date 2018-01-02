@@ -283,15 +283,14 @@
 
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="patient_id" class="form-label col-sm-1">Diagnoses</label>
-                                                                        @for($i=0; $i < sizeof($record->diagnose); $i++)
-                                                                        <div class="col-sm-2">
-                                                                            <input type="text" class="form-control"
-                                                                                   value="{{ $record->diagnose[$i] }}" readonly>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="form-group">
 
+                                                                                <label for="diagnose" class="control-label">Diagnose</label>
+                                                                                <textarea name="diagnose" readonly id="textarea" class="form-control" maxlength="500" rows="3" placeholder="Diagnoses" value="{{ $record->diagnose  }}"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        @endfor
                                                                     </div>
 
 

@@ -1,8 +1,4 @@
-@extends('layouts.mainHome')
-
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <!-- Start content -->
     <div class="content">
         <div class="container">
@@ -21,47 +17,49 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    @if(session()->has('message'))
+                    <?php if(session()->has('message')): ?>
                         <div class="alert alert-success">
-                            {{ session()->get('message') }}
+                            <?php echo e(session()->get('message')); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
                     <div class="card-box">
                         <div class="row">
                             <div class="col-lg-5 col-md-5">
                                 <div class="text-center card-box">
                                     <div class="member-card">
                                         <div class="thumb-xl member-thumb m-b-10 center-block">
-                                            <img src="{{ asset('uploads/'.$admin->users->profile_image) }}" class="img-circle img-thumbnail" alt="profile-image">
+                                            <img src="<?php echo e(asset('uploads/'.$admin->users->profile_image)); ?>" class="img-circle img-thumbnail" alt="profile-image">
                                             <i class="mdi mdi-star-circle member-star text-success" title="verified user"></i>
                                         </div>
 
                                         <div class="">
-                                            <h4 class="m-b-5">{{ $admin->admin_info['full_name'] }}</h4>
+                                            <h4 class="m-b-5"><?php echo e($admin->admin_info['full_name']); ?></h4>
                                             <p class="text-muted">ADMIN</p>
                                         </div>
                                         <div class="box-header">
-                                            <button class="btn btn-icon waves-effect waves-light btn-info m-b-5 edit_patient_modal" data-patientId="{{$admin->id}}" data-toggle="modal" data-target="#full-width-modal-edit{{$admin->id}}">Edit Profile</button>
+                                            <button class="btn btn-icon waves-effect waves-light btn-info m-b-5 edit_patient_modal" data-patientId="<?php echo e($admin->id); ?>" data-toggle="modal" data-target="#full-width-modal-edit<?php echo e($admin->id); ?>">Edit Profile</button>
 
 
-                                            @if(Auth::user()->role_id == 1)
-                                                @if($admin->users->entities->status == 0)
+                                            <?php if(Auth::user()->role_id == 1): ?>
+                                                <?php if($admin->users->entities->status == 0): ?>
                                                     <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
-                                                @elseif($admin->users->entities->status == 1)
+                                                <?php elseif($admin->users->entities->status == 1): ?>
 
                                                     <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
-                                                @endif
-                                            @endif
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                         </div>
-                                        {{--edit admin modal--}}
-                                        <div id="full-width-modal-edit{{$admin->id}}"  class="modal fade" role="dialog" aria-labelledby="full-width-modalLabel-create" aria-hidden="true" style="display: none;">
+                                        
+                                        <div id="full-width-modal-edit<?php echo e($admin->id); ?>"  class="modal fade" role="dialog" aria-labelledby="full-width-modalLabel-create" aria-hidden="true" style="display: none;">
                                             <div class="modal-dialog modal-full">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                         <h4 class="modal-title" id="full-width-modalLabel-create">Edit Admin</h4>
                                                     </div>
-                                                    {!! Form::model($admin, ['method' => 'PATCH','url' => ['admins', $admin->id], 'files'=>true]) !!}
+                                                    <?php echo Form::model($admin, ['method' => 'PATCH','url' => ['admins', $admin->id], 'files'=>true]); ?>
+
 
 
                                                     <div class="modal-body">
@@ -76,7 +74,8 @@
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">Full Name<span class="text-danger">*</span></label>
-                                                                                {!! Form::text('admin_info[full_name]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']) !!}
+                                                                                <?php echo Form::text('admin_info[full_name]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']); ?>
+
 
                                                                             </div>
                                                                         </div>
@@ -86,7 +85,8 @@
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">Email Address<span class="text-danger">*</span></label>
 
-                                                                                {!! Form::email('email' , $admin->users->email ,['class' => 'form-control input-sm','parsley-trigger' => 'change']) !!}
+                                                                                <?php echo Form::email('email' , $admin->users->email ,['class' => 'form-control input-sm','parsley-trigger' => 'change']); ?>
+
 
                                                                             </div>
                                                                         </div>
@@ -108,11 +108,13 @@
                                                                                 <label for="full_name" class="control-label">Gender<span class="text-danger">*</span></label>
                                                                                 <div>
                                                                                     <div class="radio radio-info radio-inline">
-                                                                                        {!! Form::radio('admin_info[gender]', 0,['id' => 'inlineRadio1']) !!}
+                                                                                        <?php echo Form::radio('admin_info[gender]', 0,['id' => 'inlineRadio1']); ?>
+
                                                                                         <label for="inlineRadio1"> Male </label>
                                                                                     </div>
                                                                                     <div class="radio radio-pink radio-inline">
-                                                                                        {!! Form::radio('admin_info[gender]', 1,['id' => 'inlineRadio2']) !!}
+                                                                                        <?php echo Form::radio('admin_info[gender]', 1,['id' => 'inlineRadio2']); ?>
+
                                                                                         <label for="inlineRadio2"> Female </label>
                                                                                     </div>
                                                                                 </div>
@@ -122,7 +124,8 @@
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">Clinic Name<span class="text-danger">*</span></label>
-                                                                                {!! Form::text('users[entities][entity_name]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']) !!}
+                                                                                <?php echo Form::text('users[entities][entity_name]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']); ?>
+
 
                                                                                 <input type="hidden" name="role_id" value="2" />
                                                                             </div>
@@ -131,7 +134,8 @@
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="website" class="control-label">Website</label>
-                                                                                {!! Form::text('admin_info[website]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']) !!}
+                                                                                <?php echo Form::text('admin_info[website]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']); ?>
+
 
                                                                             </div>
                                                                         </div>
@@ -139,15 +143,16 @@
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">Country<span class="text-danger">*</span></label>
-                                                                                {!!Form::select('admin_info[country]',$edit_countries,null ,['class' => 'form-control select2 country2','id' => 'country'.$admin->id,'data-patientId' => $admin->id])!!}
+                                                                                <?php echo Form::select('admin_info[country]',$edit_countries,null ,['class' => 'form-control select2 country2','id' => 'country'.$admin->id,'data-patientId' => $admin->id]); ?>
+
 
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">State<span class="text-danger">*</span></label>
-                                                                                <select class="form-control select2 state2" name="state" id="{{'state'.$admin->id}}" data-patientId="{{$admin->id}}">
-                                                                                    <option value="{{ $admin->admin_info['state'] }}" selected>{{ $admin->admin_info['state'] }}</option>
+                                                                                <select class="form-control select2 state2" name="state" id="<?php echo e('state'.$admin->id); ?>" data-patientId="<?php echo e($admin->id); ?>">
+                                                                                    <option value="<?php echo e($admin->admin_info['state']); ?>" selected><?php echo e($admin->admin_info['state']); ?></option>
 
                                                                                 </select>
                                                                             </div>
@@ -156,8 +161,8 @@
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">City<span class="text-danger">*</span></label>
-                                                                                <select class="form-control select2 city2" name="city" id="{{'city'.$admin->id}}">
-                                                                                    <option value="{{ $admin->admin_info['city'] }}" selected>{{ $admin->admin_info['city'] }}</option>
+                                                                                <select class="form-control select2 city2" name="city" id="<?php echo e('city'.$admin->id); ?>">
+                                                                                    <option value="<?php echo e($admin->admin_info['city']); ?>" selected><?php echo e($admin->admin_info['city']); ?></option>
 
                                                                                 </select>
                                                                             </div>
@@ -167,7 +172,8 @@
                                                                             <div class="form-group" align="left">
                                                                                 <label for="contact_no" class="control-label">Contact No<span class="text-danger">*</span></label>
 
-                                                                                {!! Form::text('admin_info[contact_no]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']) !!}
+                                                                                <?php echo Form::text('admin_info[contact_no]' , null ,['class' => 'form-control input-sm','parsley-trigger' => 'change']); ?>
+
                                                                             </div>
 
                                                                         </div>
@@ -175,7 +181,8 @@
                                                                         <div class="col-sm-4">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="contact_no" class="control-label">Currency<span class="text-danger">*</span></label>
-                                                                                {!!Form::select('users[entities][currency]',$edit_currencies,null ,['class' => 'form-control select2'])!!}
+                                                                                <?php echo Form::select('users[entities][currency]',$edit_currencies,null ,['class' => 'form-control select2']); ?>
+
 
                                                                             </div>
                                                                         </div>
@@ -190,7 +197,7 @@
                                                                         <div class="col-sm-2">
                                                                             <div style="width: 200px; height: 150px;">
 
-                                                                                <img src="{{ asset('uploads/'.$admin->users->profile_image) }}" style="width: 100%; height: 100%;">
+                                                                                <img src="<?php echo e(asset('uploads/'.$admin->users->profile_image)); ?>" style="width: 100%; height: 100%;">
 
                                                                             </div>
                                                                         </div>
@@ -198,7 +205,8 @@
                                                                         <div class="col-sm-8">
                                                                             <div class="form-group" align="left">
                                                                                 <label for="full_name" class="control-label">Address<span class="text-danger">*</span></label>
-                                                                                {!!Form::textarea('admin_info[address]',null ,['class' => 'form-control','maxlength' => '225','rows' => '3', 'id' => 'textarea'])!!}
+                                                                                <?php echo Form::textarea('admin_info[address]',null ,['class' => 'form-control','maxlength' => '225','rows' => '3', 'id' => 'textarea']); ?>
+
                                                                             </div>
                                                                         </div>
 
@@ -216,7 +224,8 @@
 
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
-                                                        {{ csrf_field() }}
+                                                        <?php echo e(csrf_field()); ?>
+
 
 
                                                         <button type="submit" class="btn btn-inverse waves-effect" style="float: right;margin-left: 1%;">Update Admin</button>
@@ -229,8 +238,8 @@
                                         </div><!-- /.modal -->
 
 
-                                        {{--end edit modal--}}
-                                        {{--model for activate and deactivate users--}}
+                                        
+                                        
                                         <div id="con-close-modalactive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -245,8 +254,9 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                        <form action="{{ url('adminsactivate/'.$admin->id) }}" method="post">
-                                                            {{ csrf_field() }}
+                                                        <form action="<?php echo e(url('adminsactivate/'.$admin->id)); ?>" method="post">
+                                                            <?php echo e(csrf_field()); ?>
+
 
                                                             <button type="submit" class="btn btn-success waves-effect" style="float: right;margin-right: 2%;">Yes Activate it</button>
 
@@ -271,8 +281,9 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
 
-                                                        <form action="{{ url('admins/'.$admin->id) }}" method="post">
-                                                            {{ csrf_field() }}
+                                                        <form action="<?php echo e(url('admins/'.$admin->id)); ?>" method="post">
+                                                            <?php echo e(csrf_field()); ?>
+
                                                             <input type="hidden" name="_method" value="DELETE">
                                                             <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
 
@@ -282,31 +293,31 @@
                                                 </div>
                                             </div>
                                         </div>                                     <hr/>
-                                        {{--end model--}}
+                                        
                                         <div class="text-left">
-                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">{{ $admin->admin_info['full_name'] }}</span></p>
+                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15"><?php echo e($admin->admin_info['full_name']); ?></span></p>
 
                                             <p class="text-muted font-13"><strong>Gender :</strong><span class="m-l-15">
-                                                    @if($admin->admin_info['gender'] == 0)
+                                                    <?php if($admin->admin_info['gender'] == 0): ?>
                                                         Male
-                                                    @elseif($admin->admin_info['gender'] == 1)
+                                                    <?php elseif($admin->admin_info['gender'] == 1): ?>
                                                         Female
-                                                    @else
+                                                    <?php else: ?>
                                                         Others
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </span></p>
 
                                             <p class="text-muted font-13"><strong>Email :</strong> <span class="m-l-15">
-                                                    {{ $admin->users->email }}</span></p>
+                                                    <?php echo e($admin->users->email); ?></span></p>
 
                                             <p class="text-muted font-13"><strong>Status :</strong>
                                                 <span class="m-l-15">
-                                                    @if($admin->users->entities->status == 1)
+                                                    <?php if($admin->users->entities->status == 1): ?>
                                                         Activate
-                                                    @elseif($admin->users->entities->status == 0)
+                                                    <?php elseif($admin->users->entities->status == 0): ?>
                                                         Deactivate
 
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </span></p>
                                         </div>
 
@@ -344,21 +355,24 @@
 
                                             <p><b>Clinic Name</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->users->entities->entity_name }}
+                                            <p class="text-muted font-13 m-b-0"><?php echo e($admin->users->entities->entity_name); ?>
+
                                             </p>
                                         </div>
                                         <div class=" p-t-10">
 
                                             <p><b>Location</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->admin_info['country'] }}
+                                            <p class="text-muted font-13 m-b-0"><?php echo e($admin->admin_info['country']); ?>
+
                                             </p>
                                         </div>
                                         <div class=" p-t-10">
 
                                             <p><b>Contact No</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->admin_info['contact_no'] }}
+                                            <p class="text-muted font-13 m-b-0"><?php echo e($admin->admin_info['contact_no']); ?>
+
                                             </p>
                                         </div>
 
@@ -366,7 +380,8 @@
 
                                             <p><b>Address</b></p>
 
-                                            <p class="text-muted font-13 m-b-0">{{ $admin->admin_info['address'] }}
+                                            <p class="text-muted font-13 m-b-0"><?php echo e($admin->admin_info['address']); ?>
+
                                             </p>
                                         </div>
 
@@ -402,26 +417,27 @@
 
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts Here*********-->
 
-@section('scripts')
-    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
-    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+<?php $__env->startSection('scripts'); ?>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/multiselect/js/jquery.multi-select.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/select2/js/select2.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js')); ?>"></script>
 
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.mockjax.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.autocomplete.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/countries.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.autocomplete.init.js') }}"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.mockjax.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.autocomplete.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/countries.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.autocomplete.init.js')); ?>"></script>
 
-    <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
-@endsection
+    <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts End*********-->
+<?php echo $__env->make('layouts.mainHome', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

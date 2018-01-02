@@ -11,12 +11,13 @@ use App\models\Entity;
 use App\User;
 use Auth;
 use DB;
+use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['store','update']]);
+        $this->middleware('user_privilage',['except'=>['store','update','get_state','get_cities']]);
     }
 
     /**
@@ -37,6 +38,13 @@ class PatientController extends Controller
         });
 
         $languages =  DB::table('languages')->get();
+        $edit_languages =  DB::table('languages')->pluck('name','name');
+
+        $edit_countries = Cache::rememberForever('countries22', function() {
+            return DB::table('countries2')->pluck('name','name');
+        });
+
+        //dd($edit_countries);
 
         //$cities = DB::table('cities')->get();
         /*$cities = Cache::rememberForever('cities', function() {
@@ -60,6 +68,8 @@ class PatientController extends Controller
              'docs' => $doctor_create,
              'countries' => $countries,
              'languages' => $languages,
+             'edit_languages' => $edit_languages,
+             'edit_countries' => $edit_countries
 
          ));
     }
@@ -70,14 +80,16 @@ class PatientController extends Controller
      * add to constructor*/
     public function get_state()
     {
-        $state = DB::table('states')->where('states.country_id',request()->country_id)->get();
+        $country = DB::table('countries2')->where('countries2.name',request()->country_id)->first();
+        $state = DB::table('states')->where('states.country_id',$country->id)->get();
 
         return response()->json($state);
     }
 
     public function get_cities()
     {
-        $cities = DB::table('cities')->where('cities.state_id',request()->state_id)->get();
+        $state = DB::table('states')->where('states.name',request()->state_id)->first();
+        $cities = DB::table('cities')->where('cities.state_id',$state->id)->get();
 
         return response()->json($cities);
     }
@@ -90,17 +102,6 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $doctor = UserInformation::with('users')->whereNotNull('doctor_info')
-            ->whereHas('users',function ($query){
-                $query->where('users.status','=',1);
-            })->get();
-
-        return view('pages.patients.createPatient',array(
-            'doctors' => $doctor
-        ));
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -110,15 +111,59 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->upload_photo);
         $upload_dir = base_path() . '/public/uploads';
 
-        $request->validate([
-            'full_name' =>' required|string',
-            'gender' => 'required',
-            'contact_no' => 'required',
-            'date_of_birth' => 'required'
-        ]);
+        if($request->upload_photo == "0")
+        {
+            //dd($request->profile_photo);
+            $request->validate([
+                'full_name' =>' required|string',
+                'gender' => 'required',
+                'contact_no' => 'required',
+                'date_of_birth' => 'required',
+                'country' => 'required',
+                'state' => 'required',
+                'profile_photo' => 'image|mimes:jpeg,png|max:2048'
+            ]);
+
+            $profile = $request->file('profile_photo');
+            $ext = $profile->getClientOriginalExtension();
+            $profilename = $request->get('contact_no').'-'.'.'.$ext;
+            $profile->move($upload_dir, $profilename);
+        }
+        elseif ($request->upload_photo == "1")
+        {
+            //dd($request->upload_photo);
+            $request->validate([
+                'full_name' =>' required|string',
+                'gender' => 'required',
+                'contact_no' => 'required',
+                'date_of_birth' => 'required',
+                'country' => 'required',
+                'state' => 'required',
+            ]);
+
+            $binary_data = file($request->webcam_photo);
+
+            $profilename = $request->get('contact_no').'-'.'.jpeg';
+
+            $result = file_put_contents( $upload_dir.'/'.$profilename, $binary_data );
+            //dd($result);
+        }
+        elseif ($request->upload_photo == null)
+        {
+            $request->validate([
+                'full_name' =>' required|string',
+                'gender' => 'required',
+                'contact_no' => 'required',
+                'date_of_birth' => 'required',
+                'country' => 'required',
+                'state' => 'required',
+            ]);
+            $profilename = 'avatar.png';
+        }
+
 
         /**/
 
@@ -134,10 +179,11 @@ class PatientController extends Controller
             'date_of_birth' => $request['date_of_birth'],
             'email' => $request['email'],
             'address' => $request['address'],
-            'rel_contact_no' => $request['rel_contact_no'],
-            'patient_identity_name' => $request['patient_identity_name'],
-            'patient_identity_no' => $request['patient_identity_no'],
-            'martial' => $request['martial']
+            'country' => $request['country'],
+            'city' => $request['city'],
+            'state' => $request['state'],
+            'profile_image' => $profilename,
+            'language' => $request['language']
         ];
         if($request->patient_file !== null)
         {
@@ -183,22 +229,7 @@ class PatientController extends Controller
      * @param  \App\models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $patient_dats = Patient::with('users')
-            ->where('entity_id','=',Auth::user()->id)->get();
 
-        $patient = Patient::with('users')->where('id','=',$id)->first();
-
-        $medical_records = MedicalRecord::where('status','=',1)
-                    ->where('patient_id','=',$id)->latest()->get();
-        //dd($medical_records);
-        return view('pages.patients.showPatient',array(
-            'patient' => $patient,
-            'patient_dats' => $patient_dats,
-            'medical_records' => $medical_records
-        ));
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -206,14 +237,6 @@ class PatientController extends Controller
      * @param  \App\models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $patient = Patient::with('users')->where('id','=',$id)->first();
-        //dd($patient->drug_allergy['drug_name']);
-        return view('pages.patients.editPatient',array(
-            'patient' => $patient
-        ));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -224,13 +247,64 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request['patient_info']['patient_identity_name']);
+
         $upload_dir = base_path() . '/public/uploads';
+
 
 
         /**/
 
         $patient = Patient::findOrFail($id);
+
+        if($request->upload_photo == "0")
+        {
+
+            if ($request->file('profile_photo'))
+            {
+
+
+                $profile = $request->file('profile_photo');
+                $ext = $profile->getClientOriginalExtension();
+                $profilename = $request['patient_info']['contact_no'].'-'.'.'.$ext;
+
+                Storage::Delete($upload_dir.'/'.$profilename);
+                $profile->move($upload_dir, $profilename);
+            }
+            else
+            {
+                $profilename = $patient->patient_info['profile_image'];
+            }
+            //dd($request->profile_photo);
+
+
+        }
+        elseif ($request->upload_photo == "1")
+        {
+            //dd($patient->patient_info['profile_image']);
+            if($request->webcam_photo !== null)
+            {
+                //dd($request->webcam_photo);
+                $binary_data = file($request->webcam_photo);
+
+                $profilename = $request['patient_info']['contact_no'].'-'.'.jpeg';
+
+                Storage::Delete($upload_dir.'/'.$profilename);
+
+                $result = file_put_contents( $upload_dir.'/'.$profilename, $binary_data );
+            }
+            else
+            {
+                $profilename = $patient->patient_info['profile_image'];
+            }
+
+            //dd($result);
+        }
+        elseif ($request->upload_photo == null)
+        {
+
+
+            $profilename = $patient->patient_info['profile_image'];
+        }
 
 
         $patient->patient_info = [
@@ -240,10 +314,11 @@ class PatientController extends Controller
             'date_of_birth' => $request['patient_info']['date_of_birth'],
             'email' => $request['patient_info']['email'],
             'address' => $request['patient_info']['address'],
-            'rel_contact_no' => $request['patient_info']['rel_contact_no'],
-            'patient_identity_name' => $request['patient_info']['patient_identity_name'],
-            'patient_identity_no' => $request['patient_info']['patient_identity_no'],
-            'martial' => $request['patient_info']['martial']
+            'country' => $request['patient_info']['country'],
+            'city' => $request['city'],
+            'state' => $request['state'],
+            'profile_image' => $profilename,
+            'language' => $request['patient_info']['language']
         ];
         if($request->patient_file !== null)
         {
@@ -280,7 +355,7 @@ class PatientController extends Controller
 
         $patient->save();
 
-        return redirect('patients')->with('message','Patient Successfully Edited');
+        return redirect('patients')->with('message','Patient Successfully Updated');
     }
 
     /**

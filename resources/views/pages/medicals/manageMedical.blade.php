@@ -42,7 +42,7 @@
 
                         {{--Modal--}}
 
-                        <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                        <div id="con-close-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -50,6 +50,7 @@
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                             <h4 class="modal-title">Add Record</h4>
                                         </div>
+                                        <form action="{{ url('medical_edit') }}" method="post">
                                         <div class="modal-body">
 
 
@@ -57,7 +58,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="pats" class="control-label">Select Patient<span class="text-danger">*</span></label>
-                                                        <select class="form-control select2" id="pats">
+                                                        <select class="form-control select2" name="patient_id">
                                                             <option selected disabled="disabled">Select Patient</option>
 
                                                             @foreach($patients as $patient)
@@ -68,14 +69,30 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="pats" class="control-label">Select Doctor<span class="text-danger">*</span></label>
+                                                        <select class="form-control select2" name="doctor_id">
+                                                            <option selected disabled="disabled">Select Doctor</option>
+
+                                                            @foreach($doctors as $doctor)
+                                                                <option value="{{ $doctor->id }}">{{ $doctor->users['name'] }}</option>
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
 
                                         <div class="modal-footer">
+                                            {{ csrf_field() }}
 
                                             <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                            <a href="#" class="btn btn-inverse waves-effect waves-light" id="add_here">Add Record</a>
+                                            <button type="submit" class="btn btn-inverse waves-effect waves-light">Add Record</button>
                                         </div>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -84,7 +101,7 @@
                         <hr>
 
 
-                        <table id="datatable-buttons" class="table table-striped table-bordered">
+                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
                                 <th width="2%">Sr.No</th>
@@ -92,6 +109,7 @@
                                 <th>Patient Name</th>
                                 <th width="12%">Patient Code</th>
                                 <th>Doctor Name</th>
+                                <th>Created At</th>
 
                                 <th width="15%">Action</th>
 
@@ -108,12 +126,11 @@
                                     <td>{{ $record->patients->patient_info['full_name'] }}</td>
                                     <td style="color: #017ebc; font-weight: bold">{{ $record->patients['patient_code'] }}</td>
                                     <td>{{ $record->user_informations->doctor_info['first_name'] }} {{ $record->user_informations->doctor_info['last_name'] }}</td>
+                                    <td>{{ date('d-M-Y',strtotime($record->created_at)) }}</td>
 
                                     <td>
 
-                                        <a href="{{ url('patients/'.$record->patients->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
+                                        <button class="btn btn-icon waves-effect waves-light btn-teal m-b-5" data-toggle="modal" data-target="#full-width-modal-show{{$record->id}}"><i class="fa fa-eye"></i></button>
 
                                         @if(Auth::user()->role_id == 2)
                                         <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$record->id}}"><i class="fa fa-remove"></i></button>
@@ -152,6 +169,272 @@
                             @endforeach
                             </tbody>
                         </table>
+                        @foreach($records as $record)
+                            {{--start show modal--}}
+
+                            <div id="full-width-modal-show{{$record->id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog" style="width: 70%;">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="full-width-modalLabel">Medical Record</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="text-center card-box">
+                                                        <div class="member-card">
+
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group" align="left">
+                                                                        <label for="pats" class="control-label">Patient Name</label>
+                                                                        <input type="text" readonly class="form-control input-sm" value="{{ $record->patients->patient_info['full_name'] }}">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group" align="left">
+                                                                        <label for="pats" class="control-label">Patient Code</label>
+                                                                        <input type="text" readonly class="form-control input-sm" value="{{ $record->patients->patient_code }}">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group" align="left">
+                                                                        <label for="pats" class="control-label">Doctor Name</label>
+                                                                        <input type="text" readonly class="form-control input-sm" value="{{ $record->user_informations->doctor_info['first_name'] }} {{ $record->user_informations->doctor_info['last_name'] }}">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group" align="left">
+                                                                        <label for="pats" class="control-label">Diagnose</label>
+                                                                        <input type="text" readonly class="form-control input-sm" value="{{ $record->diagnose }}">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-12">
+                                                                    <hr>
+
+
+                                                                    <ul class="nav nav-tabs navtab-bg nav-justified">
+                                                                        <li class="active">
+                                                                            <a href="#health{{ $record->id }}" data-toggle="tab" aria-expanded="false">
+                                                                                <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                                                                <span class="hidden-xs">Health Info</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="">
+                                                                            <a href="#writing{{ $record->id }}" data-toggle="tab" aria-expanded="false">
+                                                                                <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                                                <span class="hidden-xs">Typing Note</span>
+                                                                            </a>
+                                                                        </li>
+
+
+                                                                        <li class="">
+                                                                            <a href="#drawing{{ $record->id }}" id="draw_pad" data-toggle="tab" aria-expanded="false">
+                                                                                <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                                                                                <span class="hidden-xs">Drawing Pad</span>
+                                                                            </a>
+                                                                        </li>
+
+                                                                        <li class="">
+                                                                            <a href="#template{{ $record->id }}" data-toggle="tab" aria-expanded="false">
+                                                                                <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                                                                                <span class="hidden-xs">Template</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="">
+                                                                            <a href="#upload{{ $record->id }}" data-toggle="tab" aria-expanded="false">
+                                                                                <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                                                                                <span class="hidden-xs">Upload</span>
+                                                                            </a>
+                                                                        </li>
+
+
+                                                                    </ul>
+                                                                    <div class="tab-content">
+                                                                        <div class="tab-pane active" id="health{{ $record->id }}">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-xs-12 col-md-12">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="card-box">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+
+                                                                                                            <label for="weight" class="control-label">Weight</label>
+                                                                                                            <div class="input-group m-t-10">
+                                                                                                                <input type="text"
+                                                                                                                       value="{{ $record->health_info['weight'] }}" readonly class="form-control"/>
+                                                                                                                <span class="input-group-addon">kg</span>
+                                                                                                            </div>
+
+
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+
+                                                                                                            <label for="height" class="control-label">Height</label>
+                                                                                                            <div class="input-group m-t-10">
+                                                                                                                <input type="text"
+                                                                                                                       value="{{ $record->health_info['height'] }}" readonly class="form-control"/>
+                                                                                                                <span class="input-group-addon">cm</span>
+                                                                                                            </div>
+
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+
+                                                                                                            <label for="weight" class="control-label">BSA</label>
+                                                                                                            <div class="input-group m-t-10">
+                                                                                                                <input type="text"
+                                                                                                                       value="{{ $record->health_info['bsa'] }}" readonly class="form-control"/>
+                                                                                                                <span class="input-group-addon">m<span style="font-size: 10px; position: relative; top: -5px;">2</span></span>
+                                                                                                            </div>
+
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <div class="tab-pane" id="writing{{ $record->id }}">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-xs-12 col-md-12">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="card-box">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-sm-12">
+                                                                                                        {!! $record->typing_Note !!}
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+
+
+
+
+                                                                        <div class="tab-pane" id="drawing{{ $record->id }}">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-xs-12 col-md-12">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="card-box">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-md-12">
+
+                                                                                                        <img src="{{ $record->image_url }}" style="border: 2px solid black;"/>
+                                                                                                        <br>
+                                                                                                        <a href="{{ $record->image_url }}" download="Klinic" class="btn btn-primary">
+                                                                                                            Download
+                                                                                                        </a>
+
+                                                                                                    </div>
+
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="tab-pane" id="template{{ $record->id }}">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-xs-12 col-md-12">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="card-box">
+                                                                                                @foreach($record->template as $temp)
+                                                                                                    <div class="form-group row">
+                                                                                                        <label for="patient_id" class="form-label col-sm-12"><span style="float: left;">{{ $temp['question'] }} ?</span></label>
+                                                                                                        @if(sizeof($temp['answers']) > 1)
+                                                                                                            @for($i=0; $i < sizeof($temp['answers']); $i++)
+                                                                                                                <div class="col-sm-3">
+                                                                                                                    <input type="text" class="form-control"
+                                                                                                                           value="{{ $temp['answers'][$i] }}" readonly>
+
+                                                                                                                </div>
+                                                                                                            @endfor
+                                                                                                        @else
+                                                                                                            <div class="col-sm-3">
+                                                                                                                <input type="text" class="form-control"
+                                                                                                                       value="{{ $temp['answers'] }}" readonly>
+
+                                                                                                            </div>
+                                                                                                        @endif
+                                                                                                    </div>
+                                                                                                @endforeach
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="tab-pane" id="upload{{ $record->id }}">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-xs-12 col-md-12">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="card-box">
+                                                                                                <div class="row">
+                                                                                                    @for($j=0; $j < sizeof($record->upload_file); $j++)
+                                                                                                        <h5 align="left"><a href="{{ asset('uploads/'.$record->upload_file[$j]) }}" target="_blank">Image {{ $j+1 }}</a></h5>
+                                                                                                    @endfor
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                            {{--end show modal--}}
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -184,20 +467,11 @@
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.js') }}"></script>
 
-    <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.fixedHeader.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.keyTable.min.js') }}"></script>
+
+
     <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.scroller.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.colVis.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
+
 
     <!-- init -->
     <script src="{{ asset('assets/pages/jquery.datatables.init.js') }}"></script>

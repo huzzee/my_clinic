@@ -18,6 +18,9 @@ class CreateEntitiesTable extends Migration
             $table->string('entity_name');
             $table->string('entity_code');
             $table->string('currency');
+            $table->string('country');
+            $table->string('state');
+            $table->string('city');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
