@@ -22,6 +22,16 @@
                                 <i style="color: #39e7e0" class="<?php echo e($menus->menus->menu_icon); ?>"></i>
                                 <span style="color: lightgrey;"> <?php echo e($menus->menus->menu_name); ?> </span>
                             </a>
+
+                            <ul class="list-unstyled">
+                                <?php $__currentLoopData = callMenus(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $submenus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($submenus->menus->parent_menu_id == $menus->menus->id): ?>
+                                        <li>
+                                            <a href="<?php echo e(url($submenus->menus->menu_slug)); ?>"><?php echo e($submenus->menus->menu_name); ?></a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </ul>
                         <?php else: ?>
                             <a href="<?php echo e(url($menus->menus->menu_slug)); ?>" class="waves-effect">
                                 <i style="color: #39e7e0;" class="<?php echo e($menus->menus->menu_icon); ?>"></i>
@@ -32,19 +42,9 @@
 
 
 
-
-                        <ul class="list-unstyled">
-                            <?php $__currentLoopData = callMenus(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $submenus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($submenus->menus->parent_menu_id == $menus->menus->id): ?>
-                                    <li>
-                                        <a href="<?php echo e(url($submenus->menus->menu_slug)); ?>"><?php echo e($submenus->menus->menu_name); ?></a>
-                                    </li>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </ul>
                     </li>
-            <?php endif; ?>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">

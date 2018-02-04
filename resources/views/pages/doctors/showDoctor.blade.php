@@ -32,7 +32,7 @@
                                 <div class="text-center card-box">
                                     <div class="member-card">
                                         <div class="thumb-xl member-thumb m-b-10 center-block">
-                                            <img src="{{ asset('uploads/'.$doctor->users->profile_image) }}" class="img-circle img-thumbnail" alt="profile-image">
+                                            <img src="{{ asset('uploads/'.$doctor->users->profile_image.'?v='.\Carbon\Carbon::now()) }}" class="img-circle img-thumbnail" alt="profile-image">
                                             <i class="mdi mdi-star-circle member-star text-success" title="verified user"></i>
                                         </div>
 
@@ -261,13 +261,7 @@
     <script src="{{asset('assets/plugins/counterup/jquery.counterup.min.js')}}"></script>
 
     <!-- Flot chart js -->
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.min.js')}}"></script>
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.time.js')}}"></script>
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.tooltip.min.js')}}"></script>
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.resize.js')}}"></script>
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.pie.js')}}"></script>
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.selection.js')}}"></script>
-    <script src="{{asset('assets/plugins/flot-chart/jquery.flot.crosshair.js')}}"></script>
+
     <script src="{{asset('assets/pages/jquery.dashboard_2.js')}}"></script>
 @endsection
 

@@ -39,6 +39,11 @@ class Patient extends Model
 
     public function invoices()
     {
-        return $this->hasMany('App\models\Invoice','id');
+        return $this->hasMany(Invoice::class,'id')->orderBy('id','desc');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
     }
 }

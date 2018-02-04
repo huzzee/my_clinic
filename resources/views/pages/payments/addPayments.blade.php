@@ -181,7 +181,7 @@
                                                         <label for="grand_total" class="col-sm-4">Payment</label>
                                                         <div class="col-sm-8 input-group">
 
-                                                            <input type="number" class="form-control"
+                                                            <input type="text" class="form-control"
                                                                    name="payment_cash"
                                                             >
                                                             <span class="input-group-addon">

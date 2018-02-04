@@ -1,87 +1,7 @@
 
 var base_uri = $('#baseUrl').val();
 var g_day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-$('.add_drug').click(function(){
-    //alert('ok');
-    var drug_name = $('.drug_name').val();
-    var drug_comment = $('.drug_comment').val();
 
-
-    if(drug_name !== '' )
-    {
-
-        var html = `
-					<tr>
-					    
-			            <td>`+drug_name+`<input type="hidden" name="drug_name[]" value="`+drug_name+`"></td>
-			            <td>`+drug_comment+`<input type="hidden" name="drug_comment[]" value="`+drug_comment+`"></td>
-			            <td>
-			            <button type="button" class="btn btn-icon btn-danger m-b-5 remove_item">
-			            <i class="fa fa-remove"></i>
-			            </button>
-			            </td>
-			        </tr>
-		`;
-        $('#item_row').append(html);
-        //$('.name_of_item').val().prop('selected',true);
-
-
-
-
-
-        $('.drug_name').val('');
-        $('.drug_comment').val('');
-    }
-    else{
-        alert('please Enter Drug Name');
-    }
-});
-
-$('body').on('click', '.remove_item', function(){
-    var itemData = $(this).parent().parent();
-    itemData.remove();
-});
-
-$('.add_drug1').click(function(){
-    //alert('ok');
-    var drug_name = $('.drug_name1').val();
-    var drug_comment = $('.drug_comment1').val();
-
-
-    if(drug_name !== '' )
-    {
-
-        var html = `
-					<tr>
-					    
-			            <td>`+drug_name+`<input type="hidden" name="drug_name[]" value="`+drug_name+`"></td>
-			            <td>`+drug_comment+`<input type="hidden" name="drug_comment[]" value="`+drug_comment+`"></td>
-			            <td>
-			            <button type="button" class="btn btn-icon btn-danger m-b-5 remove_item1">
-			            <i class="fa fa-remove"></i>
-			            </button>
-			            </td>
-			        </tr>
-		`;
-        $('#item_row1').append(html);
-        //$('.name_of_item').val().prop('selected',true);
-
-
-
-
-
-        $('.drug_name1').val('');
-        $('.drug_comment1').val('');
-    }
-    else{
-        alert('please Enter Drug Name');
-    }
-});
-
-$('body').on('click', '.remove_item1', function(){
-    var itemData = $(this).parent().parent();
-    itemData.remove();
-});
 
 $('#my_doc').change(function () {
    var doc_id = $(this).val();
@@ -1424,7 +1344,7 @@ $('#country').change(function () {
         data: {country_id: country_id},
         dataType: 'json',
         success: function (response) {
-            var html = '<option disabled selected>Select State</option>';
+            var html = '<option disabled selected value="0">Select State</option>';
             response.forEach(function (data) {
                 html+= `
                     <option value="`+data.name+`">`+data.name+`</option>
@@ -1444,7 +1364,7 @@ $('#state').change(function () {
         data: {state_id: state_id},
         dataType: 'json',
         success: function (response) {
-            var html = '<option disabled selected>Select City</option>';
+            var html = '<option disabled selected value="0">Select City</option>';
             response.forEach(function (data) {
                 html+= `
                     <option value="`+data.name+`">`+data.name+`</option>
@@ -1457,7 +1377,8 @@ $('#state').change(function () {
 });
 
 /*for edit patients*/
-$('.edit_patient_modal').click(function () {
+$('body').on('click','.edit_patient_modal',function () {
+
     var patient_id = $(this).data('patientid');
 
     var country_id = $('#country'+patient_id).val();
@@ -1498,7 +1419,8 @@ $('.edit_patient_modal').click(function () {
         }
     });
 });
-$('.country2').change(function () {
+
+$('body').on('change','.country2',function () {
     var patient_id = $(this).data('patientid');
 
     var country_id = $(this).val();
@@ -1508,8 +1430,8 @@ $('.country2').change(function () {
         data: {country_id: country_id},
         dataType: 'json',
         success: function (response) {
-            var html = '<option disabled selected>Select State</option>';
-            var html2 = '<option disabled selected>Select City</option>';
+            var html = '<option disabled selected value="0">Select State</option>';
+            var html2 = '<option disabled selected value="0">Select City</option>';
             response.forEach(function (data) {
                 html+= `
                     <option value="`+data.name+`">`+data.name+`</option>
@@ -1523,7 +1445,8 @@ $('.country2').change(function () {
     });
 });
 
-$('.state2').change(function () {
+$('body').on('change','.state2',function () {
+
     var patient_id = $(this).data('patientid');
 
     var state_id = $(this).val();
@@ -1533,7 +1456,7 @@ $('.state2').change(function () {
         data: {state_id: state_id},
         dataType: 'json',
         success: function (response) {
-            var html = '<option disabled selected>Select City</option>';
+            var html = '<option disabled selected value="0">Select City</option>';
             response.forEach(function (data) {
                 html+= `
                     <option value="`+data.name+`">`+data.name+`</option>
@@ -1547,4 +1470,62 @@ $('.state2').change(function () {
 $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
 
+/*For Data Tables*/
 
+/*function populate()
+{
+    console.time('populate');
+    var t = $('#datatable-responsive12').dataTable();
+
+    for (var irow = 0; irow < 2500; irow++)
+    {
+        var cells = new Array();
+        var r = jQuery('<tr id=' + irow + '>');
+        for (var icol = 0; icol < 4; icol ++)
+            cells[icol] = 'Row ' + irow + '; col ' + icol;
+        var ai = t.fnAddData(cells,false);
+    }
+    t.fnDraw();
+    console.timeEnd('populate');
+}
+
+$(window).load(function () {
+    populate();
+});
+
+console.time('render');
+jQuery('#datatable-responsive12').dataTable(
+    {
+        'bDestroy': true,
+        "bInfo": true,
+        "bProcessing": true,
+        "bDeferRender": true,
+        'iDisplayLength': 10,
+        'sPaginationType': 'full_numbers',
+        'sDom': '<"top"i> T<"clear">lfrtip',
+        'sPageButtonActive': "paginate_active",
+        'sPageButtonStaticDisabled': "paginate_button",
+        "oLanguage": {
+            "sSearch": "Futher Filter Search results:",
+            "sInfo": "Got a total of _TOTAL_ results to show (_START_ to _END_)",
+            "sLengthMenu": 'Show <select>' +
+            '<option value="5">5</option>' +
+            '<option value="10">10</option>' +
+            '<option value="15">15</option>' +
+            '<option value="20">20</option>' +
+            '<option value="25">25</option>' +
+            '</select> results'
+        },
+        "bSort": false
+    }
+);
+console.timeEnd('render');*/
+
+/*For DataTables End*/
+
+
+
+/*For TExtArea start*/
+
+
+/* End Tet Area End*/

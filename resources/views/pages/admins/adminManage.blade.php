@@ -254,7 +254,7 @@
                             @foreach($admins as $admin)
                                 <tr>
                                     <td>{{ $i }}</td>
-                                    <td><img src="{{ asset('uploads/'.$admin->users->profile_image) }}" alt="{{ $admin->users->profile_image }}" style="height: 50px; width: 50px;"></td>
+                                    <td><img src="{{ asset('uploads/'.$admin->users->profile_image.'?v='.\Carbon\Carbon::now()) }}" alt="{{ $admin->users->profile_image }}" style="height: 50px; width: 50px;"></td>
                                     <td>{{ $admin->admin_info['full_name'] }}</td>
                                     <td>{{ $admin->users->email }}</td>
                                     <td>{{ $admin->users->entities->entity_name }}</td>

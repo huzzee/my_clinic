@@ -38,15 +38,15 @@
                                             <p class="text-muted">ADMIN</p>
                                         </div>
                                         <div class="box-header">
-                                            <button class="btn btn-icon waves-effect waves-light btn-info m-b-5 edit_patient_modal" data-patientId="<?php echo e($admin->id); ?>" data-toggle="modal" data-target="#full-width-modal-edit<?php echo e($admin->id); ?>">Edit Profile</button>
+                                            <button type="button" class="btn btn-icon waves-effect waves-light btn-info m-b-5 edit_patient_modal" data-patientId="<?php echo e($admin->id); ?>" data-toggle="modal" data-target="#full-width-modal-edit<?php echo e($admin->id); ?>">Edit Profile</button>
 
 
                                             <?php if(Auth::user()->role_id == 1): ?>
                                                 <?php if($admin->users->entities->status == 0): ?>
-                                                    <button type="button" class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
+                                                    <button type="button" class="btn btn-icon waves-effect waves-light btn-success m-b-5" data-toggle="modal" data-target="#con-close-modalactive">Activate</button>
                                                 <?php elseif($admin->users->entities->status == 1): ?>
 
-                                                    <button type="button" class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
+                                                    <button type="button" class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modaldeactive">Deactivate</button>
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </div>

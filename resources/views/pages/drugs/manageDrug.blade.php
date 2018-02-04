@@ -45,10 +45,10 @@
                         <hr>
 
 
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
+                        <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
-                                <th width="2%">Sr.No</th>
+                                {{--<th width="2%">Sr.No</th>
 
                                 <th width="15%">Name</th>
                                 <th>Type</th>
@@ -59,11 +59,14 @@
 
                                 <th width="10%">Status</th>
 
-                                <th width="15%">Action</th>
+                                <th width="15%">Action</th>--}}
+                                <th>id</th>
+                                <th>City Name</th>
+                                <th>State Id</th>
 
                             </tr>
                             </thead>
-
+{{--
 
                             <tbody>
                             @php $i=1;@endphp
@@ -140,7 +143,7 @@
 
                                 @php $i++; @endphp
                             @endforeach
-                            </tbody>
+                            </tbody>--}}
                         </table>
                     </div>
                 </div>
@@ -155,6 +158,8 @@
 <!--*********Page Scripts Here*********-->
 
 @section('scripts')
+
+
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.js') }}"></script>
 
@@ -169,36 +174,22 @@
 
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#datatable').dataTable();
-            $('#datatable-keytable').DataTable({keys: true});
-            $('#datatable-responsive').DataTable();
-            $('#datatable-colvid').DataTable({
-                "dom": 'C<"clear">lfrtip',
-                "colVis": {
-                    "buttonText": "Change columns"
-                }
+
+        $(function() {
+
+            $('#datatable_laravel').DataTable({
+                processing: false,
+                serverSide: false,
+                ajax: '{!! route('get_datatable_drug.data') !!}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name' },
+                    { data: 'state_id', name: 'state_id' },
+
+                ]
             });
-            $('#datatable-scroller').DataTable({
-                ajax: "../plugins/datatables/json/scroller-demo.json",
-                deferRender: true,
-                scrollY: 380,
-                scrollCollapse: true,
-                scroller: true
-            });
-            var table = $('#datatable-fixed-header').DataTable({fixedHeader: true});
-            var table = $('#datatable-fixed-col').DataTable({
-                scrollY: "300px",
-                scrollX: true,
-                scrollCollapse: true,
-                paging: false,
-                fixedColumns: {
-                    leftColumns: 1,
-                    rightColumns: 1
-                }
-            });
+
         });
-        TableManageButtons.init();
 
     </script>
 @endsection

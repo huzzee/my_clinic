@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -21,6 +22,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
+
         $appointments = Appointment::with('schedule_details','user_informations','patients')
             ->where('status','=',0)
             ->where('appointment_date','>=',date('Y-m-d',strtotime(Carbon::now(get_local_time()))))

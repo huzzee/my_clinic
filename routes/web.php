@@ -37,12 +37,15 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::Resource('patients','PatientController');
     Route::get('get_states','PatientController@get_state');
     Route::get('get_cities','PatientController@get_cities');
+    Route::get('get_patient_info','PatientController@get_patient_info');
 
 
 
     Route::Resource('services','ClinicServiceController');
     Route::Resource('service_categories','ServiceCategoryController');
     Route::Resource('drugs','MedicineController');
+    Route::get('get_datatable_drug','MedicineController@datatable')->name('get_datatable_drug.data');
+
     Route::post('updateStock/{id}','MedicineController@updateStock');
     Route::Resource('schedule','ScheduleController');
     Route::get('doc_schedule_chk','ScheduleController@schedule_chk');

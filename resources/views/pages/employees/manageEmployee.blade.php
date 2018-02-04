@@ -192,7 +192,7 @@
                             @foreach($employees as $employee)
                                 <tr>
                                     <td>{{ $i }}</td>
-                                    <td><img src="{{ asset('uploads/'.$employee->users->profile_image) }}" alt="{{ $employee->users->profile_image }}" style="height: 50px; width: 50px;"></td>
+                                    <td><img src="{{ asset('uploads/'.$employee->users->profile_image.'?v='.\Carbon\Carbon::now()) }}" alt="{{ $employee->users->profile_image }}" style="height: 50px; width: 50px;"></td>
                                     <td>{{ $employee->users['name'] }}</td>
                                     <td>{{ $employee->users->email }}</td>
                                     <td>{{ $employee->users->roles->role_name }}</td>

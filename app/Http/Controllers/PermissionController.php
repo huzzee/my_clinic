@@ -6,6 +6,7 @@ use App\models\Permission;
 use Illuminate\Http\Request;
 use App\models\Menu;
 use Illuminate\Support\Facades\DB;
+use Response;
 
 class PermissionController extends Controller
 {
@@ -25,7 +26,7 @@ class PermissionController extends Controller
     public function role_chk()
     {
         $roleId = request()->role_id;
-        $menus = Menu::all()->toArray();
+        $menus = Menu::orderBy('sort_order','asc')->get()->toArray();
 
         $pdata = Permission::where('role_id', $roleId)->get();
         if(!isset($pdata[0]))

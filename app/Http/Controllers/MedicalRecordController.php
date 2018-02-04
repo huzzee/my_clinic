@@ -31,7 +31,7 @@ class MedicalRecordController extends Controller
             ->where('status','=',1)->latest()->get();
 
         $patient = Patient::with('users')
-            ->where('entity_id','=',Auth::user()->id)->get();
+            ->where('entity_id','=',Auth::user()->entity_id)->get();
 
         $doctors = UserInformation::with('users')
             ->wherehas('users',function ($query){

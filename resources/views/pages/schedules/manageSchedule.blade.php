@@ -40,17 +40,7 @@
 
 
                         <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
-                            <thead>
-                            <tr>
-                                <th width="2%">Sr.No</th>
-                                <th width="5%">Image</th>
 
-                                <th>Doctor Name </th>
-                                <th width="25%">Doctor Department</th>
-                                <th>status</th>
-                                <th width="15%">Action</th>
-
-                            </tr>
                             </thead>
 
 
@@ -154,7 +144,7 @@
         $(document).ready(function () {
             $('#datatable').dataTable();
             $('#datatable-keytable').DataTable({keys: true});
-            $('#datatable-responsive').DataTable();
+            //$('#datatable-responsive').DataTable();
             $('#datatable-colvid').DataTable({
                 "dom": 'C<"clear">lfrtip',
                 "colVis": {

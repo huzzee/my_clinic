@@ -231,9 +231,9 @@ class AdminController extends Controller
             ]);
 
             $file = $request->file('profile_image');
-            $ext = $file->getClientOriginalExtension();
-            $filename = $request->get('email').'.'.$ext;
-            //Storage::Delete($upload_dir.'/'.$filename);
+            $ext = $file->getClientOriginalName();
+            $filename = $request->admin_info['contact_no'].'.'.$ext;
+            Storage::Delete($upload_dir.'/'.$filename);
             $file->move($upload_dir, $filename);
         }
         else{

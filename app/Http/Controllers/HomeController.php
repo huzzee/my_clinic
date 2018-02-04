@@ -26,10 +26,18 @@ class HomeController extends Controller
     {
         //dd(Auth::user()->user_informations);
        //dd('ok');
-        /*if(Auth::user()->role_id == 2)
+        if(Auth::user()->role_id == 2)
         {
             return view('dashboards.adminDashboard');
-        }*/
-        return view('dashboards.adminDashboard');
+        }
+        elseif(Auth::user()->role_id == 3)
+        {
+            return view('dashboards.doctorDashboard');
+        }
+        elseif (Auth::user()->role_id == 1)
+        {
+            return view('dashboards.superAdminDashboard');
+        }
+
     }
 }

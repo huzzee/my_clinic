@@ -59,4 +59,9 @@ class UserInformation extends Model
     {
         return $this->hasMany('App\models\Invoice','id');
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

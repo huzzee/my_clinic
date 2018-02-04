@@ -32,6 +32,7 @@ class ScheduleController extends Controller
 
         return view('pages.schedules.manageSchedule',array(
             'schedules' => $schedule
+
         ));
 
         //dd($schedule);

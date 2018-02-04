@@ -6,6 +6,9 @@
         <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
         <meta name="author" content="Coderthemes">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta http-equiv='cache-control' content='no-cache'>
+        <meta http-equiv='expires' content='0'>
+        <meta http-equiv='pragma' content='no-cache'>
 
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
@@ -86,6 +89,8 @@
 
         }
 
+
+
         @media print{
           body .box-header{
             display: none;
@@ -131,17 +136,7 @@
             background-color: white !important;
             color: lightgrey !important;
         }
-
-        span.select2-container {
-            z-index:10050;
-        }
-
-
-
-
-
-
-
+s
     </style>
     <body class="fixed-left">
     @php delete_app(); @endphp
@@ -199,6 +194,7 @@
         <script>
             var resizefunc = [];
         </script>
+
 
         <!-- jQuery  -->
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>

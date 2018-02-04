@@ -17,7 +17,7 @@ File: Menu
   text-align: center;
   height: 70px;
   position: relative;
-  width: 225px;
+  width: 200px;
   z-index: 1;
 }
 .navbar-default {
@@ -85,7 +85,7 @@ File: Menu
   display: block;
 }
 .side-menu {
-  width: 225px;
+  width: 200px;
   padding-top: 10px;
   z-index: 10;
   background: #36404e;
@@ -112,7 +112,7 @@ body.fixed-left .side-menu.left {
   position: fixed;
 }
 .content-page {
-  margin-left: 225px;
+  margin-left: 200px;
   overflow: hidden;
 }
 .content-page .content {
@@ -202,7 +202,7 @@ body.fixed-left .side-menu.left {
   border-left: 3px solid transparent;
   display: block;
   padding: 10px 20px 10px 59px;
-  font-size: 13px;
+  font-size: 10px;
 }
 #sidebar-menu ul ul a:hover {
   color: #ffffff;
@@ -223,6 +223,7 @@ body.fixed-left .side-menu.left {
 #sidebar-menu > ul > li > a {
   color: #98a6ad;
   display: block;
+  font-size: 12px;
   padding: 12px 20px;
   margin: 2px 0;
 }
@@ -288,6 +289,7 @@ body.fixed-left .side-menu.left {
 #wrapper.enlarged .left.side-menu {
   width: 70px;
   z-index: 5;
+  position: fixed;
 }
 #wrapper.enlarged .left.side-menu #sidebar-menu > ul > li > a {
   padding: 15px 20px;

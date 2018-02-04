@@ -32,7 +32,7 @@
                                 <div class="text-center card-box">
                                     <div class="member-card">
                                         <div class="thumb-xl member-thumb m-b-10 center-block">
-                                            <img src="{{ asset('uploads/'.$employee->users->profile_image) }}" class="img-circle img-thumbnail" alt="profile-image">
+                                            <img src="{{ asset('uploads/'.$employee->users->profile_image.'?v='.\Carbon\Carbon::now()) }}" class="img-circle img-thumbnail" alt="profile-image">
                                             <i class="mdi mdi-star-circle member-star text-success" title="verified user"></i>
                                         </div>
 

@@ -22,6 +22,16 @@
                                 <i style="color: #39e7e0" class="{{ $menus->menus->menu_icon }}"></i>
                                 <span style="color: lightgrey;"> {{ $menus->menus->menu_name }} </span>
                             </a>
+
+                            <ul class="list-unstyled">
+                                @foreach(callMenus() as $submenus)
+                                    @if($submenus->menus->parent_menu_id == $menus->menus->id)
+                                        <li>
+                                            <a href="{{ url($submenus->menus->menu_slug) }}">{{ $submenus->menus->menu_name }}</a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
                         @else
                             <a href="{{ url($menus->menus->menu_slug) }}" class="waves-effect">
                                 <i style="color: #39e7e0;" class="{{ $menus->menus->menu_icon }}"></i>
@@ -32,19 +42,9 @@
 
 
 
-
-                        <ul class="list-unstyled">
-                            @foreach(callMenus() as $submenus)
-                                @if($submenus->menus->parent_menu_id == $menus->menus->id)
-                                    <li>
-                                        <a href="{{ url($submenus->menus->menu_slug) }}">{{ $submenus->menus->menu_name }}</a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
                     </li>
-            @endif
-        @endforeach
+                @endif
+            @endforeach
         <!-- <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-invert-colors"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">

@@ -4,20 +4,23 @@ namespace App\Http\Controllers;
 
 use App\models\Adjustment;
 use App\models\Medicine;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\models\UserInformation;
 use App\models\Entity;
 use App\User;
-use Illuminate\Support\Facades\DB;
 use Auth;
 use App\models\DrugCategory;
 use App\models\DrugStockUnit;
+use Symfony\Component\VarDumper\Cloner\Data;
+use Yajra\DataTables\DataTables;
+use DB;
 
 class MedicineController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['drugCategoryStore','drugCategoryStore','store','updateStock','update']]);
+        $this->middleware('user_privilage',['except'=>['datatable','drugCategoryStore','drugCategoryStore','store','updateStock','update']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,13 +29,23 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        $drugs = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
+        /*$drugs = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
 
         return view('pages.drugs.manageDrug',array(
             'drugs' => $drugs,
-        ));
+        ));*/
+        //dd(DB::table('cities')->get());
+        return view('pages.drugs.manageDrug');
     }
 
+
+    public function datatable()
+    {
+        ini_set('memory_limit','256M');
+
+
+        return DataTables::of(DB::table('cities')->get())->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      *

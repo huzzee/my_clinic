@@ -62,7 +62,7 @@
                             @foreach($doctors as $doctor)
                                 <tr>
                                     <td>{{ $i }}</td>
-                                    <td><img src="{{ asset('uploads/'.$doctor->users->profile_image) }}" alt="{{ $doctor->users->profile_image }}" style="height: 50px; width: 50px;"></td>
+                                    <td><img src="{{ asset('uploads/'.$doctor->users->profile_image.'?v='.\Carbon\Carbon::now()) }}" alt="{{ $doctor->users->profile_image }}" style="height: 50px; width: 50px;"></td>
                                     <td>Dr.{{ $doctor->users['name'] }}</td>
                                     <td>{{ $doctor->users->email }}</td>
                                     <td>{{ $doctor->doctor_info['department'] }}</td>
