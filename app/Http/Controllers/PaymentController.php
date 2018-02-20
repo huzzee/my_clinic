@@ -9,7 +9,7 @@ use App\models\ServiceCategory;
 use Illuminate\Http\Request;
 use App\models\Medicine;
 use Auth;
-
+use Yajra\DataTables\DataTables;
 
 
 class PaymentController extends Controller
@@ -17,18 +17,45 @@ class PaymentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['store']]);
+        $this->middleware('user_privilage',['except'=>['store','payments_print','datatable']]);
     }
 
 
     public function index()
     {
+        return view('pages.payments.managePayments');
+    }
+
+    public function datatable()
+    {
         $payments = Payment::with('invoices','user_informations')
             ->where('entity_id','=',Auth::user()->entity_id)->latest()->get();
 
-        return view('pages.payments.managePayments',array(
-            'payments' => $payments
-        ));
+        return DataTables::of($payments)
+            ->addIndexColumn()
+            ->addColumn('action',function ($payment){
+                return ' <a href="'.url('payments_print/'.$payment->id).'"
+                           class="btn btn-inverse"
+                           target="_blank"
+                           data-toggle="tooltip" data-placement="top"
+                           data-original-title="Print Payment" style="font-size: 12px; padding: 3px 8px 3px 8px;"><i class="fa fa-print"></i></a>
+                        ';
+            })
+            ->addColumn('patient_name',function ($payment){
+                return $payment->invoices->patients->patient_info['full_name'];
+            })
+            ->addColumn('invoice_code',function ($payment){
+                return '<span style="color: steelblue">'.$payment->invoices->invoice_code.'</span>';
+            })
+            ->addColumn('created_date',function ($payment){
+                return date('d-M-Y',strtotime($payment->created_at));
+            })
+            ->addColumn('paid_amount',function ($payment){
+                return '<span style="color: darkgreen">'.$payment->paid_amount.'.'.Auth::user()->entities->currency.'</span>';
+            })
+            ->rawColumns(['action','invoice_code','paid_amount'])
+            ->make(true);
+
     }
 
     public function edit($id)
@@ -74,8 +101,13 @@ class PaymentController extends Controller
     {
 
         $request->validate([
-            'payment_cash' => 'required|min:1'
+            'payment_cash' => 'required|min:1|integer'
         ]);
+
+        if($request->payment_cash > $request->blnc)
+        {
+            return redirect()->back()->withErrors('You Enter Greater Amount then balance');
+        }
 
 
 

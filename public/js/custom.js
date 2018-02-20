@@ -1033,6 +1033,7 @@ $('#add_service_here').click(function () {
         {
             var html = `<tr>
                         <td>`+service_name+`<input type="hidden" name="drug_name[]" value="`+service_name+`">
+                        <input type="hidden" name="drug_id[]" value="0"></td>
                         </td>
                         <td>`+medicine_qnt+`<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="`+medicine_qnt+`"></td>
                         <td>`+service_price+`<input type="hidden" class="price" name="price[]" value="`+service_price+`"></td>

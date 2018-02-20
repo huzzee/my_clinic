@@ -44,15 +44,22 @@
 
                         <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
-                            <tr>
-                                
-                                <th>id</th>
-                                <th>City Name</th>
-                                <th>State Id</th>
+                                <tr>
 
-                            </tr>
+                                    <th width="5%">Sr.No</th>
+                                    <th width="15%">Name</th>
+                                    <th>Type</th>
+                                    <th>Dosage</th>
+                                    <th>Retail Price</th>
+                                    <th>Current Qnt</th>
+                                    <th>Used Qnt</th>
+                                    <th>status</th>
+
+
+                                    <th width="15%">Action</th>
+
+                                </tr>
                             </thead>
-
                         </table>
                     </div>
                 </div>
@@ -91,9 +98,15 @@
                 serverSide: false,
                 ajax: '<?php echo route('get_datatable_drug.data'); ?>',
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name' },
-                    { data: 'state_id', name: 'state_id' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
+                    { data: 'medicine_info.drug_name', name: 'medicine_info.drug_name' },
+                    { data: 'medicine_info.drug_type', name: 'medicine_info.drug_type' },
+                    { data: 'dosage_amount', name: 'dosage_amount' },
+                    { data: 'retail_price', name: 'retail_price' },
+                    { data: 'medicine_info.current_qnt', name: 'medicine_info.current_qnt' },
+                    { data: 'medicine_info.used_qnt', name: 'medicine_info.used_qnt' },
+                    { data: 'status', name: 'status' },
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
             });

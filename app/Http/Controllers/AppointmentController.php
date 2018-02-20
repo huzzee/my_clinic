@@ -11,10 +11,16 @@ use Carbon\Carbon;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
+use DB;
 
 class AppointmentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('user_privilage',['except'=>['datatable','add_app','get_token_time_chek','store','get_token_chek','get_schedule']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -23,18 +29,26 @@ class AppointmentController extends Controller
     public function index()
     {
 
-        $appointments = Appointment::with('schedule_details','user_informations','patients')
+       /* $appointments = Appointment::with('schedule_details','user_informations','patients')
             ->where('status','=',0)
             ->where('appointment_date','>=',date('Y-m-d',strtotime(Carbon::now(get_local_time()))))
-            ->where('entity_id','=',auth()->user()->entity_id)->latest()->get();
+            ->where('entity_id','=',auth()->user()->entity_id)->latest()->get();*/
 
         $patients = Patient::with('users')
             ->where('entity_id','=',Auth::user()->entity_id)->get();
 
+        //$cities = DB::table('cities')->get();
+
         return view('pages.appointments.manageAppointments',array(
-            'appointments' => $appointments,
+
             'patients' => $patients
         ));
+        //return view('pages.appointments.manageAppointments');
+    }
+
+    public function datatable()
+    {
+        return DataTables::of(DB::table('cities')->get())->make(true);
     }
 
     public function canceled()

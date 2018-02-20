@@ -31,7 +31,7 @@
                     @endif
                     <div class="card-box table-responsive">
 
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
+                        <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
                                 <th width="5%">Sr.No</th>

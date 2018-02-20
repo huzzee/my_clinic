@@ -96,22 +96,23 @@
                         <hr>
 
 
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
+                        <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
-                                <th width="2%">Sr.No</th>
+                                {{--<th width="2%">Sr.No</th>
                                 <th>Patient Name</th>
                                 <th>Patient Code</th>
                                 <th>Doctor Name </th>
                                 <th>Appointment Date</th>
                                 <th>Appointment Time</th>
-                                <th width="5%">Action</th>
+                                <th width="5%">Action</th>--}}
+                                <th>id</th>
+                                <th>name</th>
+                                <th>state Id</th>
 
                             </tr>
                             </thead>
-
-
-                            <tbody>
+                            {{--<tbody>
                             @php $i=1;@endphp
                             @foreach($appointments as $appointment)
                                 <tr>
@@ -169,7 +170,7 @@
 
                                 @php $i++; @endphp
                             @endforeach
-                            </tbody>
+                            </tbody>--}}
                         </table>
                     </div>
                 </div>
@@ -214,7 +215,23 @@
 
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        //$('#datatable-responsive').DataTable();
+        $(function() {
+
+            $('#datatable_laravel').DataTable({
+                processing: false,
+                serverSide: false,
+                ajax: '{!! route('get_datatable_app.data') !!}',
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'state_id', name: 'state_id'},
+
+
+                ]
+            });
+        });
+        /*$(document).ready(function () {
             $('#datatable').dataTable();
             $('#datatable-keytable').DataTable({keys: true});
             $('#datatable-responsive').DataTable();
@@ -244,7 +261,7 @@
             });
         });
         TableManageButtons.init();
-
+*/
     </script>
 @endsection
 

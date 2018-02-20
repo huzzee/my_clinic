@@ -82,13 +82,17 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::post('queues_note','QueueController@queue_note');
     Route::get('settled_queues','QueueController@settled_queues')->name('settled_queues.settled_queues');
     Route::get('deleted_queues','QueueController@deleted_queues')->name('deleted_queues.deleted_queues');
+    Route::post('add_to_check','QueueController@add_to_check');
 
     Route::Resource('invoices','InvoiceController');
     Route::post('invoice_add','InvoiceController@add_invoice');
     Route::get('invoice_add/{patient}/{doctor}','InvoiceController@create_invoice')->name('invoice_add.create_invoice');
+    Route::get('get_datatable_invoice','InvoiceController@datatable')->name('get_datatable_invoice.data');
 
     Route::Resource('payments','PaymentController');
     Route::get('payments_print/{id}','PaymentController@payments_print')->name('payments_print.payments_print');
+    Route::get('get_datatable_payment','PaymentController@datatable')->name('get_datatable_payment.data');
+
     Route::get('/drugs_press','InvoiceController@drug_press');
     Route::get('/services_press','InvoiceController@service_press');
     Route::get('/services_price','InvoiceController@service_price');
@@ -105,7 +109,10 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::get('appointments_today','AppointmentController@today_app')->name('appointments_today.today_app');
     Route::get('appointments_complete','AppointmentController@complete_app')->name('appointments_complete.complete_app');
     Route::post('appointments_cancel/{id}','AppointmentController@cancelation');
+
+
     Route::get('get_schedule','AppointmentController@get_schedule');
     Route::get('get_token_chek','AppointmentController@get_token_chek');
     Route::get('get_token_time_chek','AppointmentController@get_token_time_chek');
+    Route::get('get_datatable_app','AppointmentController@datatable')->name('get_datatable_app.data');
 });

@@ -95,7 +95,7 @@
 
                         <hr>
 
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
+                        <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
                                 <th width="1%">Sr.No</th>
@@ -111,126 +111,6 @@
                             </tr>
                             </thead>
 
-
-                            <tbody>
-                            @php $i=1; @endphp
-                            @foreach($invoices as $invoice)
-                                    <tr>
-                                        <td>{{$i}}</td>
-                                        <td>{{ $invoice->patients->patient_info['full_name'] }}</td>
-                                        <td>{{ $invoice->invoice_code }}</td>
-                                        <td>{{ $invoice->user_informations->users['name'] }}</td>
-                                        <td>{{ $invoice->grand_total }} {{Auth::user()->entities->currency}}</td>
-                                        <td style="color: red;">{{ $invoice->balance }} {{Auth::user()->entities->currency}}</td>
-                                        <td style="color: green;">{{ $invoice->paid }} {{Auth::user()->entities->currency}}</td>
-                                        <td>
-                                            @if($invoice->paid < $invoice->grand_total)
-                                                UnPaid
-                                            @elseif($invoice->paid == $invoice->grand_total)
-                                                Paid
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($invoice->paid < $invoice->grand_total)
-                                                <a href="{{ url('payments/'.$invoice->id) }}"
-                                                   style="font-weight: bold; font-size: 140%;color: #2b4a95"
-                                                   data-toggle="tooltip" data-placement="top" title=""
-                                                   data-original-title="Add Payment"><i class="fa fa-dollar"></i></a>
-                                            @elseif($invoice->paid == $invoice->grand_total)
-                                                <a
-                                                   style="font-weight: bold; font-size: 120%;color: #2abfcc"
-                                                   disabled="disabled"><i class="fa fa-dollar"></i></a>
-                                            @endif
-
-                                            &nbsp;
-
-                                            <a href="{{ url('invoices/'.$invoice->id) }}"
-                                               style="font-weight: bold; font-size: 120%;color: #2b4a95"
-                                               data-toggle="tooltip" data-placement="top" title=""
-                                               data-original-title="Show Invoice"><i class="fa fa-eye"></i></a>
-                                                &nbsp;
-
-                                            @if($invoice->paid !==  $invoice->grand_total && $invoice->user_informations->user_id == Auth::user()->id)
-                                            <a href="{{ url('invoices/'.$invoice->id.'/edit') }}"
-                                                style="font-weight: bold; font-size: 120%;color: #2b4a95"
-                                                data-toggle="tooltip" data-placement="top" title=""
-                                                data-original-title="Edit Invoice"><i class="fa fa-pencil"></i></a>
-                                            @else
-
-                                            <a
-                                               style="font-weight: bold; font-size: 120%;color: #2abfcc"
-                                               ><i class="fa fa-pencil"></i></a>
-                                            @endif
-                                                &nbsp;
-
-                                                &nbsp;
-
-                                            <button
-                                               style="font-weight: bold; border: none; background: none; font-size: 120%;color: #2b4a95"
-                                               data-toggle="modal" data-target="#full-width-modal{{ $invoice->id }}"><i class="fa fa-list"></i></button>
-
-                                            <div id="full-width-modal{{ $invoice->id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
-                                                <div class="modal-dialog modal-full">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                            <h4 class="modal-title" id="full-width-modalLabel">Receipts List</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <table class="table m-t-30">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th width="1%">Sr.No</th>
-                                                                    <th width="14%">Patient Name</th>
-                                                                    <th width="14%">Receipt No</th>
-                                                                    <th width="14%">Payment Date</th>
-                                                                    <th width="10%">Paid Amount</th>
-                                                                    <th width="5%">Action</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                @php $i=1; @endphp
-                                                                @foreach($invoice->payments as $payment)
-                                                                    <tr>
-                                                                        <td>{{$i}}</td>
-                                                                        <td>{{ $invoice->patients->patient_info['full_name'] }}</td>
-
-                                                                        <td>{{ $payment->receipt_no }}</td>
-                                                                        <td>{{ date('d-M-Y',strtotime($payment->created_at)) }}</td>
-
-                                                                        <td style="color: green;">{{ $payment->paid_amount }} {{Auth::user()->entities->currency}}</td>
-
-                                                                        <td>
-
-                                                                            <a href="{{ url('payments_print/'.$payment->id) }}"
-                                                                               class="btn btn-inverse"
-                                                                               target="_blank"
-                                                                               data-toggle="tooltip" data-placement="top" title=""
-                                                                               data-original-title="Print Payment"><i class="fa fa-print"></i></a>
-
-                                                                        </td>
-                                                                    </tr>
-                                                                    @php $i++; @endphp
-                                                                @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal-dialog -->
-                                                </div><!-- /.modal -->
-
-
-                                        </td>
-                                    </tr>
-
-                                @php $i++; @endphp
-                            @endforeach
-
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -274,36 +154,29 @@
     <script src="{{ asset('assets/pages/jquery.datatables.init.js') }}"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#datatable').dataTable();
-            $('#datatable-keytable').DataTable({keys: true});
-            $('#datatable-responsive').DataTable();
-            $('#datatable-colvid').DataTable({
-                "dom": 'C<"clear">lfrtip',
-                "colVis": {
-                    "buttonText": "Change columns"
-                }
+        $(function() {
+
+            $('#datatable_laravel').DataTable({
+                processing: false,
+                serverSide: false,
+                ajax: '{!! route('get_datatable_invoice.data') !!}',
+                columns: [
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
+                    { data: 'patient_name', name: 'patient_name' },
+                    { data: 'invoice_code', name: 'invoice_code' },
+                    { data: 'users_name', name: 'users_name' },
+                    { data: 'grand_total', name: 'grand_total' },
+                    { data: 'balance', name: 'balance' },
+                    { data: 'paid', name: 'paid' },
+                    { data: 'status', name: 'status' },
+                    { data: 'action', name: 'action',orderable: false, searchable: false},
+
+
+
+                ]
             });
-            $('#datatable-scroller').DataTable({
-                ajax: "../plugins/datatables/json/scroller-demo.json",
-                deferRender: true,
-                scrollY: 380,
-                scrollCollapse: true,
-                scroller: true
-            });
-            var table = $('#datatable-fixed-header').DataTable({fixedHeader: true});
-            var table = $('#datatable-fixed-col').DataTable({
-                scrollY: "300px",
-                scrollX: true,
-                scrollCollapse: true,
-                paging: false,
-                fixedColumns: {
-                    leftColumns: 1,
-                    rightColumns: 1
-                }
-            });
+
         });
-        TableManageButtons.init();
 
     </script>
 @endsection

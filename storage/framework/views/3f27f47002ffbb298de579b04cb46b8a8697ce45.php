@@ -93,82 +93,17 @@
                         <hr>
 
 
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
+                        <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
-                                <th width="2%">Sr.No</th>
-                                <th>Patient Name</th>
-                                <th>Patient Code</th>
-                                <th>Doctor Name </th>
-                                <th>Appointment Date</th>
-                                <th>Appointment Time</th>
-                                <th width="5%">Action</th>
+                                
+                                <th>id</th>
+                                <th>name</th>
+                                <th>state Id</th>
 
                             </tr>
                             </thead>
-
-
-                            <tbody>
-                            <?php $i=1;?>
-                            <?php $__currentLoopData = $appointments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $appointment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr>
-                                    <td><?php echo e($i); ?></td>
-
-                                    <td><?php echo e($appointment->patients->patient_info['full_name']); ?></td>
-                                    <td><?php echo e($appointment->patients->patient_code); ?></td>
-                                    <td><?php echo e($appointment->user_informations->users->name); ?></td>
-                                    <td><?php echo e(date('d-M-Y',strtotime($appointment->appointment_date))); ?></td>
-                                    <td><?php echo e($appointment->schedule_details->start_time); ?>  <b>TO</b>  <?php echo e($appointment->schedule_details->end_time); ?></td>
-                                    <td>
-
-                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal<?php echo e($appointment->id); ?>"><i class="fa fa-remove"></i></button>
-
-                                    </td>
-                                </tr>
-
-                                <div id="con-close-modal<?php echo e($appointment->id); ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                <h4 class="modal-title">Warning!</h4>
-                                            </div>
-                                            <div class="modal-body">
-
-                                                Are You Sure.You want to delete it.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
-                                                <?php if(Auth::user()->role_id == 2): ?>
-                                                <form action="<?php echo e(url('appointments/'.$appointment->id)); ?>" method="post">
-                                                    <?php echo e(csrf_field()); ?>
-
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Delete it</button>
-
-                                                </form>
-                                                <?php endif; ?>
-
-                                                <form action="<?php echo e(url('appointments_cancel/'.$appointment->id)); ?>" method="post">
-                                                    <?php echo e(csrf_field()); ?>
-
-
-                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Cancel Appontment</button>
-
-                                                </form>
-
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <?php $i++; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
+                            
                         </table>
                     </div>
                 </div>
@@ -213,7 +148,23 @@
 
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        //$('#datatable-responsive').DataTable();
+        $(function() {
+
+            $('#datatable_laravel').DataTable({
+                processing: false,
+                serverSide: false,
+                ajax: '<?php echo route('get_datatable_app.data'); ?>',
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'state_id', name: 'state_id'},
+
+
+                ]
+            });
+        });
+        /*$(document).ready(function () {
             $('#datatable').dataTable();
             $('#datatable-keytable').DataTable({keys: true});
             $('#datatable-responsive').DataTable();
@@ -243,7 +194,7 @@
             });
         });
         TableManageButtons.init();
-
+*/
     </script>
 <?php $__env->stopSection(); ?>
 

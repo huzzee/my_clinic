@@ -47,103 +47,22 @@
 
                         <table id="datatable_laravel" class="table table-striped table-bordered dt-responsive">
                             <thead>
-                            <tr>
-                                {{--<th width="2%">Sr.No</th>
-
-                                <th width="15%">Name</th>
-                                <th>Type</th>
-                                <th>Dosage</th>
-                                <th>Retail Price</th>
-                                <th>Current Qnt</th>
-                                <th>Used Qnt</th>
-
-                                <th width="10%">Status</th>
-
-                                <th width="15%">Action</th>--}}
-                                <th>id</th>
-                                <th>City Name</th>
-                                <th>State Id</th>
-
-                            </tr>
-                            </thead>
-{{--
-
-                            <tbody>
-                            @php $i=1;@endphp
-                            @foreach($drugs as $drug)
-                                @if($drug->medicine_info['min_qnt'] > $drug->medicine_info['current_qnt'])
-                                <tr style="background-color: pink">
-                                @else
                                 <tr>
-                                @endif
-                                    <td>{{ $i }}</td>
 
-                                    <td>{{ $drug->medicine_info['drug_name'] }}</td>
-
-                                    <td>{{ $drug->medicine_info['drug_type'] }}</td>
-
-                                    <td>{{ $drug->medicine_info['dosage_amount'] }} .{{ $drug->medicine_info['dosage_unit'] }}</td>
-
-                                    <td>{{ $drug->medicine_info['retail_price'] }}.{{ Auth::user()->entities->currency }}</td>
-
-                                    <td>{{ $drug->medicine_info['current_qnt'] }}</td>
-
-                                    <td>{{ $drug->medicine_info['used_qnt'] }}</td>
+                                    <th width="5%">Sr.No</th>
+                                    <th width="15%">Name</th>
+                                    <th>Type</th>
+                                    <th>Dosage</th>
+                                    <th>Retail Price</th>
+                                    <th>Current Qnt</th>
+                                    <th>Used Qnt</th>
+                                    <th>status</th>
 
 
+                                    <th width="15%">Action</th>
 
-
-                                    @if($drug->medicine_info['status'] == 1)
-                                        <td>Active</td>
-                                    @else
-                                        <td>Inactive</td>
-                                    @endif
-
-                                    <td>
-
-                                        <a href="{{ url('drugs/'.$drug->id) }}" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-
-
-                                        <a href="{{ url('drugs/'.$drug->id.'/edit') }}" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
-
-                                        @if(Auth::user()->role_id == 2)
-                                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal{{$drug->id}}"><i class="fa fa-remove"></i></button>
-                                        @endif
-                                    </td>
                                 </tr>
-
-                                <div id="con-close-modal{{$drug->id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                <h4 class="modal-title">Warning!</h4>
-                                            </div>
-                                            <div class="modal-body">
-
-                                                Are You Sure.You want to Delete this.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
-
-                                                <form action="{{ url('drugs/'.$drug->id) }}" method="post">
-                                                    {{ csrf_field() }}
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
-
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                @php $i++; @endphp
-                            @endforeach
-                            </tbody>--}}
+                            </thead>
                         </table>
                     </div>
                 </div>
@@ -182,9 +101,15 @@
                 serverSide: false,
                 ajax: '{!! route('get_datatable_drug.data') !!}',
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name' },
-                    { data: 'state_id', name: 'state_id' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
+                    { data: 'medicine_info.drug_name', name: 'medicine_info.drug_name' },
+                    { data: 'medicine_info.drug_type', name: 'medicine_info.drug_type' },
+                    { data: 'dosage_amount', name: 'dosage_amount' },
+                    { data: 'retail_price', name: 'retail_price' },
+                    { data: 'medicine_info.current_qnt', name: 'medicine_info.current_qnt' },
+                    { data: 'medicine_info.used_qnt', name: 'medicine_info.used_qnt' },
+                    { data: 'status', name: 'status' },
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
             });

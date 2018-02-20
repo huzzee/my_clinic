@@ -123,116 +123,29 @@ class PatientController extends Controller
 
         $timline_article = '';
 
-        foreach($patient->invoices as $invoice)
+        foreach($patient->medical_records as $records)
         {
-            if($invoice->paid < $invoice->grand_total) {
-
-                $timline_article .= '
-                    <article class="timeline-item ">
-                        <div class="timeline-desk">
-                            <div class="panel">
-                                <div class="timeline-box">
-                                    <span class="arrow"></span>
-                                    <span class="timeline-icon bg-inverse"><i class="mdi mdi-checkbox-blank-circle-outline"></i></span>
-                                    <h4 class="text-danger">' . date('d-M-Y', strtotime($invoice->updated_at)) . '</h4>
-                                    <p class="timeline-date text-muted"><small>' . date('h:i', strtotime($invoice->updated_at)) . '</small></p>
-                                    
-                                    <div class="panel panel-default" style="border: none; width: 100%; margin: 0;">
-                                        <a data-toggle="collapse"
-                                           data-parent="#accordion-test"
-                                           href="#collapseOne' . $invoice->id . '"
-                                           class="collapsed"
-                                           >
-
-                                        <div class="panel-heading" style="background-color: #fbfbfb;">
-                                           
-                                            <p> <strong>' . $patient->patient_info['full_name'] . '</strong> 
-                                            Checked By Doctor 
-                                            <strong>' . $invoice->user_informations->users['name'] . '</strong>.<br>click to more</p>
-                                        </div>
-                                        </a>
-                                        <div id="collapseOne' . $invoice->id . '" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <p class="text-right"><b>Net Total: </b> ' . $invoice->net_total . ' ' . Auth::user()->entities->currency . '</p>
-                                                        <p class="text-right"><b>Discount: </b> ' . $invoice->total_discount . ' ' . Auth::user()->entities->currency . '</p>
-                                                        <p class="text-right"><b>Amount After Discount: </b> ' . $invoice->after_discount . ' ' . Auth::user()->entities->currency . '</p>
-                                                        <p class="text-right"><b>Gst: </b> ' . $invoice->total_gst . ' ' . Auth::user()->entities->currency . '</p>
-        
-                                                        <hr>
-                                                        <h4 class="text-right"><b>Grand Total: </b> ' . $invoice->grand_total . ' ' . Auth::user()->entities->currency . '</h4>
-                                                        <h4 class="text-right"><b>Paid: </b> ' . $invoice->paid . ' ' . Auth::user()->entities->currency . '</h4>
-        
-                                                        
-                                                        <h4 class="text-right"><b>Balance: </b> <span style="color: red;"> ' . $invoice->balance . ' ' . Auth::user()->entities->currency . '</span> </h4>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+            $timline_article .= '
+                <article class="timeline-item ">
+                    <div class="timeline-desk">
+                        <div class="panel">
+                            <div class="timeline-box">
+                                <span class="arrow"></span>
+                                <span class="timeline-icon" 
+                                        style="width: 60px !important;
+                                        height: 50px !important;
+                                        border-radius: 0px !important; background-color: white; border: 1px solid grey; color: black">
+                                    <div>'. date('d',strtotime($records->created_at)) .' <br>
+                                            '. date('M*y',strtotime($records->created_at)) .'
                                     </div>
-                                    
-                                </div>
+                                </span>
+                                
                             </div>
                         </div>
-                    </article>
-                ';
-            }
-            else
-            {
-                $timline_article .= '
-                    <article class="timeline-item ">
-                        <div class="timeline-desk">
-                            <div class="panel">
-                                <div class="timeline-box">
-                                    <span class="arrow"></span>
-                                    <span class="timeline-icon bg-primary"><i class="mdi mdi-checkbox-blank-circle-outline"></i></span>
-                                    <h4 class="text-success">' . date('d-M-Y', strtotime($invoice->updated_at)) . '</h4>
-                                    <p class="timeline-date text-muted"><small>' . date('h:i', strtotime($invoice->updated_at)) . '</small></p>
-                                    
-                                    <div class="panel panel-default" style="border: none; width: 100%; margin: 0;">
-                                        <a data-toggle="collapse"
-                                           data-parent="#accordion-test"
-                                           href="#collapseOne' . $invoice->id . '"
-                                           class="collapsed"
-                                           >
+                    </div>
+                </article>
+            ';
 
-                                        <div class="panel-heading" style="background-color: #fbfbfb;">
-                                           
-                                            <p> <strong>' . $patient->patient_info['full_name'] . '</strong> 
-                                            Checked By Doctor 
-                                            <strong>' . $invoice->user_informations->users['name'] . '</strong>.<br>click to more</p>
-                                        </div>
-                                        </a>
-                                        <div id="collapseOne' . $invoice->id . '" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <p class="text-right"><b>Net Total: </b> ' . $invoice->net_total . ' ' . Auth::user()->entities->currency . '</p>
-                                                        <p class="text-right"><b>Discount: </b> ' . $invoice->total_discount . ' ' . Auth::user()->entities->currency . '</p>
-                                                        <p class="text-right"><b>Amount After Discount: </b> ' . $invoice->after_discount . ' ' . Auth::user()->entities->currency . '</p>
-                                                        <p class="text-right"><b>Gst: </b> ' . $invoice->total_gst . ' ' . Auth::user()->entities->currency . '</p>
-        
-                                                        <hr>
-                                                        <h4 class="text-right"><b>Grand Total: </b> ' . $invoice->grand_total . ' ' . Auth::user()->entities->currency . '</h4>
-                                                        <h4 class="text-right"><b>Paid: </b> ' . $invoice->paid . ' ' . Auth::user()->entities->currency . '</h4>
-        
-                                                        
-                                                        <h4 class="text-right"><b>Balance: </b> <span style="color: green;"> ' . $invoice->balance . ' ' . Auth::user()->entities->currency . '</span> </h4>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                ';
-            }
         }
 
         $drug_allergy = '';
@@ -562,19 +475,39 @@ class PatientController extends Controller
                                         <article class="timeline-item alt">
                                             <div class="text-left">
                                                 <div class="time-show first">
-                                                    <a href="javascript:void(0);" class="" style="color: black">Patient History</a>
+                                                    <a href="javascript:void(0);" class="" style="color: black">Medical Records</a>
                                                 </div>
                                             </div>
                                         </article>
                                         <article class="timeline-item left">
                                             <div class="timeline-desk">
-                                                <div class="panel">
-                                                    <div class="timeline-box">
+                                                <div class="panel" >
+                                                    <div class="timeline-box" style="background-color: white; border: 1px solid grey;">
                                                         <span class="arrow-alt"></span>
-                                                        <span class="timeline-icon"><i class="mdi mdi-checkbox-blank-circle-outline"></i></span>
-                                                        <h4 class="">'. date('d-M-Y',strtotime($patient->created_at)) .'</h4>
-                                                        <p class="timeline-date text-muted"><small>'. date('h:i',strtotime($patient->created_at)) .'</small></p>
-                                                        <p>'. $patient->patient_info['full_name'] .' Registered By '. $patient->users->name .'('.$patient->users->roles->role_name.')</p>
+                                                        <span class="timeline-icon" 
+                                                                style="width: 60px !important;
+                                                                height: 50px !important;
+                                                                border-radius: 0px !important; background-color: white; border: 1px solid grey; color: black">
+                                                            <div>'. date('d',strtotime($patient->created_at)) .' <br>
+                                                                    '. date('M*y',strtotime($patient->created_at)) .'
+                                                            </div>
+                                                        </span>
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <h4 class="">Record Data</h4>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <small>'. date('h:i',strtotime($patient->created_at)) .'-BY  Doctor name</small>
+                                                            </div>
+                                                        </div>
+                                                        <hr style="color: black; border: 1px solid grey;">
+                                                        <div class="row">
+                                                            <p>'. $patient->patient_info['full_name'] .' Registered By '. $patient->users->name .'('.$patient->users->roles->role_name.')</p>
+                                                        
+                                                        </div>
+                                                        
+                                                        
+                                                        
                                                     </div>
                                                 </div>
                                             </div>

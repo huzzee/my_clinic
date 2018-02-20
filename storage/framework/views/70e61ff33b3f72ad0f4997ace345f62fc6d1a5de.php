@@ -66,7 +66,7 @@
 
                                             <p class="text-muted font-13"><strong>Drug Allergy :</strong><span class="m-l-15">
                                                 <?php $__currentLoopData = $queue->patients->drug_allergy; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $allergy): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <?php echo e($allergy['drug_name']); ?>,
+                                                    <?php echo e($allergy); ?>,
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></span></p>
 
                                         </div>

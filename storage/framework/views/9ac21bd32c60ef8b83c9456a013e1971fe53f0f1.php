@@ -1,8 +1,4 @@
-@extends('layouts.mainHome')
-
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <!-- Start content -->
     <div class="content">
         <div class="container">
@@ -21,20 +17,21 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    @if (count($errors) > 0)
+                    <?php if(count($errors) > 0): ?>
                         <div class="alert alert-danger">
                             <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
-                    @if(session()->has('message'))
+                    <?php endif; ?>
+                    <?php if(session()->has('message')): ?>
                         <div class="alert alert-success">
-                            {{ session()->get('message') }}
+                            <?php echo e(session()->get('message')); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <div class="card-box">
                         <div class="row">
@@ -46,31 +43,32 @@
                                         <hr>
                                         <div class="text-left">
                                             <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">
-                                                    {{ $queue->patients->patient_info['full_name'] }}</span></p>
+                                                    <?php echo e($patients->patient_info['full_name']); ?></span></p>
 
                                             <p class="text-muted font-13"><strong>Patient Code :</strong><span class="m-l-15">
-                                                {{ $queue->patients->patient_code }}</span></p>
+                                                <?php echo e($patients->patient_code); ?></span></p>
 
                                             <p class="text-muted font-13"><strong>Age :</strong> <span class="m-l-15">
-                                                    @php $age = date('Y', strtotime(Carbon\Carbon::now())) - date('Y', strtotime($queue->patients->patient_info['date_of_birth'])); @endphp
-                                                    {{ $age }}</span></p>
+                                                    <?php $age = date('Y', strtotime(Carbon\Carbon::now())) - date('Y', strtotime($patients->patient_info['date_of_birth'])); ?>
+                                                    <?php echo e($age); ?></span></p>
 
                                             <p class="text-muted font-13"><strong>Gender :</strong>
                                                 <span class="m-l-15">
-                                                    @if($queue->patients->patient_info['gender'] == 0)
+                                                    <?php if($patients->patient_info['gender'] == 0): ?>
                                                         Male
-                                                    @elseif($queue->patients->patient_info['gender'] == 1)
+                                                    <?php elseif($patients->patient_info['gender'] == 1): ?>
                                                         Female
-                                                    @elseif($queue->patients->patient_info['gender'] == 2)
+                                                    <?php elseif($patients->patient_info['gender'] == 2): ?>
                                                         Other
 
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </span></p>
 
                                             <p class="text-muted font-13"><strong>Drug Allergy :</strong><span class="m-l-15">
-                                                @foreach($queue->patients->drug_allergy as $allergy)
-                                                    {{ $allergy }},
-                                                @endforeach</span></p>
+                                                <?php for($a=0; $a < sizeof($patients->drug_allergy); $a++): ?>
+                                                    <?php echo e($patients->drug_allergy[$a]); ?>,
+                                                <?php endfor; ?>
+                                                </span>
 
                                         </div>
 
@@ -81,16 +79,14 @@
                                 <div class="text-center card-box" style="min-height: 270px">
                                     <div class="member-card">
 
-                                        <h4>Doctor Information</h4>
+                                        <h4>User Information</h4>
                                         <hr>
                                         <div class="text-left">
-                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">
-                                                    {{ $queue->user_informations->users['name'] }}</span></p>
+                                            <p class="text-muted font-13"><strong>Created By :</strong> <span class="m-l-15">
+                                                    <?php echo e($doctor->users['name']); ?></span></p>
 
-                                            <p class="text-muted font-13"><strong>Department :</strong><span class="m-l-15">
-                                                {{ $queue->user_informations->doctor_info['department'] }}</span></p>
-
-
+                                            <p class="text-muted font-13"><strong>Role :</strong> <span class="m-l-15">
+                                                    <?php echo e(Auth::user()->roles->role_name); ?></span></p>
 
                                         </div>
 
@@ -152,9 +148,9 @@
                                                                         <select class="form-control select2" id="drug_pres">
                                                                             <option value="0">Select Medicines</option>
 
-                                                                            @foreach($medicines as $medicine)
-                                                                                <option value="{{$medicine->id}}">{{$medicine->medicine_info['drug_name']}}</option>
-                                                                            @endforeach
+                                                                            <?php $__currentLoopData = $medicines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $medicine): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                <option value="<?php echo e($medicine->id); ?>"><?php echo e($medicine->medicine_info['drug_name']); ?></option>
+                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                                                         </select>
                                                                     </div>
@@ -279,9 +275,9 @@
                                                                             <select class="form-control select2" id="category_pres">
                                                                                 <option selected="selected" value="0">Select Category</option>
 
-                                                                                @foreach($services as $category)
-                                                                                    <option value="{{$category->id}}">{{$category->category_name }}</option>
-                                                                                @endforeach
+                                                                                <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                    <option value="<?php echo e($category->id); ?>"><?php echo e($category->category_name); ?></option>
+                                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                                                             </select>
                                                                         </div>
@@ -338,11 +334,12 @@
                                             </div><!-- /.modal -->
                                         </div>
                                         <div class="row" style="height: 20px;"></div>
-                                        <form id="invoicing" action="{{ url('invoices') }}" method="post">
-                                            {{ csrf_field() }}
-                                            <input type="hidden" name="patient_id" value="{{ $queue->patients->id }}">
-                                            <input type="hidden" name="doctor_id" value="{{ $queue->user_informations->id }}">
-                                            <input type="hidden" name="queue_id" value="{{ $queue->id }}">
+                                        <form id="invoicing" action="<?php echo e(url('invoices')); ?>" method="post">
+                                            <?php echo e(csrf_field()); ?>
+
+                                            <input type="hidden" name="patient_id" value="<?php echo e($patients->id); ?>">
+                                            <input type="hidden" name="doctor_id" value="<?php echo e($doctor->id); ?>">
+
                                             <div class="row" style="min-height: 300px;">
 
                                                 <table class="table table-striped m-0">
@@ -381,28 +378,28 @@
                                                         <label for="net_total" class="col-sm-4" style="float: left;">Net Total</label>
                                                         <div class="input-group col-sm-8">
                                                             <input type="text" class="form-control" value="0" readonly id="net_total" name="net_total">
-                                                            <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                            <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="total_discount" class="col-sm-4" style="float: left;">Discount</label>
                                                         <div class="input-group col-sm-8">
                                                             <input type="text" class="form-control" value="0" readonly id="total_discount" name="total_discount">
-                                                            <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                            <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="after_discount" class="col-sm-4" style="float: left;">Amount After Discount</label>
                                                         <div class="input-group col-sm-8">
                                                             <input type="text" class="form-control" value="0" readonly id="after_discount" name="after_discount">
-                                                            <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                            <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="total_gst" class="col-sm-4" style="float: left;">Add Gst</label>
                                                         <div class="input-group col-sm-8">
                                                             <input type="text" class="form-control" value="0" readonly id="total_gst" name="total_gst">
-                                                            <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                            <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
                                                         </div>
                                                     </div>
 
@@ -410,7 +407,7 @@
                                                         <label for="grand_total" class="col-sm-4" style="float: left;">Grand Total</label>
                                                         <div class="input-group col-sm-8">
                                                             <input type="text" class="form-control" value="0" readonly id="grand_total" name="grand_total">
-                                                            <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                            <span class="input-group-addon"><?php echo e(Auth::user()->entities->currency); ?></span>
                                                         </div>
                                                     </div>
 
@@ -441,26 +438,27 @@
 
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts Here*********-->
 
-@section('scripts')
-    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
-    <script src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
-    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+<?php $__env->startSection('scripts'); ?>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/multiselect/js/jquery.multi-select.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/select2/js/select2.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js')); ?>"></script>
 
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.mockjax.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/jquery.autocomplete.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/autocomplete/countries.js') }}"></script>
-    <script src="{{ asset('assets/pages/jquery.autocomplete.init.js') }}"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.mockjax.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/jquery.autocomplete.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/autocomplete/countries.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/pages/jquery.autocomplete.init.js')); ?>"></script>
 
-    <script src="{{ asset('assets/pages/jquery.form-advanced.init.js') }}"></script>
-@endsection
+    <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts End*********-->
+<?php echo $__env->make('layouts.mainHome', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

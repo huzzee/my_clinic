@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Queue extends Model
 {
     protected $fillable = [
-        'entity_id','doctor_id','patient_id','bill','paid','note','status'
+        'entity_id','doctor_id','patient_id','bill','paid','note','status','queue_code'
     ];
 
     public function user_informations()

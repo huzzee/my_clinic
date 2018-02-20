@@ -12,13 +12,14 @@ use App\models\UserInformation;
 use Illuminate\Http\Request;
 use App\models\Medicine;
 use Auth;
+use Yajra\DataTables\DataTables;
 
 class InvoiceController extends Controller
 {
     public function __construct()
     {
         $this->middleware('user_privilage',['except'=>['store','update',
-            'add_invoice','service_price','service_press','drug_press']]);
+            'add_invoice','service_price','service_press','drug_press','datatable']]);
     }
     public function index()
     {
@@ -42,6 +43,154 @@ class InvoiceController extends Controller
             'patients' => $patients,
             'doctors' => $doctor
         ));
+    }
+
+    public function datatable()
+    {
+        $invoices = Invoice::with('payments','user_informations','patients')
+            ->where('entity_id','=',Auth::user()->entity_id)->get();
+
+        return DataTables::of($invoices)
+            ->addIndexColumn()
+            ->addColumn('patient_name',function ($invoice){
+                return $invoice->patients->patient_info['full_name'];
+            })
+            ->addColumn('users_name',function ($invoice){
+                return $invoice->user_informations->users['name'];
+            })
+            ->addColumn('grand_total',function ($invoice){
+                return $invoice->grand_total.'.'.Auth::user()->entities->currency;
+            })
+            ->addColumn('balance',function ($invoice){
+                return '<span style="color:#ac2925">'.$invoice->balance.'.'.Auth::user()->entities->currency.'</span>';
+            })
+            ->addColumn('paid',function ($invoice){
+                return '<span style="color: #2ca02c; ">'.$invoice->paid.'.'.Auth::user()->entities->currency;
+            })
+            ->addColumn('status',function ($invoice){
+                if($invoice->paid < $invoice->grand_total)
+                {
+                    return 'Unpaid';
+                }
+                elseif($invoice->paid == $invoice->grand_total)
+                {
+                    return 'paid';
+                }
+            })
+            ->addColumn('action',function ($invoice){
+                if($invoice->paid < $invoice->grand_total)
+                {
+                    $pays = '<a href="'.url('payments/'.$invoice->id).'"
+                       style="font-weight: bold; font-size: 140%;color: #2b4a95"
+                       data-toggle="tooltip" data-placement="top" title=""
+                       data-original-title="Add Payment"><i class="fa fa-dollar"></i></a>';
+                }
+                elseif($invoice->paid == $invoice->grand_total)
+                {
+                    $pays = '<a
+                       style="font-weight: bold; font-size: 120%;color: #2abfcc"
+                       disabled="disabled"><i class="fa fa-dollar"></i></a>';
+                }
+
+                if($invoice->paid !==  $invoice->grand_total && $invoice->user_informations->user_id == Auth::user()->id)
+                {
+                    $paid = '
+                    <a href="'.url('invoices/'.$invoice->id.'/edit').'"
+                        style="font-weight: bold; font-size: 120%;color: #2b4a95"
+                        data-toggle="tooltip" data-placement="top" title=""
+                        data-original-title="Edit Invoice"><i class="fa fa-pencil"></i></a>
+                    ';
+                }
+                else
+                {
+                    $paid = '<a
+                       style="font-weight: bold; font-size: 120%;color: #2abfcc"
+                       ><i class="fa fa-pencil"></i></a>';
+                }
+
+                $payment_loop = '';
+                $i=1;
+                foreach($invoice->payments as $payment)
+                {
+                    $payment_loop.= '
+                        <tr>
+                            <td>'.$i.'</td>
+                            <td>'.$invoice->patients->patient_info['full_name'].'</td>
+
+                            <td>'.$payment->receipt_no.'</td>
+                            <td>'.date('d-M-Y',strtotime($payment->created_at)).'</td>
+
+                            <td style="color: green;">'.$payment->paid_amount .'.'.Auth::user()->entities->currency.'</td>
+
+                            <td>
+
+                                <a href="'.url('payments_print/'.$payment->id).'"
+                                   class="btn btn-inverse"
+                                   target="_blank"
+                                   data-toggle="tooltip" data-placement="top" title=""
+                                   data-original-title="Print Payment"><i class="fa fa-print"></i></a>
+
+                            </td>
+                        </tr>
+                    ';
+                    $i++;
+                }
+
+                return '
+                    '.$pays.'
+
+                    &nbsp;
+
+                    <a href="'.url('invoices/'.$invoice->id).'}"
+                       style="font-weight: bold; font-size: 120%;color: #2b4a95"
+                       data-toggle="tooltip" data-placement="top" title=""
+                       data-original-title="Show Invoice"><i class="fa fa-eye"></i></a>
+                        &nbsp;
+
+                    '.$paid.'
+                        &nbsp;
+
+                        &nbsp;
+
+                    <button
+                       style="font-weight: bold; border: none; background: none; font-size: 120%;color: #2b4a95"
+                       data-toggle="modal" data-target="#full-width-modal'.$invoice->id.'"><i class="fa fa-list"></i></button>
+
+                    <div id="full-width-modal'.$invoice->id.'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-full">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title" id="full-width-modalLabel">Receipts List</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table m-t-30">
+                                        <thead>
+                                        <tr>
+                                            <th width="1%">Sr.No</th>
+                                            <th width="14%">Patient Name</th>
+                                            <th width="14%">Receipt No</th>
+                                            <th width="14%">Payment Date</th>
+                                            <th width="10%">Paid Amount</th>
+                                            <th width="5%">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            '.$payment_loop.'
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                ';
+            })
+            ->rawColumns(['action','balance','paid'])
+            ->make(true);
     }
 
     public function add_invoice(Request $request)
@@ -78,7 +227,7 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->queue_id);
+        //dd($request->all());
         $request->validate([
             'pres_type' => 'required'
         ]);

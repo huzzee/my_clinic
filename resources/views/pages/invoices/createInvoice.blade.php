@@ -68,9 +68,10 @@
                                                 </span></p>
 
                                             <p class="text-muted font-13"><strong>Drug Allergy :</strong><span class="m-l-15">
-                                                @foreach($patients->drug_allergy as $allergy)
-                                                        {{ $allergy['drug_name'] }},
-                                                    @endforeach</span></p>
+                                                @for($a=0; $a < sizeof($patients->drug_allergy); $a++)
+                                                    {{ $patients->drug_allergy[$a] }},
+                                                @endfor
+                                                </span>
 
                                         </div>
 

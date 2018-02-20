@@ -9,6 +9,78 @@
                     <div class="page-title-box">
 
                         <h4 class="page-title">Manage Queue</h4>
+                        <button class="btn btn-info waves-effect waves-light" data-toggle="modal"
+                                data-target="#con-close-modal" style="float: right">
+                            Add Patient to Queue
+                        </button>
+
+                        <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">Add To Queue</h4>
+                                    </div>
+                                    <form action="<?php echo e(route('queues.store')); ?>" method="post">
+                                        <div class="modal-body">
+
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="pats" class="control-label">Select Patient<span class="text-danger">*</span></label>
+                                                        <select class="form-control select2" id="patient_id" name="patient_id">
+                                                            <option selected disabled="disabled">Select Patient</option>
+
+                                                            <?php $__currentLoopData = $patients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $patient): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option value="<?php echo e($patient->id); ?>"><?php echo e($patient->patient_info['full_name']); ?>(<?php echo e($patient->patient_code); ?>)</option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
+                                                        <select class="form-control select2" id="doctor_id" name="doctor_id">
+                                                            <option selected disabled="disabled">Select Doctors</option>
+
+                                                            <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->users->name); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                            <?php echo e(csrf_field()); ?>
+
+
+
+                                            <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add To Queue</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div><!-- /.modal -->
+
+                        <a href="<?php echo e(url('settled_queues')); ?>" class="btn btn-warning m-r-5" style="float: right">Settled Queues</a>
+
+                        <a href="<?php echo e(url('deleted_queues')); ?>" class="btn btn-danger m-r-5" style="float: right">Deleted Queues</a>
+
+
+
 
                         <div class="clearfix"></div>
 
@@ -27,367 +99,157 @@
 
                         </div>
                     <?php endif; ?>
-
-                    <div class="card-box table-responsive">
-                        <button class="btn btn-info waves-effect waves-light" data-toggle="modal"
-                                data-target="#con-close-modal">
-                            Add Patient to Queue
-                        </button>
-
-
-                        <a href="<?php echo e(url('settled_queues')); ?>" class="btn btn-success">Settled Queues</a>
-
-                        <a href="<?php echo e(url('deleted_queues')); ?>" class="btn btn-danger">Deleted Queues</a>
-
-
-
-
-                        
-
-                        <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Add To Queue</h4>
+                    <?php $__currentLoopData = $queues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $queue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if(Auth::user()->role_id == 3): ?>
+                            <?php if($queue->user_informations->user_id == Auth::user()->id): ?>
+                            <div class="row" style="border: 1px solid black;">
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-5">
+                                            <p><strong style="font-size: 18px; font-weight: bold;">Queue Code:&nbsp;&nbsp;&nbsp;</strong><?php echo e($queue->queue_code); ?></p>
+                                        </div>
+                                        <div class="col-md-8 m-b-5">
+                                            <p><strong style="font-size: 18px; font-weight: bold;">Consultant Doctor Name:&nbsp;&nbsp;&nbsp;</strong><?php echo e($queue->user_informations->users->name); ?></p>
+                                        </div>
                                     </div>
-                                    <form action="<?php echo e(route('queues.store')); ?>" method="post">
-                                    <div class="modal-body">
-
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="pats" class="control-label">Select Patient<span class="text-danger">*</span></label>
-                                                    <select class="form-control select2" id="patient_id" name="patient_id">
-                                                        <option selected disabled="disabled">Select Patient</option>
-
-                                                        <?php $__currentLoopData = $patients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $patient): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($patient->id); ?>"><?php echo e($patient->patient_info['full_name']); ?>(<?php echo e($patient->patient_code); ?>)</option>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                                    </select>
-                                                </div>
-                                            </div>
+                                    <div class="row m-b-20">
+                                        <div class="col-md-2" align="center">
+                                            <?php if($queue->status == 0): ?>
+                                                <img class="m-l-10" src="<?php echo e(asset('uploads/'.$queue->patients->patient_info['profile_image'])); ?>"
+                                                     style="width: 90px;height: 90px;
+                                                        border: 5px solid #2ce1da;
+                                                        border-radius: 60px">
+                                            <?php elseif($queue->status == 1): ?>
+                                                <img class="m-l-10" src="<?php echo e(asset('uploads/'.$queue->patients->patient_info['profile_image'])); ?>"
+                                                     style="width: 90px;height: 90px;
+                                                        border: 5px solid #f9c851;
+                                                        border-radius: 60px">
+                                            <?php elseif($queue->status == 2): ?>
+                                                <img class="m-l-10" src="<?php echo e(asset('uploads/'.$queue->patients->patient_info['profile_image'])); ?>"
+                                                     style="width: 90px;height: 90px;
+                                                        border: 5px solid #ac2925;
+                                                        border-radius: 60px">
+                                            <?php endif; ?>
 
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
-                                                    <select class="form-control select2" id="doctor_id" name="doctor_id">
-                                                        <option selected disabled="disabled">Select Doctors</option>
-
-                                                        <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->users->name); ?></option>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                                    </select>
+                                        <div class="col-md-4">
+                                            <div class="row m-b-5">
+                                                <div class="col-md-7">
+                                                    <h4 style=" margin:8px 0px 8px 0px;"><?php echo e($queue->patients->patient_info['full_name']); ?></h4>
                                                 </div>
+                                                <div class="col-md-5">
+                                                    <?php if($queue->status == 0): ?>
+
+                                                            <span style="font-size: 11px;"><i class="fa fa-circle" style="color: #2ce1da;"></i></span>&nbsp;
+                                                            <span style="color: #2ce1da; font-size: 14px;"> Waiting</span>
+                                                    <?php elseif($queue->status == 1): ?>
+
+                                                            <span style="font-size: 11px;"><i class="fa fa-circle" style="color: #f9c851;"></i></span>&nbsp;
+                                                            <span style="color: #f9c851; font-size: 14px;"> Engaged</span>
+                                                    <?php elseif($queue->status == 2): ?>
+
+                                                            <span style="font-size: 11px;"><i class="fa fa-circle" style="color: #ac2925;"></i></span>&nbsp;
+                                                            <span style="color: #ac2925; font-size: 14px;"> Unbalanced</span>
+                                                    <?php endif; ?>
+                                                </div>
+
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-3" align="center">
+                                                    <strong>
+                                                        Time In <br>
+                                                        <?php echo e(date('h:i',strtotime($queue->created_at))); ?>
 
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                        <?php echo e(csrf_field()); ?>
-
-
-
-                                        <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add To Queue</button>
-                                    </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                        </div><!-- /.modal -->
-
-                        <hr>
-
-
-                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive">
-                            <thead>
-                            <tr>
-                                <th width="1%">Sr.No</th>
-
-                                <th width="12%">Patient</th>
-
-                                <th width="12%">Doctor Name</th>
-
-                                <th width="12%">Note</th>
-                                <th width="8%">Bill</th>
-                                <th width="8%">Paid</th>
-                                <th width="8%">Balance</th>
-
-                                <th width="14%">Actions</th>
-                                <th width="10%">Status</th>
-                                <th width="15%">Procedure</th>
-
-                            </tr>
-                            </thead>
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-4" align="center">
+                                                    <strong>
+                                                        Time Out <br>
+                                                        -
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-5" align="center">
+                                                    <strong>Note</strong><br>
+                                                    <?php if($queue->note == null): ?>
+                                                        <td><button style=" font-size: 14px; background: none;float: left;text-align: left;
+                                                     border: none; color: #00ff00" data-toggle="modal"
+                                                                    data-target="#con-close-modal<?php echo e($queue->id); ?>note"><i class="fa fa-edit"></i> Add Note</button></td>
+                                                    <?php else: ?>
+                                                        <td><button style=" font-size: 90%; background: none;float: left;text-align: left;
+                                                     border: none; color: #00ff00" data-toggle="modal"
+                                                                    data-target="#con-close-modal<?php echo e($queue->id); ?>note"><?php echo e($queue->note); ?></button></td>
 
 
-                            <tbody>
-                            <?php $i=1;?>
-                            <?php $__currentLoopData = $queues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $queue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if(Auth::user()->role_id == 3): ?>
-                                    <?php if($queue->user_informations->user_id == Auth::user()->id): ?>
-                                    <tr>
-                                        <td><?php echo e($i); ?></td>
+                                                    <?php endif; ?>
+                                                    <div id="con-close-modal<?php echo e($queue->id); ?>note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 
-                                        <td><?php echo e($queue->patients->patient_info['full_name']); ?>(<?php echo e($queue->patients['patient_code']); ?>)</td>
-
-                                        <td><?php echo e($queue->user_informations->doctor_info['first_name']); ?> <?php echo e($queue->user_informations->doctor_info['last_name']); ?></td>
-                                        <?php if($queue->note == null): ?>
-                                            <td><button style=" font-size: 90%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>note">Add Note</button></td>
-                                        <?php else: ?>
-                                            <td><button style=" font-size: 90%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>note"><?php echo e($queue->note); ?></button></td>
-
-
-                                        <?php endif; ?>
-                                        <div id="con-close-modal<?php echo e($queue->id); ?>note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                        <h4 class="modal-title">Change Doctor</h4>
-                                                    </div>
-                                                    <form action="<?php echo e(url('queues_note')); ?>" method="post">
-                                                        <div class="modal-body">
-
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label for="pats" class="control-label">Important Note<span class="text-danger">*</span></label>
-                                                                        <input name="note" class="form-control"
-                                                                                  value="<?php echo e($queue->note); ?>"/>
-                                                                    </div>
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                    <h4 class="modal-title">Change Doctor</h4>
                                                                 </div>
+                                                                <form action="<?php echo e(url('queues_note')); ?>" method="post">
+                                                                    <div class="modal-body">
 
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <label for="pats" class="control-label">Important Note<span class="text-danger">*</span></label>
+                                                                                    <input name="note" class="form-control"
+                                                                                           value="<?php echo e($queue->note); ?>"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                                        <?php echo e(csrf_field()); ?>
+
+
+                                                                        <input type="hidden" name="que_id" value="<?php echo e($queue->id); ?>">
+                                                                        <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add Note</button>
+                                                                    </div>
+                                                                </form>
                                                             </div>
                                                         </div>
 
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                                            <?php echo e(csrf_field()); ?>
-
-
-                                                            <input type="hidden" name="que_id" value="<?php echo e($queue->id); ?>">
-                                                            <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add Note</button>
-                                                        </div>
-                                                    </form>
+                                                    </div><!-- /.modal -->
                                                 </div>
                                             </div>
 
-                                        </div><!-- /.modal -->
-
-                                        <?php if($queue->bill == null): ?>
-                                            <td>No</td>
-                                        <?php else: ?>
-                                            <td><?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
-                                        <?php endif; ?>
-
-                                        <?php if($queue->paid == null): ?>
-                                            <td>No</td>
-                                            <td>No</td>
-                                        <?php else: ?>
-                                            <td><?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
-                                            <td><?php echo e($queue->bill - $queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
-                                        <?php endif; ?>
-                                        <td>
-                                            <?php if($queue->status == 2): ?>
-                                                <?php if($queue->invoices->paid !==  $queue->invoices->grand_total && $queue->invoices->user_informations->user_id == Auth::user()->id): ?>
-                                                    <a href="<?php echo e(url('invoices/'.$queue->invoices->id)); ?>"
-                                                       style=" font-size: 80%;color: #2b4a95"
-                                                       data-toggle="tooltip" data-placement="top" title=""
-                                                       data-original-title="Edit Invoice">#Edit Invoice</a>
-
-                                                <?php endif; ?>
+                                        </div>
+                                        <div class="col-md-2" style="border-left: 2px solid lightgrey; border-right: 2px solid lightgrey;">
+                                            <?php if($queue->bill == null): ?>
+                                                <p class="text-left"><b>Bill: </b> No Bill</p>
+                                            <?php else: ?>
+                                                <p class="text-left"><b>Bill: </b> <?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></p>
                                             <?php endif; ?>
+
+                                            <?php if($queue->paid == null): ?>
+                                                <p class="text-left"><b>Paid: </b> Not Yet</p>
+                                            <?php else: ?>
+                                                <p class="text-left"><b>Paid: </b> <?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></p>
+                                            <?php endif; ?>
+
+                                            <p class="text-left"><b>Balance: </b> <?php echo e($queue->bill - $queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></p>
+
+
+                                        </div>
+                                        <div class="col-md-4" align="center">
+
                                             <?php if($queue->status == 0 || $queue->status == 1): ?>
-                                                <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>delete">#Delete Queue</button><br>
+                                                <button style="font-size: 15px; padding: 0px;border: none;
+                                                        color:#2ce1da; margin-right: 10px; background-color: white; " data-toggle="modal"
+                                                        data-target="#con-close-modal<?php echo e($queue->user_informations->id); ?>doc">
+                                                    <span style="font-size: 25px;"><i class="fa fa-refresh"></i></span>
+                                                    <br>
+                                                    <br>
 
-
-                                                <div id="con-close-modal<?php echo e($queue->id); ?>delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                <h4 class="modal-title">Warning!</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-
-                                                                Are You Sure.You want to delete This Queue.
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
-
-                                                                <form action="<?php echo e(url('queues/'.$queue->id)); ?>" method="post">
-                                                                    <?php echo e(csrf_field()); ?>
-
-                                                                    <input type="hidden" name="_method" value="DELETE">
-                                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
-
-                                                                </form>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-                                            <a style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" href="<?php echo e(url('medical_records/'.$queue->patients->id.'/edit')); ?>">#Add Medical Record</a><br>
-
-
-                                        </td>
-                                        <?php if($queue->status == 0): ?>
-                                            <td>Waiting</td>
-                                        <?php elseif($queue->status == 1): ?>
-                                            <td>Engaged with doctor</td>
-                                        <?php elseif($queue->status == 2): ?>
-                                            <td>Checked but Unpaid</td>
-                                        <?php elseif($queue->status == 3): ?>
-                                            <td>Checked and Paid</td>
-                                        <?php elseif($queue->status == 4): ?>
-                                            <td>Deleted</td>
-                                        <?php endif; ?>
-
-
-                                        <?php if($queue->status == 0): ?>
-                                            <td><a style=" font-size: 100%; font-weight: bold; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" href="<?php echo e(url('payments/'.$queue->id.'/edit')); ?>">Check Out</a><br>
-                                            </td>
-                                        <?php elseif($queue->status == 1): ?>
-                                            <td><a style=" font-size: 100%; font-weight: bold; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" href="<?php echo e(url('payments/'.$queue->id.'/edit')); ?>">Check Out</a><br>
-                                            </td>
-                                        <?php elseif($queue->status == 2): ?>
-                                            <td><a style=" font-size: 100%; font-weight: bold; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" href="<?php echo e(url('payments/'.$queue->invoices->id)); ?>">Add Payment</a></td>
-                                        <?php elseif($queue->status == 3): ?>
-                                            <td>Payment Completed</td>
-                                        <?php elseif($queue->status == 4): ?>
-                                            <td>Deleted</td>
-                                        <?php endif; ?>
-                                    </tr>
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td><?php echo e($i); ?></td>
-
-                                        <td><?php echo e($queue->patients->patient_info['full_name']); ?>(<?php echo e($queue->patients['patient_code']); ?>)</td>
-
-                                        <td><?php echo e($queue->user_informations->doctor_info['first_name']); ?> <?php echo e($queue->user_informations->doctor_info['last_name']); ?></td>
-                                        <?php if($queue->note == null): ?>
-                                            <td><button style=" font-size: 90%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>note">Add Note</button></td>
-                                        <?php else: ?>
-                                            <td><button style=" font-size: 90%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>note"><?php echo e($queue->note); ?></button></td>
-
-
-                                        <?php endif; ?>
-                                        <div id="con-close-modal<?php echo e($queue->id); ?>note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                        <h4 class="modal-title">Add Note</h4>
-                                                    </div>
-                                                    <form action="<?php echo e(url('queues_note')); ?>" method="post">
-                                                        <div class="modal-body">
-
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label for="pats" class="control-label">Important Note<span class="text-danger">*</span></label>
-                                                                        <input name="note" class="form-control"
-                                                                               value="<?php echo e($queue->note); ?>"/>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                                            <?php echo e(csrf_field()); ?>
-
-
-                                                            <input type="hidden" name="que_id" value="<?php echo e($queue->id); ?>">
-                                                            <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add Note</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-
-                                        </div><!-- /.modal -->
-
-                                        <?php if($queue->bill == null): ?>
-                                            <td>No</td>
-                                        <?php else: ?>
-                                            <td><?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
-                                        <?php endif; ?>
-
-                                        <?php if($queue->paid == null): ?>
-                                            <td>No</td>
-                                            <td>No</td>
-                                        <?php else: ?>
-                                            <td><?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
-                                            <td><?php echo e($queue->bill - $queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></td>
-                                        <?php endif; ?>
-                                        <td>
-                                        <?php if($queue->status == 0 || $queue->status == 1): ?>
-                                                <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>delete">#Delete Queue</button><br>
-
-
-                                                <div id="con-close-modal<?php echo e($queue->id); ?>delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                <h4 class="modal-title">Warning!</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-
-                                                                Are You Sure.You want to delete This Queue.
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
-
-                                                                <form action="<?php echo e(url('queues/'.$queue->id)); ?>" method="post">
-                                                                    <?php echo e(csrf_field()); ?>
-
-                                                                    <input type="hidden" name="_method" value="DELETE">
-                                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
-
-                                                                </form>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        <?php endif; ?>
-
-                                        <?php if($queue->status == 0): ?>
-                                                <button style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" data-toggle="modal"
-                                                        data-target="#con-close-modal<?php echo e($queue->user_informations->id); ?>doc">#Change Doctor</button><br>
+                                                    Change Doctor</button>
 
                                                 <div id="con-close-modal<?php echo e($queue->user_informations->id); ?>doc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 
@@ -401,7 +263,7 @@
                                                                 <div class="modal-body">
 
                                                                     <div class="row">
-                                                                        <div class="col-md-12">
+                                                                        <div class="col-sm-12">
                                                                             <div class="form-group">
                                                                                 <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
                                                                                 <select class="form-control select2" id="doctor_id" name="doctor_id">
@@ -423,7 +285,7 @@
                                                                     <?php echo e(csrf_field()); ?>
 
 
-                                                                    <input type="hidden" name="old_doc" value="<?php echo e($queue->user_informations->id); ?>">
+                                                                    <input type="hidden" name="old_doc" value="<?php echo e($queue->id); ?>">
                                                                     <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add To Queue</button>
                                                                 </div>
                                                             </form>
@@ -431,48 +293,336 @@
                                                     </div>
 
                                                 </div><!-- /.modal -->
-                                        <?php endif; ?>
-                                            
-                                            <a style=" font-size: 80%; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" href="<?php echo e(url('medical_records/'.$queue->patients->id.'/edit')); ?>">#Add Medical Record</a><br>
+                                            <?php endif; ?>
+                                                <?php if($queue->status == 0 || $queue->status == 1): ?>
+
+                                                    <button style="font-size: 15px; padding: 0px;border: none;
+                                                            color:red;background-color: white; " data-toggle="modal"
+                                                            data-target="#con-close-modal<?php echo e($queue->id); ?>delete">
+                                                        <span style="font-size: 29px;"><i class="fa fa-times"></i></span>
+                                                        <br>
+                                                        <br>
+                                                        Delete Queue</button>
+
+                                                    <div id="con-close-modal<?php echo e($queue->id); ?>delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                    <h4 class="modal-title">Warning!</h4>
+                                                                </div>
+                                                                <div class="modal-body">
+
+                                                                    Are You Sure.You want to delete This Queue.
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
+
+                                                                    <form action="<?php echo e(url('queues/'.$queue->id)); ?>" method="post">
+                                                                        <?php echo e(csrf_field()); ?>
+
+                                                                        <input type="hidden" name="_method" value="DELETE">
+                                                                        <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
+
+                                                                    </form>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row" style="height: 30px;">
+
+                                    </div>
+
+                                    <div class="row" style="border-left:2px solid lightgrey; height: 105px;">
+                                        <div class="col-sm-12" align="center">
+                                            <?php if($queue->status == 0 || $queue->status == 1): ?>
+                                                <form action="<?php echo e(url('add_to_check')); ?>" method="post">
+                                                    <?php echo e(csrf_field()); ?>
+
+                                                    <input type="hidden" name="queue_id" value="<?php echo e($queue->id); ?>">
+                                                    <button type="submit" class="btn btn-teal m-t-30">Check Patient</button>
+
+                                                </form>
+
+                                            <?php elseif($queue->status == 2): ?>
+                                                <td><a class="btn btn-success m-t-30" href="<?php echo e(url('payments/'.$queue->invoices->id)); ?>">Add Payment</a></td>
+                                            <?php elseif($queue->status == 3): ?>
+                                                <td>Payment Completed</td>
+                                            <?php elseif($queue->status == 4): ?>
+                                                <td>Deleted</td>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <div class="row" style="border: 1px solid black;">
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-5">
+                                            <p><strong style="font-size: 18px; font-weight: bold;">Queue Code:&nbsp;&nbsp;&nbsp;</strong><?php echo e($queue->queue_code); ?></p>
+                                        </div>
+                                        <div class="col-md-8 m-b-5">
+                                            <p><strong style="font-size: 18px; font-weight: bold;">Consultant Doctor Name:&nbsp;&nbsp;&nbsp;</strong><?php echo e($queue->user_informations->users->name); ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-b-20">
+                                        <div class="col-md-2" align="center">
+                                            <?php if($queue->status == 0): ?>
+                                                <img class="m-l-10" src="<?php echo e(asset('uploads/'.$queue->patients->patient_info['profile_image'])); ?>"
+                                                     style="width: 90px;height: 90px;
+                                                    border: 5px solid #2ce1da;
+                                                    border-radius: 60px">
+                                            <?php elseif($queue->status == 1): ?>
+                                                <img class="m-l-10" src="<?php echo e(asset('uploads/'.$queue->patients->patient_info['profile_image'])); ?>"
+                                                     style="width: 90px;height: 90px;
+                                                    border: 5px solid #f9c851;
+                                                    border-radius: 60px">
+                                            <?php elseif($queue->status == 2): ?>
+                                                <img class="m-l-10" src="<?php echo e(asset('uploads/'.$queue->patients->patient_info['profile_image'])); ?>"
+                                                     style="width: 90px;height: 90px;
+                                                    border: 5px solid #ac2925;
+                                                    border-radius: 60px">
+                                            <?php endif; ?>
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="row m-b-5">
+                                                <div class="col-md-7">
+                                                    <h4 style=" margin:8px 0px 8px 0px;"><?php echo e($queue->patients->patient_info['full_name']); ?></h4>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <?php if($queue->status == 0): ?>
+
+                                                        <span style="font-size: 11px;"><i class="fa fa-circle" style="color: #2ce1da;"></i></span>&nbsp;
+                                                        <span style="color: #2ce1da; font-size: 14px;"> Waiting</span>
+                                                    <?php elseif($queue->status == 1): ?>
+
+                                                        <span style="font-size: 11px;"><i class="fa fa-circle" style="color: #f9c851;"></i></span>&nbsp;
+                                                        <span style="color: #f9c851; font-size: 14px;"> Engaged</span>
+                                                    <?php elseif($queue->status == 2): ?>
+
+                                                        <span style="font-size: 11px;"><i class="fa fa-circle" style="color: #ac2925;"></i></span>&nbsp;
+                                                        <span style="color: #ac2925; font-size: 14px;"> Unbalanced</span>
+                                                    <?php endif; ?>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3" align="center">
+                                                    <strong>
+                                                        Time In <br>
+                                                        <?php echo e(date('h:i',strtotime($queue->created_at))); ?>
+
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-4" align="center">
+                                                    <strong>
+                                                        Time Out <br>
+                                                        -
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-5" align="center">
+                                                    <strong>Note</strong><br>
+                                                    <?php if($queue->note == null): ?>
+                                                        <td><button style=" font-size: 14px; background: none;float: left;text-align: left;
+                                                 border: none; color: #00ff00" data-toggle="modal"
+                                                                    data-target="#con-close-modal<?php echo e($queue->id); ?>note"><i class="fa fa-edit"></i> Add Note</button></td>
+                                                    <?php else: ?>
+                                                        <td><button style=" font-size: 90%; background: none;float: left;text-align: left;
+                                                 border: none; color: #00ff00" data-toggle="modal"
+                                                                    data-target="#con-close-modal<?php echo e($queue->id); ?>note"><?php echo e($queue->note); ?></button></td>
 
 
+                                                    <?php endif; ?>
+                                                    <div id="con-close-modal<?php echo e($queue->id); ?>note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 
-                                        </td>
-                                        <?php if($queue->status == 0): ?>
-                                            <td>Waiting</td>
-                                        <?php elseif($queue->status == 1): ?>
-                                            <td>Engaged with doctor</td>
-                                        <?php elseif($queue->status == 2): ?>
-                                            <td>Checked but Unpaid</td>
-                                        <?php elseif($queue->status == 3): ?>
-                                            <td>Checked and Paid</td>
-                                        <?php elseif($queue->status == 4): ?>
-                                            <td>Deleted</td>
-                                        <?php endif; ?>
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                    <h4 class="modal-title">Change Doctor</h4>
+                                                                </div>
+                                                                <form action="<?php echo e(url('queues_note')); ?>" method="post">
+                                                                    <div class="modal-body">
+
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <label for="pats" class="control-label">Important Note<span class="text-danger">*</span></label>
+                                                                                    <input name="note" class="form-control"
+                                                                                           value="<?php echo e($queue->note); ?>"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                                        <?php echo e(csrf_field()); ?>
 
 
+                                                                        <input type="hidden" name="que_id" value="<?php echo e($queue->id); ?>">
+                                                                        <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add Note</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+
+                                                    </div><!-- /.modal -->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-2" style="border-left: 2px solid lightgrey; border-right: 2px solid lightgrey;">
+                                            <?php if($queue->bill == null): ?>
+                                                <p class="text-left"><b>Bill: </b> No Bill</p>
+                                            <?php else: ?>
+                                                <p class="text-left"><b>Bill: </b> <?php echo e($queue->bill); ?> <?php echo e(Auth::user()->entities->currency); ?></p>
+                                            <?php endif; ?>
+
+                                            <?php if($queue->paid == null): ?>
+                                                <p class="text-left"><b>Paid: </b> Not Yet</p>
+                                            <?php else: ?>
+                                                <p class="text-left"><b>Paid: </b> <?php echo e($queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></p>
+                                            <?php endif; ?>
+
+                                            <p class="text-left"><b>Balance: </b> <?php echo e($queue->bill - $queue->paid); ?> <?php echo e(Auth::user()->entities->currency); ?></p>
 
 
-                                        <?php if($queue->status == 0): ?>
-                                            <td>Waiting</td>
-                                        <?php elseif($queue->status == 1): ?>
-                                            <td>Engaging</td>
-                                        <?php elseif($queue->status == 2): ?>
-                                            <td><a style=" font-size: 100%; font-weight: bold; background: none;float: left;text-align: left;
-                                             border: none; color: #2b4a95" href="<?php echo e(url('payments/'.$queue->invoices->id)); ?>">Add Payment</a></td>
-                                        <?php elseif($queue->status == 3): ?>
-                                            <td>Payment Completed</td>
-                                        <?php elseif($queue->status == 4): ?>
-                                            <td>Deleted</td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endif; ?>
-                            <?php $i++; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                        </div>
+                                        <div class="col-md-4" align="center">
+
+                                            <?php if($queue->status == 0 || $queue->status == 1): ?>
+                                                <button style="font-size: 15px; padding: 0px;border: none;
+                                                    color:#2ce1da; margin-right: 10px; background-color: white; " data-toggle="modal"
+                                                        data-target="#con-close-modal<?php echo e($queue->user_informations->id); ?>doc">
+                                                    <span style="font-size: 25px;"><i class="fa fa-refresh"></i></span>
+                                                    <br>
+                                                    <br>
+
+                                                    Change Doctor</button>
+
+                                                <div id="con-close-modal<?php echo e($queue->user_informations->id); ?>doc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h4 class="modal-title">Change Doctor</h4>
+                                                            </div>
+                                                            <form action="<?php echo e(url('queues_doc')); ?>" method="post">
+                                                                <div class="modal-body">
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="pats" class="control-label">Select Doctors<span class="text-danger">*</span></label>
+                                                                                <select class="form-control select2" id="doctor_id" name="doctor_id">
+                                                                                    <option selected disabled="disabled">Select Doctors</option>
+
+                                                                                    <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                        <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->users->name); ?></option>
+                                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                                    <?php echo e(csrf_field()); ?>
+
+
+                                                                    <input type="hidden" name="old_doc" value="<?php echo e($queue->id); ?>">
+                                                                    <button type="submit" class="btn btn-inverse waves-effect" style="float: left;margin-right: 2%;">Add To Queue</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+
+                                                </div><!-- /.modal -->
+                                            <?php endif; ?>
+                                            <?php if($queue->status == 0 || $queue->status == 1): ?>
+
+                                                <button style="font-size: 15px; padding: 0px;border: none;
+                                                        color:red;background-color: white; " data-toggle="modal"
+                                                        data-target="#con-close-modal<?php echo e($queue->id); ?>delete">
+                                                    <span style="font-size: 29px;"><i class="fa fa-times"></i></span>
+                                                    <br>
+                                                    <br>
+                                                    Delete Queue</button>
+
+                                                <div id="con-close-modal<?php echo e($queue->id); ?>delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h4 class="modal-title">Warning!</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                Are You Sure.You want to delete This Queue.
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
+
+                                                                <form action="<?php echo e(url('queues/'.$queue->id)); ?>" method="post">
+                                                                    <?php echo e(csrf_field()); ?>
+
+                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Delete it</button>
+
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row" style="height: 30px;">
+
+                                    </div>
+
+                                    <div class="row" style="border-left:2px solid lightgrey; height: 105px;">
+                                        <div class="col-sm-12" align="center">
+                                            <?php if($queue->status == 0): ?>
+                                                <p class="m-t-30">Waiting</p>
+                                            <?php elseif($queue->status == 1): ?>
+                                                <p class="m-t-30">Engaged</p>
+                                            <?php elseif($queue->status == 2): ?>
+                                                <a class="btn btn-success m-t-30" href="<?php echo e(url('payments/'.$queue->invoices->id)); ?>">Add Payment</a>
+                                            <?php elseif($queue->status == 3): ?>
+                                                <p class="m-t-30">Payment Completed</p>
+                                            <?php elseif($queue->status == 4): ?>
+                                                <p class="m-t-30">Deleted</p>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
 
@@ -501,51 +651,7 @@
 
     <script src="<?php echo e(asset('assets/pages/jquery.form-advanced.init.js')); ?>"></script>
 
-    <script src="<?php echo e(asset('assets/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
-    <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.bootstrap.js')); ?>"></script>
 
-
-
-    <script src="<?php echo e(asset('assets/plugins/datatables/dataTables.responsive.min.js')); ?>"></script>
-    <script src="<?php echo e(asset('assets/plugins/datatables/responsive.bootstrap.min.js')); ?>"></script>
-
-
-    <!-- init -->
-    <script src="<?php echo e(asset('assets/pages/jquery.datatables.init.js')); ?>"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#datatable').dataTable();
-            $('#datatable-keytable').DataTable({keys: true});
-            $('#datatable-responsive').DataTable();
-            $('#datatable-colvid').DataTable({
-                "dom": 'C<"clear">lfrtip',
-                "colVis": {
-                    "buttonText": "Change columns"
-                }
-            });
-            $('#datatable-scroller').DataTable({
-                ajax: "../plugins/datatables/json/scroller-demo.json",
-                deferRender: true,
-                scrollY: 380,
-                scrollCollapse: true,
-                scroller: true
-            });
-            var table = $('#datatable-fixed-header').DataTable({fixedHeader: true});
-            var table = $('#datatable-fixed-col').DataTable({
-                scrollY: "300px",
-                scrollX: true,
-                scrollCollapse: true,
-                paging: false,
-                fixedColumns: {
-                    leftColumns: 1,
-                    rightColumns: 1
-                }
-            });
-        });
-        TableManageButtons.init();
-
-    </script>
 <?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts End*********-->

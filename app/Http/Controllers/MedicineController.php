@@ -34,17 +34,96 @@ class MedicineController extends Controller
         return view('pages.drugs.manageDrug',array(
             'drugs' => $drugs,
         ));*/
-        //dd(DB::table('cities')->get());
+       //dd(DB::table('fake_datas')->paginate(10));
+        //$fakers = DB::table('fake_datas')->paginate(10);
+
         return view('pages.drugs.manageDrug');
     }
 
 
     public function datatable()
     {
-        ini_set('memory_limit','256M');
+        ini_set('memory_limit','512M');
 
+        //$faker = DB::table('fake_datas')->get();
+        $drugs = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
 
-        return DataTables::of(DB::table('cities')->get())->make(true);
+        return DataTables::of($drugs)
+            ->addIndexColumn()
+            ->addColumn('dosage_amount',function ($drug){
+                return $drug->medicine_info['dosage_amount'].'.'.$drug->medicine_info['dosage_unit'];
+            })
+            ->addColumn('retail_price',function ($drug){
+                return $drug->medicine_info['retail_price'].'.'.auth()->user()->entities->currency;
+            })
+            ->addColumn('status',function ($drug){
+                if($drug->medicine_info['status'] == 1)
+                {
+                    return 'Active';
+                }
+                else
+                {
+                    return 'Inactive';
+                }
+
+            })
+            ->addColumn('action',function ($drug){
+                if(auth()->user()->role_id == 2)
+                {
+                    return '
+                        <a href="'.url('drugs/'.$drug->id).'" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
+                            <i class="fa fa-eye"></i>
+                        </a>
+    
+    
+                        <a href="'.url('drugs/'.$drug->id.'/edit').'" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
+    
+                       
+                        <button class="btn btn-icon waves-effect waves-light btn-danger m-b-5" data-toggle="modal" data-target="#con-close-modal'.$drug->id.'"><i class="fa fa-remove"></i></button>
+                        
+                        <div id="con-close-modal'.$drug->id.'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title">Warning!</h4>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                Are You Sure.You want to Delete this.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" style="float: right;">Close</button>
+
+                                                <form action="'.url('drugs/'.$drug->id).'" method="post">
+                                                    '.csrf_field().'
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="btn btn-danger waves-effect" style="float: right;margin-right: 2%;">Yes Deactivate it</button>
+
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                   
+                    ';
+                }
+                else
+                {
+                    return '
+                        <a href="'.url('drugs/'.$drug->id).'" class="btn btn-icon waves-effect waves-light btn-teal m-b-5" style="">
+                            <i class="fa fa-eye"></i>
+                        </a>
+    
+    
+                        <a href="'.url('drugs/'.$drug->id.'/edit').'" class="btn btn-icon waves-effect waves-light btn-info m-b-5" style=""><i class="fa fa-edit"></i></a>
+                   
+                    ';
+                }
+
+            })
+            ->make(true);
     }
     /**
      * Show the form for creating a new resource.
