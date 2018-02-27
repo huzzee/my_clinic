@@ -61,21 +61,7 @@ class PaymentController extends Controller
     public function edit($id)
     {
 
-        $queue = Queue::with('patients','user_informations')
-            ->where('id','=',$id)->first();
 
-        $queue->status = 1;
-        $queue->save();
-
-        $medicines = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
-
-        $services = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->get();
-
-        return view('pages.queues.addinvoice',array(
-            'queue' => $queue,
-            'medicines' => $medicines,
-            'services' => $services
-        ));
     }
     public function show($id)
     {

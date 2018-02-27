@@ -98,6 +98,9 @@ Route::group(['middleware' => ['auth','entity_check','user_status']],function() 
     Route::get('/services_price','InvoiceController@service_price');
 
     Route::Resource('prescriptions','PrescriptionController');
+    Route::get('drugs_autocomplete','PrescriptionController@drugs_autocomplete');
+    Route::get('drug_qnt_check','PrescriptionController@drug_qnt_check');
+    Route::get('drug_type_check','PrescriptionController@drug_type_check');
 
     Route::get('permissions_klenic_abc','PermissionController@index')->name('permissions_klenic_abc.index');
     Route::get('role_chk','PermissionController@role_chk');

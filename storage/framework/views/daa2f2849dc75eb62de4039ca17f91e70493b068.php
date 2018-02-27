@@ -352,7 +352,7 @@
                                                 </form>
 
                                             <?php elseif($queue->status == 2): ?>
-                                                <td><a class="btn btn-success m-t-30" href="<?php echo e(url('payments/'.$queue->invoices->id)); ?>">Add Payment</a></td>
+                                                <td>Add Payment</td>
                                             <?php elseif($queue->status == 3): ?>
                                                 <td>Payment Completed</td>
                                             <?php elseif($queue->status == 4): ?>

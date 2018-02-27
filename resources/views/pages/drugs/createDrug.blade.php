@@ -96,12 +96,6 @@
                                                     <option value="Times">Times</option>
                                                     <option value="Tube">Tube</option>
                                                     <option value="Others">Others</option>
-
-
-
-
-
-
                                                 </select>
                                             </div>
                                         </div>

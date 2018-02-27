@@ -22,7 +22,7 @@ class QueueController extends Controller
 
     public function index()
     {
-        $queues = Queue::with('user_informations','patients','invoices')
+        $queues = Queue::with('user_informations','patients')
             ->where('entity_id','=',Auth::user()->entity_id)
             ->where('status','!=',4)
             ->where('status','!=',3)
@@ -50,11 +50,11 @@ class QueueController extends Controller
 
         if($queue->status == 1)
         {
-            return redirect('payments/'.$request->queue_id.'/edit');
+            return redirect('prescriptions/'.$request->queue_id.'/edit');
         }
         else
         {
-            return redirect('payments/'.$request->queue_id.'/edit');
+            return redirect('prescriptions/'.$request->queue_id.'/edit');
         }
 
     }

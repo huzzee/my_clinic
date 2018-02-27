@@ -349,7 +349,7 @@
                                                 </form>
 
                                             @elseif($queue->status == 2)
-                                                <td><a class="btn btn-success m-t-30" href="{{ url('payments/'.$queue->invoices->id) }}">Add Payment</a></td>
+                                                <td>Add Payment</td>
                                             @elseif($queue->status == 3)
                                                 <td>Payment Completed</td>
                                             @elseif($queue->status == 4)

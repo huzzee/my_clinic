@@ -505,179 +505,7 @@ $('.temp_submt').one('submit',function(e) {
 /*----------------------------------------------------------------*/
 /*----------------------------------------------------------------*/
 
-$('#draw_pad').click(function () {
-    $('.bootstrap-filestyle').css('display','block');
-});
 
-$('#uploads').click(function () {
-    $('.bootstrap-filestyle').css('display','none');
-});
-
-$('#chk_temp').change(function () {
-    $('#templating div:last-child').remove();
-
-
-
-
-   var temp_id = $(this).val();
-
-    $.ajax({
-        url: "../../record_ajax",
-        type: "GET",
-        data: {temp_id: temp_id},
-        dataType: "json",
-        success: function (response) {
-            //console.log(response);
-            var html = ``;
-            var cnts = 1;
-            var abcd = 0;
-            response.forEach(function (data,i) {
-                if(data.type == 0)
-                {
-                    html+= `
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label for="field-3" class="control-label">`+cnts++ +`-`+data.question+` ?</label>
-                                    <input type="hidden" name="questions[]" value="`+data.question+`">
-                                    
-                                    <input type="text" class="form-control"
-                                           name="answers[`+abcd+`]" placeholder="Answer" required>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-                }
-                else if(data.type == 1)
-                {
-                    html+= `
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label for="field-3" class="control-label">`+cnts++ +`-`+data.question+` ?</label>
-                                    <input type="hidden" name="questions[]" value="`+data.question+`">
-                                    
-                                    <textarea name="answers[`+abcd+`]" id="textarea" 
-                                    class="form-control" maxlength="500" rows="4" placeholder="Answer" required></textarea>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                else if(data.type == 2)
-                {
-                    var radio = '';
-                    data.answers.forEach(function (ans,j) {
-                        radio+=`
-                            <div class="radio radio-inverse radio-inline">
-                                <input type="radio" id="inlineRadio`+ans+`" name="answers[`+abcd+`]" value="`+ans+`">
-                                <label for="inlineRadio`+ans+`"> `+ans+` </label>
-                            </div></br>
-                        `;
-                    });
-                    html+= `
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label for="field-3" class="control-label">`+cnts++ +`-`+data.question+` ?</label>
-                                    <input type="hidden" name="questions[]" value="`+data.question+`"><br>
-                                       `+radio+`
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-
-                }
-                else if(data.type == 3)
-                {
-                    var chk = '';
-                    data.answers.forEach(function (ans,j) {
-                        chk+=`
-                            <div class="checkbox checkbox-success checkbox">
-                                <input id="checkbox-`+j+`" value="`+ans+`" type="checkbox" name="answers[`+abcd+`][]">
-                                <label for="checkbox-`+j+`" style="font-weight: bold">
-                                    `+ans+`
-                                </label>
-                            </div>
-                        `;
-                    });
-                    html+= `
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <input type="hidden" name="questions[]" value="`+data.question+`">
-                                    <label for="field-3" class="control-label">`+cnts++ +`-`+data.question+` ? (Multiple choice)</label>
-                                       `+chk+`
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-
-                }
-                else if(data.type == 4)
-                {
-                    var select = '';
-                    data.answers.forEach(function (ans,j) {
-                        select+=`
-                            <option value="`+ans+`">`+ans+`</option>
-                        `;
-                    });
-                    html+= `
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <input type="hidden" name="questions[]" value="`+data.question+`">
-                                    <label for="field-3" class="control-label">`+cnts++ +`-`+data.question+` ?</label>
-                                    <select class="form-control" 
-                                    name="answers[`+abcd+`]">
-                                        <option selected disabled>Select Answer</option>
-                                        `+select+`
-                                    </select>
-                                       
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-
-                }
-                abcd++;
-                //console.log(abcd);
-            });
-
-            $('#templating').html(html);
-
-        }
-    });
-
-});
-
-$('.weight').keyup(function () {
-
-    var weight = $(this).val();
-    var height = $('.height').val();
-
-
-
-    total = Math.round(Math.sqrt((weight*height)/3600)*100)/100 ;
-
-    var bsa = $('.bsa').val(total);
-});
-$('.height').keyup(function () {
-
-    var height = $(this).val();
-    var weight = $('.weight').val();
-
-
-
-    total = Math.round(Math.sqrt((weight*height)/3600)*100)/100 ;
-
-    var bsa = $('.bsa').val(total);
-});
 
 $('#presc').change(function () {
     var pres = $(this).val();
@@ -696,6 +524,7 @@ $('#drug_pres').change(function () {
     if(drug == 0)
     {
         $('#stock_unit').val('');
+        $('#dosage_qnt').val('');
         $('#dosage_unit').val('');
         $('#price_med').val('');
         $('#gst').val('');
@@ -710,6 +539,7 @@ $('#drug_pres').change(function () {
             success: function(response) {
                 //console.log(response.medicine_info['drug_name']);dosage_unitprice_med
                 $('#stock_unit').val(response.medicine_info['stock_unit']);
+                $('#dosage_qnt').val(response.medicine_info['dosage_amount']);
                 $('#dosage_unit').val(response.medicine_info['dosage_unit']);
                 $('#price_med').val(response.medicine_info['retail_price']);
                 $('#gst').val(response.medicine_info['retail_gst']);

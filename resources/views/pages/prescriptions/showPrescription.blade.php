@@ -134,7 +134,7 @@
 
                                         <p class="text-muted font-13"><strong>Drug Allergy :</strong><span class="m-l-15">
                                         @foreach($prescription->patients->drug_allergy as $allergy)
-                                                    {{ $allergy['drug_name'] }},
+                                                    {{ $allergy}},
                                                 @endforeach</span></p>
 
                                         <p class="text-muted font-13"><strong>Doctor Name :</strong> <span class="m-l-15">
@@ -175,7 +175,7 @@
                                                         <tr>
                                                             <td>{{$items['drug_name']}}</td>
                                                             <td>{{$items['drug_qnt']}}</td>
-                                                            <td>{{$items['dosage_qnt']}} {{$items['dosage_unit']}}</td>
+                                                            <td>{{$items['dosage_qnt']}}</td>
                                                             <td>{{$items['days']}}</td>
                                                             <td>{{$items['instruction']}}</td>
 

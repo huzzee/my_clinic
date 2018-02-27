@@ -25,6 +25,7 @@
         <link href="<?php echo e(asset('assets/plugins/custombox/css/custombox.min.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(asset('assets/plugins/summernote/summernote.css')); ?>" rel="stylesheet" />
         <link rel="stylesheet" href="<?php echo e(asset('assets/plugins/tooltipster/tooltipster.bundle.min.css')); ?>">
+        <link href="<?php echo e(asset('js/jQuery-autoComplete-master/jquery.auto-complete.css')); ?>" rel="stylesheet" />
 
         <!-- form css-->
         <link href="<?php echo e(asset('assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css')); ?>" rel="stylesheet" />
@@ -61,7 +62,7 @@
         <link href="<?php echo e(asset('assets/css/responsive.css')); ?>" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="<?php echo e(asset('assets/plugins/switchery/switchery.min.css')); ?>">
 
-
+        <link rel="stylesheet" href="<?php echo e(asset('js/jquery-confirm.min.css')); ?>">
 
 
 
@@ -197,7 +198,9 @@ s
 
 
         <!-- jQuery  -->
+
         <script src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/jquery-confirm.min.js')); ?>"></script>
         <script src="<?php echo e(asset('js/jquery.jqscribble.js')); ?>"></script>
         <script src="<?php echo e(asset('js/jqscribble.extrabrushes.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/bootstrap.min.js')); ?>"></script>

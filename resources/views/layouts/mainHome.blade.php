@@ -25,6 +25,7 @@
         <link href="{{ asset('assets/plugins/custombox/css/custombox.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/summernote/summernote.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('assets/plugins/tooltipster/tooltipster.bundle.min.css') }}">
+        <link href="{{ asset('js/jQuery-autoComplete-master/jquery.auto-complete.css') }}" rel="stylesheet" />
 
         <!-- form css-->
         <link href="{{ asset('assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css') }}" rel="stylesheet" />
@@ -61,7 +62,7 @@
         <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="{{ asset('assets/plugins/switchery/switchery.min.css') }}">
 
-
+        <link rel="stylesheet" href="{{ asset('js/jquery-confirm.min.css') }}">
 
 
 
@@ -197,7 +198,9 @@ s
 
 
         <!-- jQuery  -->
+
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery-confirm.min.js') }}"></script>
         <script src="{{ asset('js/jquery.jqscribble.js') }}"></script>
         <script src="{{ asset('js/jqscribble.extrabrushes.js') }}"></script>
         <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>

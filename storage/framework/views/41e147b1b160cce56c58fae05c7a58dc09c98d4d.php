@@ -34,8 +34,9 @@
                                 <th width="5%">Sr.No</th>
                                 <th>Patient Name</th>
                                 <th>Doctor Name</th>
+                                <th>Queue Code</th>
                                 <th width="40%">Prescriptions</th>
-                                <th>Action</th>
+                                <th width="15%">Action</th>
 
                             </tr>
                             </thead>
@@ -48,6 +49,7 @@
                                     <td><?php echo e($i); ?></td>
                                     <td><?php echo e($prescription->patients->patient_info['full_name']); ?></td>
                                     <td><?php echo e($prescription->user_informations->users->name); ?></td>
+                                    <td><?php echo e($prescription->queue_code); ?></td>
                                     <td>
                                         <?php $__currentLoopData = $prescription->prescriptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $items): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <?php echo e($items['drug_name']); ?>/
@@ -60,6 +62,12 @@
                                            class="btn btn-icon waves-effect waves-light btn-inverse m-b-5"
                                             target="_blank">
                                             <i class="fa fa-print"></i>
+                                        </a>
+
+                                        <a href="<?php echo e(url('invoices/'.$prescription->id.'/edit')); ?>"
+                                           class="btn btn-icon waves-effect waves-light btn-primary m-b-5"
+                                           >
+                                            Invoice
                                         </a>
                                     </td>
 

@@ -8,7 +8,7 @@ class Invoice extends Model
 {
     protected $fillable = [
         'entity_id','doctor_id','patient_id','grand_total','paid','balance','prescriptions','invoice_code',
-        'total_gst','after_discount','total_discount','net_total','invoice_comment','queue_id'
+        'total_gst','after_discount','total_discount','net_total','invoice_comment','prescription_id'
     ];
 
     protected $casts = [
@@ -30,8 +30,8 @@ class Invoice extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function queues()
+    public function prescriptions()
     {
-        return $this->belongsTo('App\models\Queue','queue_id');
+        return $this->belongsTo('App\models\Prescription','prescription_id');
     }
 }

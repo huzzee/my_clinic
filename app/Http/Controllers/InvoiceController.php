@@ -227,7 +227,7 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
         $request->validate([
             'pres_type' => 'required'
         ]);
@@ -238,14 +238,14 @@ class InvoiceController extends Controller
         $invoice->invoice_code = 'PI-'.str_random(4).'-'.str_random(2);
         $invoice->doctor_id = $request->doctor_id;
         $invoice->patient_id = $request->patient_id;
+        $invoice->prescription_id = $request->prescription_id;
         $invoice->entity_id = Auth::user()->entity_id;
-        $invoice->queue_id = $request->queue_id;
         $invoice->net_total = $request->net_total;
         $invoice->total_discount = $request->total_discount;
         $invoice->after_discount = $request->after_discount;
         $invoice->total_gst = $request->total_gst;
         $invoice->grand_total = $request->grand_total;
-        $invoice->paid = 0;
+        $invoice->paid = $request->paid;
         $invoice->balance = $request->grand_total;
         $invoice->invoice_comment = $request->invoice_comment;
 
@@ -277,58 +277,41 @@ class InvoiceController extends Controller
 
         $invoice->save();
 
-        $prescription = new Prescription;
-        $prescription->doctor_id = $request->doctor_id;
-        $prescription->patient_id = $request->patient_id;
-        $prescription->entity_id = Auth::user()->entity_id;
-        $prescription->prescriptions = $pres;
-
-        $prescription->save();
-
         if($invoice->queue_id !== null) {
 
-            $queue = Queue::findOrFail($invoice->queue_id);
-            $queue->status = 2;
+            $queue = Queue::findOrFail($request->queue_id);
+            $queue->status = 3;
             $queue->bill = $request->grand_total;
-            $queue->paid = 0;
+            $queue->paid = $request->paid;
             $queue->save();
         }
 
-        if ($request->payment == 0)
-        {
-            return redirect('invoices/'.$invoice->id)
-                ->with('message','Successfully Created Invoice');
-        }
-        else if ($request->payment == 1)
-        {
-            return redirect('payments/'.$invoice->id)
-                ->with('message','Successfully Created Invoice Now Add Payment');
-        }
+
+        return redirect('invoices/'.$invoice->id)
+            ->with('message','Successfully Created Invoice');
+
     }
 
     public function edit($id)
     {
-
-        $invoice = Invoice::with('patients','user_informations','queues')
+        $prescriptions = Prescription::with('patients','patients')
             ->where('id','=',$id)->first();
-        if($invoice->paid ==  $invoice->grand_total)
-        {
-            return abort(404);
-        }
-        else{
-            $medicines = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
 
-            $services = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->get();
+        $queue = Queue::where('queue_code','=',$prescriptions->queue_code)->first();
 
-            return view('pages.invoices.editInvoice',array(
-                'invoice' => $invoice,
-                'medicines' => $medicines,
-                'services' => $services
-            ));
-        }
+        $queue->status = 1;
+        $queue->save();
 
+        $medicines = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
 
+        $services = ServiceCategory::where('entity_id','=',Auth::user()->entity_id)->get();
 
+        return view('pages.invoices.addinvoice',array(
+            'prescriptions' => $prescriptions,
+            'medicines' => $medicines,
+            'services' => $services,
+            'queue' => $queue
+        ));
     }
 
     public function update(Request $request,$id)

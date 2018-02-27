@@ -19,7 +19,8 @@ class CreateInvoicesTable extends Migration
             $table->unsignedInteger('entity_id');
             $table->unsignedInteger('doctor_id');
             $table->unsignedInteger('patient_id');
-            $table->unsignedInteger('queue_id')->nullable();
+            $table->unsignedInteger('prescription_id');
+
             $table->double('grand_total',15,3)->default(0);
             $table->double('total_gst',15,3)->default(0);
             $table->double('after_discount',15,3)->default(0);
@@ -36,7 +37,7 @@ class CreateInvoicesTable extends Migration
             $table->foreign('entity_id')->references('id')->on('entities')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('user_informations');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->foreign('queue_id')->references('id')->on('queues');
+            $table->foreign('prescription_id')->references('id')->on('prescriptions')->onDelete('cascade');
 
         });
     }

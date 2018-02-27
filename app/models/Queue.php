@@ -19,8 +19,9 @@ class Queue extends Model
     {
         return $this->belongsTo('App\models\Patient','patient_id');
     }
-    public function invoices()
+
+    public function prescriptions()
     {
-        return $this->hasOne(Invoice::class);
+        return $this->hasOne(Prescription::class);
     }
 }

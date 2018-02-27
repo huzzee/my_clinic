@@ -38,61 +38,78 @@
 
                     <div class="card-box">
                         <div class="row">
-                            <div class="col-lg-6 col-md-6">
+                            <div class="col-lg-4 col-md-4">
                                 <div class="text-center card-box">
                                     <div class="member-card">
 
-                                        <h4>Patient Information</h4>
+                                        <h4>Information</h4>
                                         <hr>
                                         <div class="text-left">
-                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">
-                                                    {{ $queue->patients->patient_info['full_name'] }}</span></p>
+                                            <p class="text-muted font-13"><strong>Patient Name :</strong> <span class="m-l-15">
+                                                    {{ $prescriptions->patients->patient_info['full_name'] }}</span></p>
 
                                             <p class="text-muted font-13"><strong>Patient Code :</strong><span class="m-l-15">
-                                                {{ $queue->patients->patient_code }}</span></p>
+                                                {{ $prescriptions->patients->patient_code }}</span></p>
 
                                             <p class="text-muted font-13"><strong>Age :</strong> <span class="m-l-15">
-                                                    @php $age = date('Y', strtotime(Carbon\Carbon::now())) - date('Y', strtotime($queue->patients->patient_info['date_of_birth'])); @endphp
+                                                    @php $age = date('Y', strtotime(Carbon\Carbon::now())) - date('Y', strtotime($prescriptions->patients->patient_info['date_of_birth'])); @endphp
                                                     {{ $age }}</span></p>
 
                                             <p class="text-muted font-13"><strong>Gender :</strong>
                                                 <span class="m-l-15">
-                                                    @if($queue->patients->patient_info['gender'] == 0)
+                                                    @if($prescriptions->patients->patient_info['gender'] == 0)
                                                         Male
-                                                    @elseif($queue->patients->patient_info['gender'] == 1)
+                                                    @elseif($prescriptions->patients->patient_info['gender'] == 1)
                                                         Female
-                                                    @elseif($queue->patients->patient_info['gender'] == 2)
+                                                    @elseif($prescriptions->patients->patient_info['gender'] == 2)
                                                         Other
 
                                                     @endif
                                                 </span></p>
 
-                                            <p class="text-muted font-13"><strong>Drug Allergy :</strong><span class="m-l-15">
-                                                @foreach($queue->patients->drug_allergy as $allergy)
-                                                    {{ $allergy }},
-                                                @endforeach</span></p>
+                                            <p class="text-muted font-13"><strong>Doctor Name :</strong> <span class="m-l-15">
+                                                    {{ $prescriptions->user_informations->users['name'] }}</span></p>
+
+                                            <p class="text-muted font-13"><strong>Department :</strong><span class="m-l-15">
+                                                {{ $prescriptions->user_informations->doctor_info['department'] }}</span></p>
 
                                         </div>
 
                                     </div>
                                 </div> <!-- end card-box -->
                             </div> <!-- end col -->
-                            <div class="col-lg-6 col-md-6" >
+                            <div class="col-lg-8 col-md-8" >
                                 <div class="text-center card-box" style="min-height: 270px">
                                     <div class="member-card">
 
-                                        <h4>Doctor Information</h4>
+                                        <h4>Prescription</h4>
                                         <hr>
-                                        <div class="text-left">
-                                            <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">
-                                                    {{ $queue->user_informations->users['name'] }}</span></p>
+                                        <table class="table table-striped m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Drug/Test</th>
+                                                    <th>days</th>
+                                                    <th>Instruction</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php $k=1; @endphp
+                                                @foreach($prescriptions->prescriptions as $prescription)
+                                                    <tr>
+                                                        <td>{{ $k }}</td>
+                                                        <td>{{ $prescription['drug_name'] }}
+                                                            @if($prescription['dosage_qnt'] !== '0')
+                                                            -{{$prescription['dosage_qnt']}}
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $prescription['days'] }}</td>
+                                                        <td>{{ $prescription['instruction'] }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
 
-                                            <p class="text-muted font-13"><strong>Department :</strong><span class="m-l-15">
-                                                {{ $queue->user_informations->doctor_info['department'] }}</span></p>
-
-
-
-                                        </div>
+                                        </table>
 
 
                                     </div>
@@ -153,7 +170,7 @@
                                                                             <option value="0">Select Medicines</option>
 
                                                                             @foreach($medicines as $medicine)
-                                                                                <option value="{{$medicine->id}}">{{$medicine->medicine_info['drug_name']}}</option>
+                                                                                <option value="{{$medicine->id}}">{{$medicine->medicine_info['drug_name']}} -({{$medicine->medicine_info['dosage_amount']}}.{{ $medicine->medicine_info['dosage_unit']}})</option>
                                                                             @endforeach
 
                                                                         </select>
@@ -188,7 +205,7 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="pats" class="control-label"  style="float:left;">Dosage Quantity<span class="text-danger">*</span></label>
-                                                                        <input type="number" class="form-control" placeholder="Enter Dose" id="dosage_qnt">
+                                                                        <input type="number" class="form-control" readonly="true" placeholder="Enter Dose" id="dosage_qnt">
                                                                     </div>
                                                                 </div>
 
@@ -340,9 +357,10 @@
                                         <div class="row" style="height: 20px;"></div>
                                         <form id="invoicing" action="{{ url('invoices') }}" method="post">
                                             {{ csrf_field() }}
-                                            <input type="hidden" name="patient_id" value="{{ $queue->patients->id }}">
-                                            <input type="hidden" name="doctor_id" value="{{ $queue->user_informations->id }}">
+                                            <input type="hidden" name="patient_id" value="{{ $prescriptions->patients->id }}">
+                                            <input type="hidden" name="doctor_id" value="{{ $prescriptions->user_informations->id }}">
                                             <input type="hidden" name="queue_id" value="{{ $queue->id }}">
+                                            <input type="hidden" name="prescription_id" value="{{ $prescriptions->id }}">
                                             <div class="row" style="min-height: 300px;">
 
                                                 <table class="table table-striped m-0">
@@ -413,6 +431,13 @@
                                                             <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <label for="grand_total" class="col-sm-4" style="float: left;">Payment</label>
+                                                        <div class="input-group col-sm-8">
+                                                            <input type="number" class="form-control" name="paid">
+                                                            <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
+                                                        </div>
+                                                    </div>
 
 
                                                 </div>
@@ -420,9 +445,7 @@
                                             <div class="row" style="height: 50px;"></div>
                                             <div class="row">
 
-                                                <button type="submit" name="payment" value="0" class="btn btn-inverse waves-effect waves-light m-b-5">Add Invoice</button>
-
-                                                <button type="submit" name="payment" value="1" class="btn btn-success waves-effect waves-light m-b-5">Add Invoice & Payment</button>
+                                                <button type="submit" class="btn btn-inverse waves-effect waves-light m-b-5">Save Invoice</button>
 
                                             </div>
                                         </form>

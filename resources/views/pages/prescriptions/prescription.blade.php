@@ -37,8 +37,9 @@
                                 <th width="5%">Sr.No</th>
                                 <th>Patient Name</th>
                                 <th>Doctor Name</th>
+                                <th>Queue Code</th>
                                 <th width="40%">Prescriptions</th>
-                                <th>Action</th>
+                                <th width="15%">Action</th>
 
                             </tr>
                             </thead>
@@ -51,6 +52,7 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $prescription->patients->patient_info['full_name'] }}</td>
                                     <td>{{ $prescription->user_informations->users->name }}</td>
+                                    <td>{{ $prescription->queue_code }}</td>
                                     <td>
                                         @foreach($prescription->prescriptions as $items)
                                             {{ $items['drug_name'] }}/
@@ -67,6 +69,12 @@
                                            class="btn btn-icon waves-effect waves-light btn-inverse m-b-5"
                                             target="_blank">
                                             <i class="fa fa-print"></i>
+                                        </a>
+
+                                        <a href="{{ url('invoices/'.$prescription->id.'/edit') }}"
+                                           class="btn btn-icon waves-effect waves-light btn-primary m-b-5"
+                                           >
+                                            Invoice
                                         </a>
                                     </td>
 

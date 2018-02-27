@@ -397,9 +397,9 @@ $(function () {
         var html =
                 '<input type="hidden" value="'+dataurl+'" name="canvas_image"/>';
 
-        $('#hide_one').append(html);
+        $('#abcde').append(html);
 
-        //$(this).submit();
+        $(this).submit();
 
     });
     /*$("#save").click(function () {
