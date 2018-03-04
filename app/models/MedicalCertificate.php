@@ -23,6 +23,6 @@ class MedicalCertificate extends Model
 
     public function prescriptions()
     {
-        return $this->belongsTo('App\models\Prescription','prescription_id');
+        return $this->belongsTo(Prescription::class,'prescription_id');
     }
 }

@@ -62,7 +62,7 @@ function check_user_privilage($role_id){
 
 
 }
-
+/*
 function delete_app()
 {
     $appointments = Appointment::with('schedule_details','user_informations','patients')
@@ -81,7 +81,7 @@ function delete_app()
             $app->save();
         }
     }
-}
+}*/
 
 function get_local_time()
 {

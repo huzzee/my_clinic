@@ -259,7 +259,7 @@ $(window).load(function () {
         }
     });
 
-    console.log(medicines);
+    //console.log(medicines);
 
     $('#drug_name_pres').autoComplete({
 
@@ -398,86 +398,82 @@ $('#enter_drug_add').click(function () {
 
                     if(response.medicines.medicine_info.current_qnt < response.medicines.medicine_info.min_qnt)
                     {
-                        if(response.medicines.medicine_info.current_qnt < 1)
-                        {
-                            $.confirm({
-                                title: 'Are You Sure!',
-                                btnClass: 'btn-blue',
-                                content: 'This Medicine is Out Of Stock From Our Clinic.Are You Sure to Add this',
-                                buttons: {
-                                    Yes: function () {
-                                        var html = `<tr>
-                                    <td>` + medicine_name + ` (`+medicine_type+`)<input type="hidden" name="drug_name[]" value="` + medicine_name + ` (`+medicine_type+`)"></td>
-                                    
-                                    <td>` + medicine_qnt + `<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="` + medicine_qnt + `"></td>
-                                    <td>` + medicine_dosage + `.`+medicine_dosage_unit+`<input type="hidden" name="dosage_qnt[]" value="` + medicine_dosage + `.`+medicine_dosage_unit+`"></td>
-                                    <td>` + medicine_days + `<input type="hidden" name="days[]" value="` + medicine_days + `"></td></td>
-                                    <td>` + instructions + `<input type="hidden" name="instruction[]" value="` + instructions + `">
-                                    <input type="hidden" name="pres_type[]" value="1"></td>
-                                    <td><button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_prescription">
-                                    <i class="fa fa-remove"></i>
-                                    </button></td>
-                                </tr>`;
-                                        $('#pres_test_here').append(html);
+                        $.alert('Low In Stock', 'This medicine is Low in our stock!');
+                        var html = `<tr>
+                                <td>` + medicine_name + ` (`+medicine_type+`)<input type="hidden" name="drug_name[]" value="` + medicine_name + ` (`+medicine_type+`)"></td>
+                                
+                                <td>` + medicine_qnt + `<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="` + medicine_qnt + `"></td>
+                                <td>` + medicine_dosage + `.`+medicine_dosage_unit+`<input type="hidden" name="dosage_qnt[]" value="` + medicine_dosage + `.`+medicine_dosage_unit+`"></td>
+                                <td>` + medicine_days + `<input type="hidden" name="days[]" value="` + medicine_days + `"></td></td>
+                                <td>` + instructions + `<input type="hidden" name="instruction[]" value="` + instructions + `">
+                                <input type="hidden" name="pres_type[]" value="0"></td>
+                                <td><button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_prescription">
+                                <i class="fa fa-remove"></i>
+                                </button></td>
+                            </tr>`;
+                        $('#pres_test_here').append(html);
 
-                                        $('#drug_name_pres').val('');
+                        $('#drug_name_pres').val('');
 
-                                        $('#drug_qnt_pres').val('');
-                                        $('#drug_dosage_pres').val('');
+                        $('#drug_qnt_pres').val('');
+                        $('#drug_dosage_pres').val('');
 
-                                        $('#drug_days_pres').val('');
+                        $('#drug_days_pres').val('');
 
-                                        $('#drug_inst_pres').val('');
-                                    },
-                                    No: function () {
+                        $('#drug_inst_pres').val('');
 
-                                    },
+                    }
+                    else{
+                        var html = `<tr>
+                                <td>` + medicine_name + ` (`+medicine_type+`)<input type="hidden" name="drug_name[]" value="` + medicine_name + ` (`+medicine_type+`)"></td>
+                                
+                                <td>` + medicine_qnt + `<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="` + medicine_qnt + `"></td>
+                                <td>` + medicine_dosage + `.`+medicine_dosage_unit+`<input type="hidden" name="dosage_qnt[]" value="` + medicine_dosage + `.`+medicine_dosage_unit+`"></td>
+                                <td>` + medicine_days + `<input type="hidden" name="days[]" value="` + medicine_days + `"></td></td>
+                                <td>` + instructions + `<input type="hidden" name="instruction[]" value="` + instructions + `">
+                                <input type="hidden" name="pres_type[]" value="0"></td>
+                                <td><button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_prescription">
+                                <i class="fa fa-remove"></i>
+                                </button></td>
+                            </tr>`;
+                        $('#pres_test_here').append(html);
 
-                                }
-                            });
+                        $('#drug_name_pres').val('');
 
-                        }
-                        else {
-                            $.alert('Medicine is Low In Stock. Total Quantity now:'+response.medicines.medicine_info.current_qnt,'Low in Our Stock');
-                        }
+                        $('#drug_qnt_pres').val('');
+                        $('#drug_dosage_pres').val('');
+
+                        $('#drug_days_pres').val('');
+
+                        $('#drug_inst_pres').val('');
                     }
                 }
                 else{
-                    $.confirm({
-                        title: 'Are You Sure!',
-                        btnClass: 'btn-blue',
-                        content: medicine_name+'  ('+medicine_type+') '+medicine_dosage+'.'+medicine_dosage_unit+' is Not Available in Our clinic Stock.Are you Want To add This',
-                        buttons: {
-                            Yes: function () {
-                                var html = `<tr>
+                    $.alert('Not In Stock', 'This medicine is not in our stock!');
+
+                    var html = `<tr>
                                     <td>` + medicine_name + ` (`+medicine_type+`)<input type="hidden" name="drug_name[]" value="` + medicine_name + ` (`+medicine_type+`)"></td>
                                     
                                     <td>` + medicine_qnt + `<input type="hidden" class="medicine_qnt" name="drug_qnt[]" value="` + medicine_qnt + `"></td>
                                     <td>` + medicine_dosage + `.`+medicine_dosage_unit+`<input type="hidden" name="dosage_qnt[]" value="` + medicine_dosage + `.`+medicine_dosage_unit+`"></td>
                                     <td>` + medicine_days + `<input type="hidden" name="days[]" value="` + medicine_days + `"></td></td>
                                     <td>` + instructions + `<input type="hidden" name="instruction[]" value="` + instructions + `">
-                                    <input type="hidden" name="pres_type[]" value="1"></td>
+                                    <input type="hidden" name="pres_type[]" value="0"></td>
                                     <td><button type="button" class="btn btn-icon btn-danger m-b-5 remove_table_prescription">
                                     <i class="fa fa-remove"></i>
                                     </button></td>
                                 </tr>`;
-                                $('#pres_test_here').append(html);
+                    $('#pres_test_here').append(html);
 
-                                $('#drug_name_pres').val('');
+                    $('#drug_name_pres').val('');
 
-                                $('#drug_qnt_pres').val('');
-                                $('#drug_dosage_pres').val('');
+                    $('#drug_qnt_pres').val('');
+                    $('#drug_dosage_pres').val('');
 
-                                $('#drug_days_pres').val('');
+                    $('#drug_days_pres').val('');
 
-                                $('#drug_inst_pres').val('');
-                            },
-                            No: function () {
+                    $('#drug_inst_pres').val('');
 
-                            },
-
-                        }
-                    });
 
                 }
             }

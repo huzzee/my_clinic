@@ -31,16 +31,16 @@ class Prescription extends Model
 
     public function invoices()
     {
-        return $this->hasOne('App\models\Invoice','id');
+        return $this->hasMany(Invoice::class);
     }
 
     public function medicalRecords()
     {
-        return $this->hasOne('App\models\MedicalRecord','id');
+        return $this->hasOne('App\models\MedicalRecord');
     }
 
     public function medicalCertificates()
     {
-        $this->hasOne('App\models\MedicalCertificate','id');
+        return $this->hasOne('App\models\MedicalCertificate');
     }
 }

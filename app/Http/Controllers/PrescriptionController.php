@@ -19,14 +19,15 @@ class PrescriptionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('user_privilage',['except'=>['edit','store',
+        $this->middleware('user_privilage',['except'=>['store',
             'drugs_autocomplete','drug_qnt_check','dosage_qnt_check','drug_type_check']]);
     }
 
     public function index()
     {
-        $prescriptions = Prescription::with('user_informations','patients')
-        ->where('entity_id','=',Auth::user()->entity_id)->get();
+        $prescriptions = Prescription::with('user_informations','patients','queues','invoices')
+        ->where('entity_id','=',Auth::user()->entity_id)->latest()->paginate(20);
+        //dd($prescriptions);
 
         return view('pages.prescriptions.prescription',array(
             'prescriptions' => $prescriptions
@@ -49,6 +50,11 @@ class PrescriptionController extends Controller
         $patient = Patient::with('medical_records','prescriptions')
             ->where('id','=',$queue->patient_id)->first();
 
+        $prescriptions = Prescription::with('medicalRecords','MedicalCertificates')
+            ->where('patient_id','=',$queue->patient_id)->latest()->paginate(6);
+
+        //dd($prescriptions);
+
         $templates = MedicalTemplate::with('medical_template_details')
             ->where('entity_id','=',Auth::user()->entity_id)->get();
 
@@ -67,7 +73,8 @@ class PrescriptionController extends Controller
             'queue' => $queue,
             'drawings' => $drawings,
             'templates' => $templates,
-            'drugTypes' => $drugType
+            'drugTypes' => $drugType,
+            'prescriptions' => $prescriptions
         ));
     }
 
@@ -79,6 +86,18 @@ class PrescriptionController extends Controller
         $request->validate([
             'pres_type' => 'required'
         ]);
+        if($request->check_mc !== null)
+        {
+            $request->validate([
+                'date_of_visit' => 'required',
+                'date_of_issue' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'time_in' => 'required',
+                'time_out' => 'required',
+                'description' => 'required',
+            ]);
+        }
 
         $queue = Queue::findOrFail($request->queue_id);
         $queue->status = 2;
@@ -107,7 +126,7 @@ class PrescriptionController extends Controller
         $prescription = new Prescription;
         $prescription->doctor_id = $request->doctor_id;
         $prescription->patient_id = $request->patient_id;
-        $prescription->queue_code = $queue->queue_code;
+        $prescription->queue_id = $request->queue_id;
         $prescription->entity_id = Auth::user()->entity_id;
         $prescription->prescriptions = $pres;
 
@@ -182,6 +201,8 @@ class PrescriptionController extends Controller
             $mc->end_date = date('Y-m-d',strtotime($request->end_date));
             $mc->time_in = date('H:i',strtotime($request->time_in));
             $mc->time_out = date('H:i',strtotime($request->time_out));
+            $mc->certificate_type = $request->certificate_type;
+            $mc->description = $request->description;
             $mc->remarks = $request->remarks;
 
             $mc->save();

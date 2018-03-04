@@ -140,7 +140,7 @@
 s
     </style>
     <body class="fixed-left">
-    @php delete_app(); @endphp
+
     <input type="hidden" value="{{ url('/') }}" id="baseUrl">
 
         <!-- Begin page -->
@@ -173,9 +173,10 @@ s
             <div class="content-page">
                 @yield('content')
 
-                @include('include.footer')
+
 
             </div>
+            @include('include.footer')
 
 
             <!-- ============================================================== -->
@@ -191,7 +192,7 @@ s
         <!-- END wrapper -->
 
 
-
+        <script src="{{ asset('js/app.js') }}"></script>
         <script>
             var resizefunc = [];
         </script>
@@ -199,11 +200,11 @@ s
 
         <!-- jQuery  -->
 
-        <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-        <script src="{{ asset('js/jquery-confirm.min.js') }}"></script>
+        {{--<script src="{{ asset('assets/js/jquery.min.js') }}"></script>--}}
+
         <script src="{{ asset('js/jquery.jqscribble.js') }}"></script>
         <script src="{{ asset('js/jqscribble.extrabrushes.js') }}"></script>
-        <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+        
         <script src="{{ asset('assets/js/detect.js') }}"></script>
         <script src="{{ asset('assets/js/fastclick.js') }}"></script>
         <script src="{{ asset('assets/js/jquery.blockUI.js') }}"></script>
@@ -215,9 +216,13 @@ s
         @yield('scripts');
 
         <!-- App js -->
+        <script src="{{ asset('js/jquery-confirm.min.js') }}"></script>
         <script src="{{ asset('assets/js/jquery.core.js') }}"></script>
         <script src="{{ asset('assets/js/jquery.app.js') }}"></script>
+
         <script src="{{ asset('js/custom.js') }}"></script>
+
+
 
     </body>
 </html>

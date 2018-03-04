@@ -500,9 +500,10 @@
 
 
     <script src="<?php echo e(asset('js/webcam/webcam.js')); ?>"></script>
-
-
     <script src="<?php echo e(asset('js/patient_info.js')); ?>"></script>
+
+
+
 <?php $__env->stopSection(); ?>
 
 <!--*********Page Scripts End*********-->

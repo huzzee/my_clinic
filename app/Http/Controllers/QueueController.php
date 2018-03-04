@@ -22,11 +22,12 @@ class QueueController extends Controller
 
     public function index()
     {
+
         $queues = Queue::with('user_informations','patients')
             ->where('entity_id','=',Auth::user()->entity_id)
             ->where('status','!=',4)
             ->where('status','!=',3)
-            ->orderBy('id','asc')->get();
+            ->orderBy('status','asc')->get();
 
         $patients = Patient::with('users')
             ->where('entity_id','=',Auth::user()->entity_id)->get();

@@ -59,7 +59,7 @@
                             <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td><?php echo e($i); ?></td>
-                                    <td><img src="<?php echo e(asset('uploads/'.$doctor->users->profile_image)); ?>" alt="<?php echo e($doctor->users->profile_image); ?>" style="height: 50px; width: 50px;"></td>
+                                    <td><img src="<?php echo e(asset('uploads/'.$doctor->users->profile_image.'?v='.\Carbon\Carbon::now())); ?>" alt="<?php echo e($doctor->users->profile_image); ?>" style="height: 50px; width: 50px;"></td>
                                     <td>Dr.<?php echo e($doctor->users['name']); ?></td>
                                     <td><?php echo e($doctor->users->email); ?></td>
                                     <td><?php echo e($doctor->doctor_info['department']); ?></td>

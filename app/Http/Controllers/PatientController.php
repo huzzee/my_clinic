@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\models\MedicalRecord;
 use App\models\Patient;
+use App\models\Prescription;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\models\UserInformation;
@@ -31,9 +32,10 @@ class PatientController extends Controller
      */
     public function index()
     {
+        //dd(Prescription::with('medicalCertificates')->get());
 
-        $patient = Patient::with('users','medical_records')->where('entity_id','=',Auth::user()->entity_id)
-            ->latest()->get();
+        $patient = Patient::with('users')->where('entity_id','=',Auth::user()->entity_id)
+            ->OrderBy(ucfirst('patient_info->full_name'),'asc')->get();
 
         //dd($patient);
         //$states = DB::table('states')->get();
@@ -103,10 +105,346 @@ class PatientController extends Controller
             return DB::table('countries2')->pluck('name','name');
         });
 
-        $patient = Patient::with('users','medical_records','appointments','invoices')
-            ->where('entity_id','=',Auth::user()->entity_id)
-            ->where('id','=',$patient_id)->first();
+        $patient = Patient::findOrFail($patient_id);
 
+        $prescriptions = Prescription::with('user_informations',
+            'medicalRecords','medicalCertificates')
+        ->where('patient_id','=',$patient_id)->latest()->get();
+
+
+
+        $timline_article = '';
+
+        foreach($prescriptions as $prescription)
+        {
+            $medical_template = '';
+
+            foreach($prescription->medicalRecords->template as $temp)
+            {
+
+                if(sizeof($temp['answers']) > 1)
+                {
+                    $answer = '';
+                    for($o =0 ; $o < sizeof($temp['answers']); $o++)
+                    {
+                        $answer.= '
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control"
+                                    value="'. $temp['answers'][$o] .'" readonly>
+
+                            </div>
+                        ';
+                    }
+
+                }
+                else
+                {
+                    $answer = '
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control"
+                                value="'. $temp['answers'] .'" readonly>
+
+                        </div>
+                    ';
+                }
+
+
+                $medical_template.='
+                    <div class="form-group row">
+                        <label for="patient_id" class="form-label col-sm-12"><span style="float: left;">'. $temp['question'] .'?</span></label>
+                        '.$answer.'
+                    </div>
+                ';
+            }
+
+
+            /*for prescriptions*/
+
+            $meds = '';
+
+            foreach ($prescription->prescriptions as $prescribe)
+            {
+                $meds.= '
+                    <tr>
+                        <td>'.$prescribe['drug_name'].'</td>
+                        <td>'.$prescribe['drug_qnt'].'</td>
+                        <td>'.$prescribe['dosage_qnt'].'</td>
+                        <td>'.$prescribe['days'].'</td>
+                        <td>'.$prescribe['instruction'].'</td>
+                    </tr>
+                ';
+            }
+
+
+            if($prescription->medicalCertificates !== null)
+            {
+                $certificate =
+                    '
+                    <div class="row">
+                                                
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Date Of Visit</label>
+                                <p>'.$prescription->medicalCertificates->date_of_visit.'</p>
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Date Of Issue</label>
+                                <p>'.$prescription->medicalCertificates->date_of_issue.'</p>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Start Date</label>
+                                <p>'.$prescription->medicalCertificates->start_date.'</p>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">End Date</label>
+                                <p>'.$prescription->medicalCertificates->end_date.'</p>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Time In</label>
+                                <p>'.date('g:i a',strtotime($prescription->medicalCertificates->time_in)).'</p>
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Time Out</label>
+                                <p>'.date('g:i a',strtotime($prescription->medicalCertificates->time_out)).'</p>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">MC Type</label>
+                                <p>'.$prescription->medicalCertificates->certificate_type.'</p>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Description</label>
+                               <p>'.$prescription->medicalCertificates->description.'</p>
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <label for="full_name" class="control-label">Remarks</label>
+                                <p>'.$prescription->medicalCertificates->remarks.'</p>
+                            </div>
+                        </div>
+                    </div>
+                ';
+            }
+            else
+            {
+                $certificate = '<p> No Certificate </p>';
+            }
+
+
+            /*for multiple files*/
+            $upps = '';
+
+            $inc = 1;
+            for($j=0; $j < sizeof($prescription->medicalRecords->upload_file); $j++)
+            {
+                $upps.='
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-11">
+                                <h5 align="left"><a href="'. asset('uploads/'.$prescription->medicalRecords->upload_file[$j]) .'" target="_blank">Image '. $inc .'</a></h5>
+                            </div>
+                            
+                        </div>
+                        ';
+                $inc++;
+            }
+
+
+
+
+            $timline_article.= '
+                <article class="timeline-item left">
+                    <div class="timeline-desk">
+                        <div class="panel" >
+                            <div class="timeline-box" style="background-color: white; border: 1px solid grey;">
+                                <span class="arrow-alt"></span>
+                                <span class="timeline-icon"
+                                      style="width: 60px !important;
+                                                height: 50px !important;
+                                                border-radius: 0px !important; background-color: white; border: 1px solid grey; color: black">
+                                    <div>'. date('d',strtotime($prescription->created_at)) .'<br>
+                                                    '. date('M*y',strtotime($prescription->created_at)) .'
+                                    </div>
+                                </span>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h4 class="">Records And Prescription</h4>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <small>'. date('g:i a',strtotime($prescription->created_at)) .' -BY  '. $prescription->user_informations->users['name'] .'</small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="select_pres_record2 select2"
+                                                 data-prescription_id="'.$prescription->id.'">
+                                            <option value="0">Vital Signs</option>
+                                            <option value="1">Medical Notes</option>
+                                            <option value="2">Medical Templates</option>
+                                            <option value="3">Drawing Pad</option>
+                                            <option value="4">Prescription</option>
+                                            <option value="5">Medical Certificate</option>
+                                            <option value="6">Files</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr style="color: black; border: 1px solid grey; margin-top: 10px;">
+                                <div class="row">
+                                    
+                                    <div class="col-sm-12" id="vital_sign_hidden'.$prescription->id.'">
+                                        <div class="row"><h3 style=" margin-left: 10px;">Vital Signs</h3></div>
+                                        <div class="row">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-2 m-t-10 form-group" align="center">
+                                                <h1><i class="fa fa-balance-scale"></i></h1>
+                                                <h5 style="color: grey;">WEIGHT</h5>
+                                                <br>
+                                                <br>
+                                                <h5 style="color: grey; margin: 0px;">'.$prescription->medicalRecords->health_info['weight'].'</h5>
+                                            </div>
+
+                                            <div class="col-md-2 m-t-10 form-group" align="center">
+                                                <h1>B.P</h1>
+                                                <h5 style="color: grey;">B.Pressure</h5>
+                                                <br>
+                                                <br>
+                                                <h5 style="color: grey; margin: 0px;">'.$prescription->medicalRecords->health_info['blood_pressure'].'</h5>
+                                            </div>
+
+                                            <div class="col-md-2 m-t-10 form-group" align="center">
+                                                <h1><i class="fa fa-heartbeat"></i></h1>
+                                                <h5 style="color: grey;">HEARTBEAT</h5>
+                                                <br>
+                                                <small>Heartbeat/Mint</small>
+                                                <br>
+                                                <h5 style="color: grey; margin: 0px;">'.$prescription->medicalRecords->health_info['heartbeat'].'</h5>
+                                            </div>
+
+                                            <div class="col-md-2 m-t-10 form-group" align="center">
+                                                <h1><i class="mdi mdi-thermometer"></i></h1>
+                                                <h5 style="color: grey;">TEMPERATURE</h5>
+                                                <br>
+                                                <br>
+                                                <h5 style="color: grey; margin: 0px;">'.$prescription->medicalRecords->health_info['temperature'].'</h5>
+                                            </div>
+
+                                            <div class="col-md-2 m-t-10 form-group" align="center">
+                                                <h1><i class="fa fa-odnoklassniki"></i></h1>
+                                                <h5 style="color: grey;">RESP.RATE</h5>
+                                                <br>
+                                                <small>Breaths/Mint</small>
+                                                <br>
+                                                <h5 style="color: grey; margin: 0px;">'.$prescription->medicalRecords->health_info['breaths'].'</h5>
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12" id="medical_note_hidden'.$prescription->id.'" style="display: none">
+
+                                        <div class="row">
+                                            <h3 style="margin-bottom:20px;margin-left: 10px;">Medical Note</h3>
+                                        </div>
+                                        
+                                        <div>'. $prescription->medicalRecords->typing_Note .'</div>
+                                        
+                                    </div>
+
+                                    <div class="col-sm-12" id="medical_template_hidden'.$prescription->id.'" style="display: none">
+
+                                        <div class="row"><h3 style="margin-bottom:20px; margin-left: 10px;">Medical Template</h3></div>
+
+                                        <div class="card-box">
+                                            '.$medical_template.'
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12" align="center" id="drawing_template_hidden'.$prescription->id.'" style="display: none">
+                                        <img src="'.asset('uploads/'.$prescription->medicalRecords->image_url).'" style="border: 2px solid black;"/>
+                                        <br>
+                                        <a href="'. asset('uploads/'.$prescription->medicalRecords->image_url) .'" download="Klenic-'.$prescription->patients->patient_info['full_name'].'-'.$prescription->created_at.'" class="btn btn-primary">
+                                            Download
+                                        </a>
+                                    </div>
+
+                                    <div class="col-sm-12" id="prescription_hidden'.$prescription->id.'" style="display: none">
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <h3 style="margin-bottom:20px; margin-left: 10px;">Prescribe Medicines</h3>
+                                            </div>
+                                           
+                                        </div>
+                                       
+                                        <div class="row">
+                                            <table class="table table-striped m-0">
+                                                <thead>
+                                                    
+                                                    <th>Drug Name/Test</th>
+                                                    <th>Quantity</th>
+                                                    <th>Dosage</th>
+                                                    <th>Days</th>
+                                                    <th>Instruction</th>
+                                                    
+                                                </thead>
+                                                <tbody>
+                                                    '.$meds.'
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-12" id="medical_certificate_hidden'.$prescription->id.'" style="display: none">
+
+                                        <div class="row"><h3 style="margin-bottom:20px; margin-left: 10px;">Medical Certificate</h3></div>
+
+                                        '.$certificate.'
+
+                                    </div>
+
+                                    <div class="col-sm-12" id="files_hidden'.$prescription->id.'" style="display: none">
+
+                                            <div class="row"><h3 style="margin-bottom:20px; margin-left: 10px;">Files</h3></div>
+
+                                            <div class="row">
+                                                '.$upps.'
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            ';
+        }
 
 
 
@@ -120,33 +458,6 @@ class PatientController extends Controller
             $gender = 'FEMALE';
         }
 
-
-        $timline_article = '';
-
-        foreach($patient->medical_records as $records)
-        {
-            $timline_article .= '
-                <article class="timeline-item ">
-                    <div class="timeline-desk">
-                        <div class="panel">
-                            <div class="timeline-box">
-                                <span class="arrow"></span>
-                                <span class="timeline-icon" 
-                                        style="width: 60px !important;
-                                        height: 50px !important;
-                                        border-radius: 0px !important; background-color: white; border: 1px solid grey; color: black">
-                                    <div>'. date('d',strtotime($records->created_at)) .' <br>
-                                            '. date('M*y',strtotime($records->created_at)) .'
-                                    </div>
-                                </span>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            ';
-
-        }
 
         $drug_allergy = '';
 
@@ -479,39 +790,7 @@ class PatientController extends Controller
                                                 </div>
                                             </div>
                                         </article>
-                                        <article class="timeline-item left">
-                                            <div class="timeline-desk">
-                                                <div class="panel" >
-                                                    <div class="timeline-box" style="background-color: white; border: 1px solid grey;">
-                                                        <span class="arrow-alt"></span>
-                                                        <span class="timeline-icon" 
-                                                                style="width: 60px !important;
-                                                                height: 50px !important;
-                                                                border-radius: 0px !important; background-color: white; border: 1px solid grey; color: black">
-                                                            <div>'. date('d',strtotime($patient->created_at)) .' <br>
-                                                                    '. date('M*y',strtotime($patient->created_at)) .'
-                                                            </div>
-                                                        </span>
-                                                        <div class="row">
-                                                            <div class="col-sm-3">
-                                                                <h4 class="">Record Data</h4>
-                                                            </div>
-                                                            <div class="col-sm-3">
-                                                                <small>'. date('h:i',strtotime($patient->created_at)) .'-BY  Doctor name</small>
-                                                            </div>
-                                                        </div>
-                                                        <hr style="color: black; border: 1px solid grey;">
-                                                        <div class="row">
-                                                            <p>'. $patient->patient_info['full_name'] .' Registered By '. $patient->users->name .'('.$patient->users->roles->role_name.')</p>
-                                                        
-                                                        </div>
-                                                        
-                                                        
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </article>
+                                        
                                         '.$timline_article.'
                                     </div>
                                 </div>
@@ -601,7 +880,7 @@ class PatientController extends Controller
         $patient->patient_code = Auth::user()->id.''.$request->patient_code;
         $patient->entity_id = Auth::user()->entity_id;
         $patient->patient_info = [
-            'full_name' => $request['full_name'],
+            'full_name' => ucfirst($request['full_name']),
             'contact_no' => $request['contact_no'],
             'gender' => $request['gender'],
             'date_of_birth' => $request['date_of_birth'],

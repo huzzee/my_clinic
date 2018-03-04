@@ -28,7 +28,7 @@ class CreateInvoicesTable extends Migration
             $table->double('net_total',15,3)->default(0);
             $table->double('paid',15,3)->default(0);
             $table->double('balance',15,3)->default(0);
-            $table->json('prescriptions');
+            $table->json('prescription_item');
             $table->text('invoice_comment')->nullable();
             $table->timestamps();
         });

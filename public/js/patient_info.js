@@ -113,11 +113,10 @@ $('.patient_all_info').click(function () {
         data: {patient_id: patient_id},
         dataType: 'json',
         success: function (response) {
-            console.log(response);
-
 
             $('#profie_pat_here').html(response);
             $('.select2').select2();
+
 
         }
     });
@@ -352,4 +351,85 @@ $('#patient_add_submit').on('submit',function (e) {
     }
 
 });
+
+
+$('body').on('change','.select_pres_record2',function () {
+    var type = $(this).val();
+    var pres_id = $(this).data('prescription_id');
+
+    if(type == 0)
+    {
+        $('#vital_sign_hidden'+pres_id).css('display','block');
+        $('#medical_note_hidden'+pres_id).css('display','none');
+        $('#medical_template_hidden'+pres_id).css('display','none');
+        $('#drawing_template_hidden'+pres_id).css('display','none');
+        $('#prescription_hidden'+pres_id).css('display','none');
+        $('#medical_certificate_hidden'+pres_id).css('display','none');
+        $('#files_hidden'+pres_id).css('display','none');
+    }
+    else if(type == 1)
+    {
+        $('#vital_sign_hidden'+pres_id).css('display','none');
+        $('#medical_note_hidden'+pres_id).css('display','block');
+        $('#medical_template_hidden'+pres_id).css('display','none');
+        $('#drawing_template_hidden'+pres_id).css('display','none');
+        $('#prescription_hidden'+pres_id).css('display','none');
+        $('#medical_certificate_hidden'+pres_id).css('display','none');
+        $('#files_hidden'+pres_id).css('display','none');
+    }
+    else if(type == 2)
+    {
+        $('#vital_sign_hidden'+pres_id).css('display','none');
+        $('#medical_note_hidden'+pres_id).css('display','none');
+        $('#medical_template_hidden'+pres_id).css('display','block');
+        $('#drawing_template_hidden'+pres_id).css('display','none');
+        $('#prescription_hidden'+pres_id).css('display','none');
+        $('#medical_certificate_hidden'+pres_id).css('display','none');
+        $('#files_hidden'+pres_id).css('display','none');
+    }
+    else if(type == 3)
+    {
+
+
+        $('#vital_sign_hidden'+pres_id).css('display','none');
+        $('#medical_note_hidden'+pres_id).css('display','none');
+        $('#medical_template_hidden'+pres_id).css('display','none');
+        $('#drawing_template_hidden'+pres_id).css('display','block');
+        $('#prescription_hidden'+pres_id).css('display','none');
+        $('#medical_certificate_hidden'+pres_id).css('display','none');
+        $('#files_hidden'+pres_id).css('display','none');
+    }
+    else if(type == 4)
+    {
+        $('#vital_sign_hidden'+pres_id).css('display','none');
+        $('#medical_note_hidden'+pres_id).css('display','none');
+        $('#medical_template_hidden'+pres_id).css('display','none');
+        $('#drawing_template_hidden'+pres_id).css('display','none');
+        $('#prescription_hidden'+pres_id).css('display','block');
+        $('#medical_certificate_hidden'+pres_id).css('display','none');
+        $('#files_hidden'+pres_id).css('display','none');
+    }
+    else if(type == 5)
+    {
+        $('#vital_sign_hidden'+pres_id).css('display','none');
+        $('#medical_note_hidden'+pres_id).css('display','none');
+        $('#medical_template_hidden'+pres_id).css('display','none');
+        $('#drawing_template_hidden'+pres_id).css('display','none');
+        $('#prescription_hidden'+pres_id).css('display','none');
+        $('#medical_certificate_hidden'+pres_id).css('display','block');
+        $('#files_hidden'+pres_id).css('display','none');
+    }
+    else if(type == 6)
+    {
+
+        $('#vital_sign_hidden'+pres_id).css('display','none');
+        $('#medical_note_hidden'+pres_id).css('display','none');
+        $('#medical_template_hidden'+pres_id).css('display','none');
+        $('#drawing_template_hidden'+pres_id).css('display','none');
+        $('#prescription_hidden'+pres_id).css('display','none');
+        $('#medical_certificate_hidden'+pres_id).css('display','none');
+        $('#files_hidden'+pres_id).css('display','block');
+    }
+});
+
 /*for patients end*/

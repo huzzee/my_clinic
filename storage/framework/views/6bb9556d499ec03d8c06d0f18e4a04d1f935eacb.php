@@ -31,12 +31,13 @@
 
                         <!-- Right(Notification) -->
                         <ul class="nav navbar-nav navbar-right">
-
+                            <div id="app"></div>
                             <li>
                                 <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
                                     <i class="mdi mdi-bell"></i>
                                     <span class="badge up bg-success">4</span>
                                 </a>
+
 
                                 <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list">
                                     <li>

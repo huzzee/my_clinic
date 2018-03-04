@@ -227,68 +227,101 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
-        $request->validate([
-            'pres_type' => 'required'
-        ]);
-
-
-
-        $invoice = new Invoice;
-        $invoice->invoice_code = 'PI-'.str_random(4).'-'.str_random(2);
-        $invoice->doctor_id = $request->doctor_id;
-        $invoice->patient_id = $request->patient_id;
-        $invoice->prescription_id = $request->prescription_id;
-        $invoice->entity_id = Auth::user()->entity_id;
-        $invoice->net_total = $request->net_total;
-        $invoice->total_discount = $request->total_discount;
-        $invoice->after_discount = $request->after_discount;
-        $invoice->total_gst = $request->total_gst;
-        $invoice->grand_total = $request->grand_total;
-        $invoice->paid = $request->paid;
-        $invoice->balance = $request->grand_total;
-        $invoice->invoice_comment = $request->invoice_comment;
-
-        $pres=[];
-        for ($i=0; $i < sizeof($request->pres_type); $i++)
+        if($request->invoice == 1)
         {
-
-            $abc = [
-                'drug_id' => $request->drug_id[$i],
-                'drug_name' => $request->drug_name[$i],
-                'drug_qnt' => $request->drug_qnt[$i],
-                'price' => $request->price[$i],
-                'sub_total' => $request->sub_total[$i],
-                'discount' => $request->discount[$i],
-                'remark' => $request->remark[$i],
-                'gst' => $request->gst[$i],
-                'line_total' => $request->line_total[$i],
-                'pres_type' => $request->pres_type[$i],
-                'days' => $request->days[$i],
-                'instruction' => $request->instruction[$i],
-                'dosage_qnt' => $request->dosage_qnt[$i],
-                'dosage_unit' => $request->dosage_unit[$i]
-            ];
-
-            array_push($pres,$abc);
-
-        }
-        $invoice->prescriptions = $pres;
-
-        $invoice->save();
-
-        if($invoice->queue_id !== null) {
-
             $queue = Queue::findOrFail($request->queue_id);
             $queue->status = 3;
-            $queue->bill = $request->grand_total;
-            $queue->paid = $request->paid;
+
             $queue->save();
+
+            return redirect('prescriptions');
+
         }
+        else {
 
 
-        return redirect('invoices/'.$invoice->id)
-            ->with('message','Successfully Created Invoice');
+            //dd($request->all());
+            $request->validate([
+                'pres_type' => 'required',
+                'paid' => 'integer'
+            ]);
+
+            if ($request->paid > $request->grand_total) {
+                return redirect()->back()->with('message', 'You Higher Amount Then Total Please enter valid amount');
+            }
+
+
+            $invoice = new Invoice;
+            $invoice->invoice_code = 'PI-' . str_random(4) . '-' . str_random(2);
+            $invoice->doctor_id = $request->doctor_id;
+            $invoice->patient_id = $request->patient_id;
+            $invoice->prescription_id = $request->prescription_id;
+            $invoice->entity_id = Auth::user()->entity_id;
+            $invoice->net_total = $request->net_total;
+            $invoice->total_discount = $request->total_discount;
+            $invoice->after_discount = $request->after_discount;
+            $invoice->total_gst = $request->total_gst;
+            $invoice->grand_total = $request->grand_total;
+            $invoice->paid = $request->paid;
+            $invoice->balance = $request->grand_total - $request->paid;
+            $invoice->invoice_comment = $request->invoice_comment;
+
+            $pres = [];
+            for ($i = 0; $i < sizeof($request->pres_type); $i++) {
+
+                $abc = [
+                    'drug_id' => $request->drug_id[$i],
+                    'drug_name' => $request->drug_name[$i],
+                    'drug_qnt' => $request->drug_qnt[$i],
+                    'price' => $request->price[$i],
+                    'sub_total' => $request->sub_total[$i],
+                    'discount' => $request->discount[$i],
+                    'remark' => $request->remark[$i],
+                    'gst' => $request->gst[$i],
+                    'line_total' => $request->line_total[$i],
+                    'pres_type' => $request->pres_type[$i],
+                    'days' => $request->days[$i],
+                    'instruction' => $request->instruction[$i],
+                    'dosage_qnt' => $request->dosage_qnt[$i],
+                    'dosage_unit' => $request->dosage_unit[$i]
+                ];
+
+                array_push($pres, $abc);
+
+            }
+            $invoice->prescription_item = $pres;
+
+            $invoice->save();
+
+            if ($request->paid == $request->grand_total) {
+                $queue = Queue::findOrFail($request->queue_id);
+                $queue->status = 3;
+                if ($queue->bill == null) {
+                    $queue->bill = $request->grand_total;
+                }
+                $queue->paid = $request->paid;
+                $queue->save();
+            } else {
+                $queue = Queue::findOrFail($request->queue_id);
+                if ($queue->bill == null) {
+                    $queue->bill = $request->grand_total;
+                }
+                $queue->paid = $queue->paid + $request->paid;
+                $queue->save();
+            }
+
+            for ($i = 0; $i < sizeof($invoice->prescriptions); $i++) {
+                if ($invoice->prescriptions[$i]['pres_type'] == 0) {
+                    $drug = Medicine::findOrFail($invoice->prescriptions[$i]['drug_id']);
+                    $drug['medicine_info->used_qnt'] = $drug->medicine_info['used_qnt'] + $invoice->prescriptions[$i]['drug_qnt'];
+                    $drug['medicine_info->current_qnt'] = $drug->medicine_info['current_qnt'] - $invoice->prescriptions[$i]['drug_qnt'];
+                    $drug->save();
+                }
+            }
+
+            return redirect('invoices/' . $invoice->id)
+                ->with('message', 'Successfully Created Invoice');
+        }
 
     }
 
@@ -296,11 +329,6 @@ class InvoiceController extends Controller
     {
         $prescriptions = Prescription::with('patients','patients')
             ->where('id','=',$id)->first();
-
-        $queue = Queue::where('queue_code','=',$prescriptions->queue_code)->first();
-
-        $queue->status = 1;
-        $queue->save();
 
         $medicines = Medicine::where('entity_id','=',Auth::user()->entity_id)->get();
 
@@ -310,89 +338,20 @@ class InvoiceController extends Controller
             'prescriptions' => $prescriptions,
             'medicines' => $medicines,
             'services' => $services,
-            'queue' => $queue
+
         ));
     }
 
-    public function update(Request $request,$id)
-    {
-        $request->validate([
-            'pres_type' => 'required'
-        ]);
-
-
-
-        $invoice = Invoice::findOrFail($id);
-
-        $invoice->net_total = $request->net_total;
-        $invoice->total_discount = $request->total_discount;
-        $invoice->after_discount = $request->after_discount;
-        $invoice->total_gst = $request->total_gst;
-        $invoice->grand_total = $request->grand_total;
-        $invoice->paid = 0;
-        $invoice->balance = $request->grand_total;
-        $invoice->invoice_comment = $request->invoice_comment;
-
-        $pres=[];
-        for ($i=0; $i < sizeof($request->pres_type); $i++)
-        {
-
-            $abc = [
-                'drug_id' => $request->drug_id[$i],
-                'drug_name' => $request->drug_name[$i],
-                'drug_qnt' => $request->drug_qnt[$i],
-                'price' => $request->price[$i],
-                'sub_total' => $request->sub_total[$i],
-                'discount' => $request->discount[$i],
-                'remark' => $request->remark[$i],
-                'gst' => $request->gst[$i],
-                'line_total' => $request->line_total[$i],
-                'pres_type' => $request->pres_type[$i],
-                'days' => $request->days[$i],
-                'instruction' => $request->instruction[$i],
-                'dosage_qnt' => $request->dosage_qnt[$i],
-                'dosage_unit' => $request->dosage_unit[$i]
-            ];
-
-            array_push($pres,$abc);
-
-        }
-        $invoice->prescriptions = $pres;
-
-        $invoice->save();
-
-        $prescription = new Prescription;
-        $prescription->doctor_id = $request->doctor_id;
-        $prescription->patient_id = $request->patient_id;
-        $prescription->entity_id = Auth::user()->entity_id;
-        $prescription->prescriptions = $pres;
-
-        $prescription->save();
-
-        if($invoice->queue_id !== null)
-        {
-            $queue = Queue::findOrFail($invoice->queue_id);
-            $queue->status = 2;
-            $queue->bill = $request->grand_total;
-            $queue->paid = 0;
-            $queue->save();
-        }
-
-
-            return redirect('invoices/'.$invoice->id)
-                ->with('message','Successfully Edited Invoice');
-
-    }
 
 
     public function show($id)
     {
 
 
-        $invoice = Invoice::with('user_informations','patients')
+        $invoice = Invoice::with('user_informations','patients','prescriptions')
             ->where('id','=',$id)->first();
-
-        return view('pages.queues.showInvoice',array(
+        //dd($invoice->prescriptions->queues);
+        return view('pages.invoices.showInvoice',array(
             'invoice' => $invoice,
 
         ));

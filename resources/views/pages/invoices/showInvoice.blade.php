@@ -83,7 +83,7 @@
 
                                                 </div>
                                                 <div class="pull-right m-t-30">
-
+                                                    <p><strong>Queue Code: </strong>  {{ $invoice->prescriptions->queues->queue_code }}</p>
                                                     <p><strong>Created By: </strong>  {{ $invoice->user_informations->users['name'] }}</p>
                                                     <p><strong>Role: </strong>{{ $invoice->user_informations->users->roles->role_name }}</p>
                                                     <p><strong>Created At: </strong>  {{ date('d-M-Y', strtotime($invoice->created_at)) }}</p>
@@ -115,7 +115,7 @@
                                                         </thead>
                                                         <tbody>
                                                         @php $i=1; @endphp
-                                                        @foreach($invoice->prescriptions as $pres)
+                                                        @foreach($invoice->prescription_item as $pres)
                                                             <tr>
                                                                 <td>{{$i}}</td>
                                                                 <td>{{ $pres['drug_name'] }}</td>
@@ -164,7 +164,7 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                         <i class="mdi mdi-checkbox-marked"></i>
-                                                        <strong>Aoa!</strong> Payment is Completed.
+                                                        <strong>Good !</strong> Payment is Completed.
                                                     </div>
                                                 @endif
                                                 </div>

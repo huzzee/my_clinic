@@ -89,6 +89,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Drug/Test</th>
+                                                    <th>Quantity</th>
                                                     <th>days</th>
                                                     <th>Instruction</th>
                                                 </tr>
@@ -103,6 +104,7 @@
                                                             -{{$prescription['dosage_qnt']}}
                                                             @endif
                                                         </td>
+                                                        <td>{{ $prescription['drug_qnt'] }}</td>
                                                         <td>{{ $prescription['days'] }}</td>
                                                         <td>{{ $prescription['instruction'] }}</td>
                                                     </tr>
@@ -359,7 +361,7 @@
                                             {{ csrf_field() }}
                                             <input type="hidden" name="patient_id" value="{{ $prescriptions->patients->id }}">
                                             <input type="hidden" name="doctor_id" value="{{ $prescriptions->user_informations->id }}">
-                                            <input type="hidden" name="queue_id" value="{{ $queue->id }}">
+                                            <input type="hidden" name="queue_id" value="{{ $prescriptions->queues->id }}">
                                             <input type="hidden" name="prescription_id" value="{{ $prescriptions->id }}">
                                             <div class="row" style="min-height: 300px;">
 
@@ -434,7 +436,7 @@
                                                     <div class="form-group row">
                                                         <label for="grand_total" class="col-sm-4" style="float: left;">Payment</label>
                                                         <div class="input-group col-sm-8">
-                                                            <input type="number" class="form-control" name="paid">
+                                                            <input type="text" class="form-control" name="paid">
                                                             <span class="input-group-addon">{{ Auth::user()->entities->currency }}</span>
                                                         </div>
                                                     </div>
@@ -445,7 +447,9 @@
                                             <div class="row" style="height: 50px;"></div>
                                             <div class="row">
 
-                                                <button type="submit" class="btn btn-inverse waves-effect waves-light m-b-5">Save Invoice</button>
+                                                <button type="submit" name="invoice" value="0" class="btn btn-inverse waves-effect waves-light m-b-5">Save Invoice</button>
+
+                                                <button type="submit" name="invoice" value="1" class="btn btn-teal waves-effect waves-light m-b-5">Don't Make Invoice</button>
 
                                             </div>
                                         </form>

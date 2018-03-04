@@ -140,7 +140,7 @@
 s
     </style>
     <body class="fixed-left">
-    <?php delete_app(); ?>
+
     <input type="hidden" value="<?php echo e(url('/')); ?>" id="baseUrl">
 
         <!-- Begin page -->
@@ -173,9 +173,10 @@ s
             <div class="content-page">
                 <?php echo $__env->yieldContent('content'); ?>
 
-                <?php echo $__env->make('include.footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
 
             </div>
+            <?php echo $__env->make('include.footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 
             <!-- ============================================================== -->
@@ -191,7 +192,7 @@ s
         <!-- END wrapper -->
 
 
-
+        <script src="<?php echo e(asset('js/app.js')); ?>"></script>
         <script>
             var resizefunc = [];
         </script>
@@ -199,11 +200,11 @@ s
 
         <!-- jQuery  -->
 
-        <script src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>
-        <script src="<?php echo e(asset('js/jquery-confirm.min.js')); ?>"></script>
+        
+
         <script src="<?php echo e(asset('js/jquery.jqscribble.js')); ?>"></script>
         <script src="<?php echo e(asset('js/jqscribble.extrabrushes.js')); ?>"></script>
-        <script src="<?php echo e(asset('assets/js/bootstrap.min.js')); ?>"></script>
+        
         <script src="<?php echo e(asset('assets/js/detect.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/fastclick.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/jquery.blockUI.js')); ?>"></script>
@@ -215,9 +216,13 @@ s
         <?php echo $__env->yieldContent('scripts'); ?>;
 
         <!-- App js -->
+        <script src="<?php echo e(asset('js/jquery-confirm.min.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/jquery.core.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/jquery.app.js')); ?>"></script>
+
         <script src="<?php echo e(asset('js/custom.js')); ?>"></script>
+
+
 
     </body>
 </html>

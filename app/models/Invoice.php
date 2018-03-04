@@ -12,7 +12,7 @@ class Invoice extends Model
     ];
 
     protected $casts = [
-        'prescriptions' => 'array'
+        'prescription_item' => 'array'
     ];
 
     public function user_informations()

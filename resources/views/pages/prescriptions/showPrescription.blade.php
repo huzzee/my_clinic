@@ -132,10 +132,8 @@
                                                 @endif
                                         </span></p>
 
-                                        <p class="text-muted font-13"><strong>Drug Allergy :</strong><span class="m-l-15">
-                                        @foreach($prescription->patients->drug_allergy as $allergy)
-                                                    {{ $allergy}},
-                                                @endforeach</span></p>
+                                        <p class="text-muted font-13"><strong>Queue Code :</strong> <span class="m-l-15">
+                                            {{ $prescription->queues->queue_code }}</span></p>
 
                                         <p class="text-muted font-13"><strong>Doctor Name :</strong> <span class="m-l-15">
                                             {{ $prescription->user_informations->users['name'] }}</span></p>
@@ -164,10 +162,10 @@
                                                 <tr>
 
                                                     <th width="15%" style="text-align: center">Item Name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Dosage</th>
-                                                    <th>Days</th>
-                                                    <th>Instruction</th>
+                                                    <th style="text-align: center">Quantity</th>
+                                                    <th style="text-align: center">Dosage</th>
+                                                    <th style="text-align: center">Days</th>
+                                                    <th style="text-align: center">Instruction</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

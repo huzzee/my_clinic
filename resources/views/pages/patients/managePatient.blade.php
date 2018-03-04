@@ -499,9 +499,10 @@
 
 
     <script src="{{ asset('js/webcam/webcam.js') }}"></script>
-
-
     <script src="{{ asset('js/patient_info.js') }}"></script>
+
+
+
 @endsection
 
 <!--*********Page Scripts End*********-->

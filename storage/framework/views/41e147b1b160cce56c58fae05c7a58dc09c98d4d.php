@@ -49,7 +49,7 @@
                                     <td><?php echo e($i); ?></td>
                                     <td><?php echo e($prescription->patients->patient_info['full_name']); ?></td>
                                     <td><?php echo e($prescription->user_informations->users->name); ?></td>
-                                    <td><?php echo e($prescription->queue_code); ?></td>
+                                    <td><?php echo e($prescription->queues->queue_code); ?></td>
                                     <td>
                                         <?php $__currentLoopData = $prescription->prescriptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $items): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <?php echo e($items['drug_name']); ?>/
@@ -65,10 +65,61 @@
                                         </a>
 
                                         <a href="<?php echo e(url('invoices/'.$prescription->id.'/edit')); ?>"
-                                           class="btn btn-icon waves-effect waves-light btn-primary m-b-5"
-                                           >
-                                            Invoice
+                                           class="btn btn-icon waves-effect waves-light btn-warning m-b-5">
+                                            <i class="fa fa-plus"></i>
                                         </a>
+
+                                        <button data-toggle="modal" data-target="#full-width-modal<?php echo e($prescription->id); ?>" class="btn btn-icon btn-teal waves-effect waves-light m-b-5"><i class="fa fa-list"></i></button>
+
+                                        <div id="full-width-modal<?php echo e($prescription->id); ?>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog modal-full">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h4 class="modal-title" id="full-width-modalLabel">Receipts List</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <table class="table m-t-30">
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="1%">Sr.No</th>
+                                                                <th width="14%">Invoice Code</th>
+
+                                                                <th width="14%">Date & Time</th>
+                                                                <th width="10%">Total Bill Amount</th>
+                                                                <th width="10%">Paid Amount</th>
+                                                                <th width="5%">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php $p=1; ?>
+
+                                                                <?php $__currentLoopData = $prescription->invoices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invoice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <tr>
+                                                                        <td><?php echo e($p); ?></td>
+                                                                        <td><?php echo e($invoice->invoice_code); ?></td>
+                                                                        <td><?php echo e(date('d-M-Y g:i a',strtotime($invoice->created_at))); ?></td>
+                                                                        <td><?php echo e($invoice->grand_total); ?></td>
+                                                                        <td><?php echo e($invoice->paid); ?></td>
+                                                                        <td>
+                                                                            <a href="<?php echo e(url('invoices/'.$invoice->id)); ?>" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                <?php $p++ ?>
+
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+
                                     </td>
 
                                 </tr>
@@ -80,6 +131,10 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="col-sm-12">
+                    <?php echo e($prescriptions->links()); ?>
+
                 </div>
             </div>
 
